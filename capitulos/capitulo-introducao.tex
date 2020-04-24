@@ -26,41 +26,27 @@ Segundo \citeauthor{VarelaDeSouza} (\citeyear{VarelaDeSouza}), a palavra “Dom�
 
 \section{Objetivos} 
 
-O objetivo deste trabalho é desenvolver um sistema, de baixo custo, baseado nas tecnologias de Machine Learning, Microserviços, \textit{Cloud Computing}
+O objetivo deste trabalho é desenvolver um sistema, de baixo custo, baseado nas tecnologias de \textit{Machine Learning}, Microserviços, Desenvolvimento Web e \textit{Cloud Computing} para automatizar o processo e reduzir o erro humano através da integração entre uma câmera e camadas de softwares. 
 
-O objetivo deste trabalho é desenvolver um sistema modular, de baixo custo, baseado em microsserviços e em IoT para monitoramento e controle de consumo de água em chuveiros elétricos residenciais através da integração entre dispositivos e camadas de softwares. 
+O sistema, através de uma foto, será capaz de identificar as etiquetas fixadas no Tarugo, contar o número de etiquetas, identificar o código de barras que se econtra nelas e, alem disso, identificar os números que se encontram acima do mesmo.
 
-O sistema será capaz de armazenar e exibir dados vindos dos sensores de fluxo de água em chuveiros, conectados através da rede Wi-Fi, além de comandar um atuador para interromper o fornecimento da água sob certas circunstâncias.
-
-Será criado também um sistema que emulará os dados provindos do sensor, atuador e teclado utilizados.
+Será criado uma aplicação Web com um servidor \textit{online} para que o usuário final possa administrar o sistema através de telas com um \textit{layout} mais amigável.
 
 \subsection{Objetivos específicos}
 
 \begin{itemize}
-	\item Armazenar dados para levantamentos estatísticos;
-	\item Implementar o sistema de identificação e controle de usuários;
-	\item Implementar o sistema de interface;
-	\item Implementar o sistema de atuação;
-	\item Implementar o sistema de emulação de dados;
+	\item Recolher várias imagens contendo todos os Tarugos;
+	\item Implementar o sistema de expansão dos \textit{datasets} através do método \textit{Data Augmentation}, para que a quantidade de imagens seja suficiente para treinar os modelos de \textit{Machine Learning};
+	\item Treinar e implementar o modelo de reconhecimento de código de barras;
+	\item Treinar e implementar o modelo de reconhecimento de números;
+	\item Implementar a aplicação Web;
+	\item Publicar a aplicação no Google Cloud Plataform;
 	\item Integrar todos os sistemas a fim de garantir as funcionalidades do projeto;
-	\item Monitorar em ambiente online os parâmetros do sistema;
+	\item Executar os procedimentos em ambiente online a fim de validar o projeto;
 \end{itemize}
 
 %\section{Justificativas e Relev{\^a}ncia}
-%
-%Segundo \citeauthor{AlvesDaSilva} (\citeyear{AlvesDaSilva}), o crescente consumo de água
-%tem feito do uso consciente uma necessidade primordial. Essa prática deve ser considerada parte de uma atividade mais abrangente que é o uso racional da água, incluindo também, o controle de perdas e a redução do consumo de água.
 
-%Ao longo dos anos, os desperdícios da água utilizada atingem níveis nunca imaginados \cite{rebouccas2003agua}. Ao utilizar técnicas de IoT, é possível otimizar o monitoramento do gasto de água em residências e prédios, visando coletar dados para diminuir este tipo de desperdício. Este trabalho se justifica pela urgente necessidade de controle do uso da água em todas as esferas da sociedade. 
-%
 \section{Organização do trabalho}
 
-O presente trabalho está organizado em 5 capítulos. No Capítulo 1, encontra-se a apresentação do problema e suas possíveis soluções, além de apresentar os objetivos propostos.
-
-O Capítulo 2 consiste na revisão sobre os hardwares e softwares utilizados no projeto, encontram-se as definições e explicações dos mesmos.
-
-No Capítulo 3 é apresentado a estrutura geral do sistema, a metodologia em que foi construído. Explica-se também as etapas do desenvolvimento e códigos implementados.
-
-O Capítulo 4 trata dos experimentos realizados no sistema e seus resultados.
-
-No Capítulo 5 são abordadas as considerações finais do trabalho e os possíveis trabalhos futuros.
+O presente trabalho está organizado em X capítulos. No Capítulo 1, encontra-se ... 
