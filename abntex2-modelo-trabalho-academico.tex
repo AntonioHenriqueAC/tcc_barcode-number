@@ -304,21 +304,21 @@
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
  \noindent
- A economia de água é um assunto recorrente que há muito deixou de ser restrito às regiões áridas e desérticas com baixa disponibilidade de água per capita. Com isto, existe uma crescente demanda para aumentar a economia de água em todo o mundo. Com o avanço da tecnologia e seu fácil acesso, tornou-se mais simples desenvolver sistemas visando uma melhora nesta economia. Este trabalho tem o propósito de criar um sistema de Domótica para controle de água simulando dados de um sensor de fluxo de água, uma válvula solenoide como atuador e utilizando um RaspberryPi. O sistema será capaz de monitorar o uso de água, mostrando os dados em gráfico e salvando-os em um banco de dados. Será construído um sistema de controle de usuários que será capaz de criar, editar e salvar dados de clientes para integrar no sistema. A comunicação entre o sensor e o Raspberry Pi será feita via MQTT. Os sistemas de comunicação e usuários serão construídos de acordo com a arquitetura de microsserviços, sendo dois sistemas diferentes que se completam para realizar as operações necessárias. Os sistemas de usuário e comunicação, juntamente com os softwares utilizados para monitoramento serão configurados, testados e os resultados serão apresentados no decorrer no trabalho. A validação do projeto será feita através de dados emulados a partir de um sistema criado para simular as informações dos sensores.
+A finalidade deste trabalho consiste no desenvolvimento e na aplicação de um software que seja capaz de extrair e reconhecer, com precisão, os números  localizados nas etiquetas dos tarugos no processo de Lingotamento Contínuo possibilitando assim a confiabilidade e rastreabilidade e automação dos produtos na fabricação do aço. No processo siderúrgico, cada aço tem sua especificidade, e, com isso, para evitar que o produto se mistura nas etapas de fabricação, é essencial a idetificação detalhada em cada etapa do processo. Na última etapa do processo de Lingotamento Contínuo, no qual os tarugos são estocados, empilhados e serem despachados para o processo seguinte de Laminação, a identificação e contagem das peças são feitas manualmente e enviadas por um operador da Siderúrgica. Dessa forma, devido ao histórico de erros durante o procedimento, foi  pensado em uma alternativa para solucionar o problema criando uma aplicação no qual seria necessária apenas o uso de uma câmera fotográfica. 
 
- \textbf{Palavras-chaves}: iot, monitoramento, microsserviços, mqtt, node, domótica, raspberry pi, economia de água.
+ \textbf{Palavras-chaves}: aprendizado de máquina, computação da núvem, IoT, reconhecimento de imagem, código de barras, deep learning, desenvolvimento web.
 \end{resumo}
 
 % resumo em inglês
 \begin{resumo}[Abstract]
   \begin{otherlanguage*}{english}
 
- \noindent Water saving is a recurring issue that has long ceased to be restricted to arid and desert regions with low per capita water availability. Hence, there is a growing demand to increase water savings worldwide. Since the tecnology has been modernised, it has become simpler to develop systems aimed at improving water savings. This paper has the porpouse of create a Domotic system for water control simulating data from a water flux sensor, solenoid valve as actuator and using a Raspberry Pi. The system will be able to monitorize the use of the water, showing the data and saving it in a database. A user control system will also be created that will be able to create, edit and save data about the system users to integrate with the whole system. All the comunications between the sensor and the Raspberry Pi will be done via MQTT and the comunication system and the users system will be built using the microservices architeture, being two different systems that comunicate with each other to do the necessary operations. The users and comunication services, together with the softwares used for the monitoring will be set up, tested and the results will be shown in this paper.
+ \noindent leri go.
 
    \vspace{\onelineskip}
  
    \noindent 
-   \textbf{Key-words}: iot, monitoring, microservices, mqtt, node, domotic, raspberry pi, water saving.
+   \textbf{Key-words}: machine learning, cloud computing, iot, image recognition, barcode, deep learning, web development.
   \end{otherlanguage*}
 \end{resumo}
 
@@ -367,26 +367,30 @@
 % ---
 
 % ---
-% inserir lista de abreviaturas e siglas
+%D inserir lista de abreviaturas e siglas
 % ---
 \begin{siglas}
-  \item[IP] \textit{Internet Protocol}
-  \item[TSDB] Banco de Dados de Séries Temporais
-  \item[MQTT] \textit{Message Queueing Telemetry Transport}
-  \item[IoT] \textit{Internet of Things}
-  \item[TCP] \textit{Transmission Control Protocol}
-  \item[SSH] \textit{Secure Shell}
-  \item[RAM] \textit{Random Access Memory}
-  \item[I/O] \textit{Input / Output}
-  \item[MHz] \textit{mega hertz}
-  \item[WiFi] \textit{Wireless Fidelity}
-  \item[PWM] \textit{Pulse with modulation}
-  \item[HTTP] \textit{Hypertext Transfer Protocol}
-  \item[RESTful] \textit{Representational State Transfer}
-  \item[API] \textit{Application Programming Interface}
-  \item[BLE] \textit{Bluetooth Low Energy}
-  \item[SD] \textit{Secure Digital}
+  \item[CV1] \textit{Convertedor 1}
+  \item[CV1] \textit{Convertedor 2}
+  \item[MLC] \textit{Máquina de Lingotamento Contínuo}
   \item[JSON] \textit{Javascript Object Notation}
+%  \item[IP] \textit{Internet Protocol}
+%  \item[TSDB] Banco de Dados de Séries Temporais
+%  \item[MQTT] \textit{Message Queueing Telemetry Transport}
+%  \item[IoT] \textit{Internet of Things}
+%  \item[TCP] \textit{Transmission Control Protocol}
+%  \item[SSH] \textit{Secure Shell}
+%  \item[RAM] \textit{Random Access Memory}
+%  \item[I/O] \textit{Input / Output}
+%  \item[MHz] \textit{mega hertz}
+%  \item[WiFi] \textit{Wireless Fidelity}
+%  \item[PWM] \textit{Pulse with modulation}
+%  \item[HTTP] \textit{Hypertext Transfer Protocol}
+%  \item[RESTful] \textit{Representational State Transfer}
+%  \item[API] \textit{Application Programming Interface}
+%  \item[BLE] \textit{Bluetooth Low Energy}
+%  \item[SD] \textit{Secure Digital}
+  
 \end{siglas}
 % ---
 
