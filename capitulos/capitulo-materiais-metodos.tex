@@ -1,51 +1,142 @@
-\chapter{Materiais e Softwares}
+\chapter{Linguagens, Métodos e \textit{Softwares}}
 % ---
-Nas seções a seguir serão apresentados os \textit{hardwares} e \textit{softwares} utilizados na construção do sistema proposto.
+Nas seções a seguir serão apresentados as linguagens de programação, os métodos e os \textit{softwares} utilizados na construção do sistema proposto.
 % ---
-\section{Microcontroladores e Microprocessadores}
-% ---
+\section{Linguagens}
+As lingaugens de programação que foram utilizadas para a implementação do sistema estão presentes nesta seção.
+\subsection{Python}
 
-Buscando aumentar a eficiência no processamento de dados, na década de 70
-começaram a ser utilizados microprocessadores em computadores \cite{martins2005sistemas}. Os microprocessadores são componentes dedicados ao processamento de informações com
-capacidade de cálculos matemáticos e endereçamento de memória externa \cite{chase2007sistemas}.
+Python é uma linguagem de programação interpretada, de alto nível e de uso geral. Criado por Guido van Rossum e lançado pela primeira vez em 1991, a filosofia de design do Python enfatiza a legibilidade do código com seu uso notável de espaço em branco significativo. Suas construções de linguagem e abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código claro e lógico para projetos de pequena e grande escala.
 
-Por sua vez, os microcontroladores são pequenos sistemas computacionais poderosos que englobam em um único chip: interfaces de entrada/saída digitais e analógicas, memória RAM, memória FLASH, interfaces de comunicação serial, conversores analógicos/digitais, temporizadores/contadores e um microprocessador \cite{chase2007sistemas}.
+O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional. O Python é frequentemente descrito como uma linguagem "baterias incluídas" devido à sua abrangente biblioteca padrão.
 
-Na Figura \ref{fig:microprocessador-microcontrolador}, pode-se observar algumas das diferenças entre Microprocessadores e Microcontroladores. O microcontrolador embarca todos os componentes necessários ao seu funcionamento, enquanto o microprocessador precisa de comunicar externamente com os periféricos similares.
+Os intérpretes de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento de Python. \cite{van2007python}
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[scale=0.7]{figuras/processa-controla.png}
-	\caption{Arquitetura básica de microprocessadores e microcontroladores.}
-	\legend{Fonte: \citeauthor{chase2007sistemas} (\citeyear{chase2007sistemas})}
-	\label{fig:microprocessador-microcontrolador}
-\end{figure}
-
-\newpage
-
-%O microcontrolador a ser utilizado no projeto é o ESP8266 (Figura \ref{fig:esp}), que é um circuito integrado, com interfaces de I/O digitais e analógicas. Possui interface Wi-Fi, com um microprocessador de 32 bits, capaz de executar tarefas a 160 MHz.
-%
-%Os circuitos baseados no microcontrolador ESP8266 representam um grande avanço na relação de preço-recursos e pode ser um componente muito interessante para soluções IoT \cite {de2017internet}.
-%
-%\begin{figure}[htbp]
-%		\centering
-%		\includegraphics[scale=0.5]{figuras/esp8266_.jpg}
-%		\caption{ESP8266.}
-%		\legend{Fonte: \citeauthor{Kodali2017} (\citeyear{Kodali2017})}
-%		\label{fig:esp}
-%\end{figure}
+\subsection{Node.JS}
 
 
-\subsection{Raspberry Pi}
+O Node.JS, também conhecido como Node, é uma estrutura EDA de código aberto para o desenvolvimento de aplicativos JavaScript no servidor. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
 
-O Raspberry Pi (Figura \ref{fig:rpi}) é um minicomputador criado pela Raspberry Pi Foundation. Seu objetivo é estimular o ensino da ciência da computação nas escolas e universidades. Apesar do Raspberry Pi possuir o hardware em uma única placa eletrônica de tamanho reduzido, seu potencial de processamento é significativo \cite{crotti2013raspberrypi}. O Raspberry Pi pode ser usado em diversos projetos tecnológicos, como experimentos remotos nos quais sua função é ser um micro servidor web \cite{crotti2013raspberrypi}.
+O EDA é uma maneira de realizarmos a comunicação entre sistemas que consiste, principalmente, em operações assíncronas além de permitir aplicativos mais escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível. 
+
+O Node é um dos ambientes e \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
+
+
+
+\section{Métodos}
+Os métodos e conceitos que foram utilizados para a implementação do sistema estão presentes nesta seção.
+
+\subsection{\textit{Bounding Box}}
+
+As \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) são um dos métodos de anotação de imagem mais populares e reconhecíveis usados em \textit{Machine Learning} e em \textit{Deep Learning}.
+
+Elas são caixas retangulares que podem ser determinadas pelas coordenadas dos eixos x1 e y1 no canto superior esquerdo e as coordenadas dos eixos x2 e y2 no canto inferior direito do retângulo. Definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem real.\cite{allDeep}
 
 \begin{figure}[htbp]
 		\centering
-		\includegraphics[scale=0.2]{figuras/raspberrypi.jpg}
-		\caption{Raspberry Pi.}
-		\label{fig:rpi}
+		\includegraphics[scale=0.4]{figuras/MachineLearning/catDog.png}
+		\caption{Execução de \textit{Bounding Boxes}.}
+		\legend{Fonte: \cite{133Ob9905723:online})}
+		\label{fig:boundingBox}
 \end{figure}
+
+O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do cachorro e do gato na imagem, respectivamente.
+
+\begin{lstlisting}[caption=Posições de X e Y nas \textit{Bounding Boxes}, label=cod:bbox]
+         dog_bbox, cat_bbox = [60, 45, 378, 516], [400, 112, 655, 493]
+\end{lstlisting}
+
+
+\subsection{\textit{Data Augmentation}}
+
+\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados. A partir de imagens originais, gerar mais imagens semelhantes através de vários métodos como, girar 25º, 90º, 45º, embaçar a imagem, entre outros para que possa agrupar em um dataset mais robusto.
+
+Quanto mais dados um algoritmo de ML tiver acesso, mais eficaz ele poderá ser. Mesmo quando os dados são de qualidade inferior, os algoritmos podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram significativamente devido ao lançamento de um corpus de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros. Com esses conjuntos de dados grandes e não estruturados, no entanto, a tarefa passa a ser a de encontrar estrutura dentro de um mar de dados não estruturados. \cite{dataAug}
+
+\subsection{TensorFlow}
+
+O TensorFlow é uma interface para expressar algoritmos de \textit{Machine Learning} e uma implementação para a execução de tais algoritmos. Um cálculo expresso usando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis como telefones e tablets até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como Placas de GPU. 
+
+O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de aprendizado de máquina na produção em mais de uma dúzia de áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
+
+Vários serviços do Google uilizam o TensorFlow em sua produção, o lançaram como um projeto de código aberto e
+tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
+
+\subsection{Scikit-Image}
+
+O Scikit-image, também conhecido como Skimage, é uma biblioteca de processamento de imagens que implementa algoritmos e utilitários para uso em aplicações de pesquisa, educação e indústria. É lançado sob a licença liberal de código aberto Modified BSD, fornece uma API bem documentada na linguagem de programação Python e é desenvolvido por uma equipe internacional ativa de colaboradores.
+
+O objetivo do scikit-image é fornecer uma biblioteca de alta qualidade de ferramentas poderosas e diversas de processamento de imagens, gratuitas e sem restrições. Esses princípios são a base para as práticas de desenvolvimento na comunidade de imagens scikit.\cite{skimage}
+
+\subsection{ImageAI}
+
+ImageAI é uma biblioteca python de código aberto criada para capacitar os desenvolvedores a criar aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando simples e poucas linhas de código.
+
+A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algoritmos diferentes de \textit{Machine Learning} treinados no conjunto de dados ImageNet-1000. O ImageAI também suporta detecção de objetos, detecção de vídeo e rastreamento de objetos usando RetinaNet, YOLOv3 e TinyYOLOv3 treinados no conjunto de dados COCO e PASCAL VOC.\cite{ImageAI}
+
+\subsection{YOLOv3}
+
+A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Comparado com a rede Faster R-CNN, a YOLO transforma o problema de detecção em um problema de regressão. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN .
+
+
+\section{Softwares}
+Os softwares que foram utilizados para a implementação do sistema estão presentes nesta seção.
+% ---
+\subsection{Google Colaboratory}
+O Google Colaboratory, mais conhecido como "Google Colab" ou simplesmente "Colab", é um projeto de pesquisa para criar protótipos de modelos de \textit{Machine Learning} em poderosas opções de \textit{hardware}, como GPUs e TPUs. Ele fornece um ambiente de notebook Jupyter sem servidor para desenvolvimento interativo. O Google Colab é gratuito para usar como outros produtos do G Suite — que anteriormente era conhecido como Google Apps — no qual é um serviço oferecido pelo Google que fornece diversas ferramentas da própria empresa. Elas podem ser totalmente personalizadas com as informações do negócio, incluindo um domínio próprio.
+
+Além de ser fácil de usar, o Colab é bastante flexível em sua configuração e faz muito do trabalho pesado para você. \cite{colabdetail}
+
+\begin{itemize}
+    \item Suporte para Python 2.7 e Python 3.6;
+    \item Aceleração de GPU grátis;
+    \item Bibliotecas pré-instaladas: Todas as principais bibliotecas Python, como o TensorFlow, o Scikit-learn, o Matplotlib, entre muitas outras, estão pré-instaladas e prontas para serem importadas;
+    \item Construído com base no Jupyter Notebook;
+    \item Recurso de colaboração (funciona com uma equipe igual ao Google Docs): o Google Colab permite que os desenvolvedores usem e compartilhem o Jupyter notebook entre si sem precisar baixar, instalar ou executar qualquer coisa que não seja um navegador;
+    \item Suporta comandos \textit{bash};
+    \item Os notebooks do Google Colab são armazenados no drive.
+\end{itemize}
+
+\begin{figure}[htbp]
+		\centering
+		\includegraphics[scale=0.4]{figuras/MachineLearning/colabGithub.png}
+		\caption{Utilização do Colab, Drive e Github}
+		\label{fig:colabGithub}
+\end{figure}
+
+O Colab se integra facilmente ao Google Drive, o que o torna uma opção natural para espaço de armazenamento, em que se armazena os dados e os modelos. Ao mesmo tempo, o Github é mais adequado para hospedagem de código e uso de diversas  bibliotecas gratuitas disponíveis pela comunidade. 
+
+\subsection{LabelImg}
+
+O labelImg (Figura \ref{fig:labelimg}) é uma ferramenta open source de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Figura \ref{fig:labelXml}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO no qual utilizaremos em nosso projeto. \cite{labelimg}
+
+O software em questão permite que você circule as \textit{bounding boxes} englobando o objeto de interesse nas imagens e criando automaticamente um arquivo XML com todas as especificações necessárias.
+
+Utiliza-se a ferramenta para formar o \textit{dataset}, que é um dos fundamentos da \textit{deep learning}. Para muitos pesquisadores obter dados suficientes para realizar o experimento por si só é um grande problema, por isso precisamos de muitos \textit{datasets open source} para que todo mundo possa usar. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\linewidth]{figuras/MachineLearning/labelimg.jpg}
+	\caption{Procedimento de anotações das \textit{bounding boxes}}
+	\legend{Fonte: \citeauthor{labelimg} (\citeyear{labelimg})}
+	\label{fig:labelimg}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figuras/MachineLearning/labelXml.png}
+	\caption{Arquivo XML gerado pelo LabelImg}
+	\legend{Fonte: \citeauthor{zhou2017application} (\citeyear{zhou2017application})}
+	\label{fig:labelXml}
+\end{figure}
+
+O ImageNet dataset \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e anotações de locais de objetos na imagem. O conjunto de dados Imagenet é um dos conjuntos de dados mais usados no campo da aprendizagem profunda. A maior parte do trabalho de pesquisa, como classificação, localização e detecção de imagens, é baseada nesse conjunto de dados. O conjunto de dados Imagenet é detalhado e é muito fácil de usar. É amplamente utilizado no campo da pesquisa em visão computacional e se tornou o conjunto de dados 'padrão' do aprendizado profundo atual do domínio da imagem para testar o desempenho do algoritmo. \cite{zhou2017application}
+
+O PASCAL VOC (análise de padrões, modelagem estatística e classes de objetos visuais de aprendizado computacional) \cite{everingham2007pascal} fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos e fornece um conjunto comum de ferramentas para acessar os conjuntos de dados e anotações. O conjunto de dados PASCAL VOC inclui 20 classes e tem um desafio baseado nesse conjunto de dados. O PASCAL VOC Challenge \cite{everingham2010pascal} não está mais disponível após 2012, mas seu conjunto de dados é de boa qualidade e bem marcado e permite a avaliação e comparação de diferentes métodos. E como a quantidade de dados do conjunto de dados PASCAL VOC é pequena, comparada ao conjunto de dados imagenet, muito adequada para os pesquisadores testarem programas de rede. Nosso conjunto de dados também é criado com base no padrão de conjunto de dados PASCAL VOC.\cite{zhou2017application}
+
+
+
+
 
 \section{Sensores e atuadores}
 
