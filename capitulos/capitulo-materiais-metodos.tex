@@ -76,7 +76,33 @@ A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algorit
 
 \subsection{YOLOv3}
 
-A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Comparado com a rede Faster R-CNN, a YOLO transforma o problema de detecção em um problema de regressão. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN .
+A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Comparado com a rede Faster R-CNN, em que é a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
+
+Comparando a rede Faster R-CNN com a  R-CNN, a velocidade do treinamento  é 9 vezes mais rápida e a velocidade do teste é 213 vezes mais rápida. \cite{7960069}
+
+\begin{figure}[htbp]
+		\centering
+		\includegraphics[scale=0.2]{figuras/MachineLearning/yolo.png}
+		\caption{YOLO}
+		\label{fig:yolo}
+\end{figure}
+
+No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucional prediz tanto os \textit{bounding boxes} quanto as probabilidades de pertinencia a classe de cada objeto detectado. Para isso, YOLO funciona da seguinte forma:
+
+\begin{itemize}
+    \item Toma-se uma imagem e divide-se-a em um grid SxS de células (S = 6);
+    \item Usando o \textit{grid} como referência, gera-se N \textit{bounding boxes};
+    \item \textit{Bounding boxes} com probabilidade acima de um limiar são selecionados e usados para localizar o objeto dentro da imagem.
+    \item
+\end{itemize}
+
+Cada célula do  \textit{grid} é usada para predizer B  \textit{bounding boxes} (bbox) e C probabilidades de classe. O conceito de interseção sobre união (IoU) tem um papel importante e a confiança de uma predição em YOLO é dada por:
+
+\begin{lstlisting}[caption=Posições de X e Y nas \textit{Bounding Boxes}, label=cod:confianca]
+        \textit{Confiança = \[ p_r(Object) X IoU_{pred}^truth, p_r(Object) \in {0,1}\]}
+\end{lstlisting}
+
+Em que, quando o \textit{target} estiver na \textit{grid}, \[p_r(Object)\] = 1 e 0 caso contrário. A verdade IoUpred é usada para denotar a coincidência entre a referência e a caixa delimitadora prevista. A confiança reflete se a grade contém objetos e a precisão da caixa delimitadora prevista quando ela contém objetos. Quando várias caixas delimitadoras detectam o mesmo destino, o YOLO usa o método de não supressão máxima (NMS) para selecionar a melhor caixa delimitadora.
 
 
 \section{Softwares}
