@@ -1,9 +1,11 @@
 \chapter{Metodologia}
 
+EJS\footnote{O EJS é uma engine de visualização, com ele conseguimos de uma maneira fácil e simples transportar dados do back-end para o front-end, basicamente conseguimos utilizar códigos em javascript no html de nossas páginas.}
+
 Este Capítulo apresenta a estrutura geral do sistema, a configuração inicial do Raspberry Pi, a construção dos microsserviços, assim como as etapas de realização do projeto. A
 primeira etapa consiste no desenvolvimento do microsserviço de cadastro e controle de usuários. Em seguida, foi desenvolvido o sistema que recebe os dados via MQTT, guardando-os no InfluxDB. Com os dados sendo recebidos e devidamente guardados, foram configurados o HomeAssistant e Grafana.
 
-A validação do projeto será feita através de um sistema criado para emular os dados vindos dos sensores, atuadores e teclado. %Este sistema é capaz de criar dados que simulam os sinais recebidos pelo sensor YF-S201, pelo teclado numérico e atuador.
+A validação do projeto será feita através de um sistema criado para emular os dados vindos dos sensores, atuadores e teclado.
 
 \section{Funcionamento do sistema} \label{sec:funcionamento}
 
