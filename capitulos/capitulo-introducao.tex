@@ -4,15 +4,18 @@
 \chapter[Introdução]{Introdução}
 %\addcontentsline{toc}{chapter}{Introdução}
 % ----------------------------------------------------------
- Dentre os diversos processos de uma usina integrada, podemos destacar que na Aciaria, temos o processo dos convertedores, que de acordo com \cite{machado2003siderurgia}, é o processo no qual ocore a transformação do gusa líquido em aço que envolve:
+ 
+ % TODO Senti falta de uma parágrafo só introduzindo a siderurgia, indicando o que faz e tal. Considere que a pessoa que vai ler pode não saber nada de Aciaria... Em resumo, você deve sempre pensar que está escrevendo pra uma criança, sério. O quanto mais uma criança puder entender, mais o seu texto tá bem escrito.
+ 
+ Dentre os diversos processos de uma usina integrada, há na Aciaria o processo dos convertedores, que de acordo com \cite{machado2003siderurgia}, é o processo no qual ocorre a transformação do gusa líquido em aço que envolve:
 
 \begin{itemize}
-	\item a diminuição dos teores de carbono, silício, fósforo, enxofre e nitrogênio a níveis bastante baixos;
+	\item a diminuição dos teores de carbono, silício, fósforo, enxofre e nitrogênio a níveis muito baixos;
 	\item a adição de sucata ou minério de ferro para ajustar a temperatura do aço bruto;
 	\item o ajuste dos teores de carbono, manganês, elementos de liga e da temperatura no forno ou na panela de vazamento;
 \end{itemize}
 
-Posteriormente, destaca-se a etapa de lingotamento contínuo na qual o aço é convertido do estado líquido para o sólido através da Máquina de Lingotamento Contínuo (MLC), dando origem a produtos semi-acabados, como perfis, placas, blocos ou tarugos.
+Destaca-se a etapa de lingotamento contínuo na qual o aço é convertido do estado líquido para o sólido através da Máquina de Lingotamento Contínuo (MLC), dando origem a produtos semi-acabados, como perfis, placas, blocos ou tarugos.
 
 \begin{figure}[htbp]
 	\centering
@@ -22,11 +25,24 @@ Posteriormente, destaca-se a etapa de lingotamento contínuo na qual o aço é c
 	\label{fig:processLing}
 \end{figure}
 
-Como mostrado na Figura \ref{fig:processLing}, o processo de Lingotamento Contínuo de Tarugo se inicia quando uma panela que contém, em média, 224 toneladas de aço chega à plataforma com temperaturas ideias, em torno de 1500 ºC, para ser lingotada de forma que o equipamento possa efetuar horas ou ate mesmo dias de produção sem interrupção. Cada panela que é lingotada, da-se o nome de \textbf{corrida}. 
+O processo de lingotamento, na siderúrgica Gerdau, usina de Ouro Branco, consiste no despejamento de uma panela com $\sim~224$ toneladas de aço, a uma temperatura de $\sim~1550~$ºC, no distribuidor que precede o lingotamento (Figura \ref{fig:processLing}).
+%
+Este processo pode levar de horas a dias sem interrupção.
+%
+A cada batelada de panela da-se o nome de \textbf{corrida}.
 
-A etapa de solificação ocorre de fora para dentro do veio em função do contato com as paredes refrigeradas do molde, aspersão de água em sprays e perda de calor por radiação para o ambiente. Essa troca de calor faz com que o aço se solidifique gradativamente criando zonas onde o material pode ser encontrado em seus estados sólido e líquido.
 
-No processo final de cada corrida, os tarugos são cortados na máquina Oxicorte como mostrado na Figura \ref{fig:processLing}. Os cortes são feitos de acordo com a demanda do cliente e origina em média 100 tarugos, número este que depende do diâmetro das peças que podem ser todas de 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Após serem cortados são transportados para o despacho, por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e 27 toneladas de carga. 
+A etapa de solidificação ocorre de fora para dentro do veio\footnote{Veio é o nome que se dá ao conjunto formado pelo molde, a máquina Oxicorte e os rolos de extração e endireitadores. Quanto maior o número de veios, maior a produtividade da máquina, mas mais complexo se torna o seu controle.} em função do contato com as paredes refrigeradas do molde, aspersão de água em \textit{sprays} e perda de calor por radiação para o ambiente. Essa troca de calor faz com que o aço se solidifique gradativamente criando zonas onde o material pode ser encontrado em seus estados sólido na parte exterior do tarugo e líquido no interior.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{figuras/Steel/estadoSolidoLiq.png}
+	\caption{Estados do aço no processo de lingotamento contínuo}
+	\legend{Fonte: \citeauthor{YU201736} (\citeyear{YU201736})}
+	\label{fig:processLingSolid}
+\end{figure}
+
+No processo final de cada corrida, os tarugos, produto cuja seção transversal é quadrada é usado como matéria prima para laminação,  são cortados na máquina Oxicorte \footnote{Corta o tarugo em um tamanho previamente definido, possibilitando assim o seu trasporte até a sua destinação final.} como mostrado na Figura \ref{fig:processLing}. Os cortes são feitos de acordo com a demanda do cliente e origina em média 100 tarugos, número este que depende do diâmetro das peças que podem ser todas de 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Após serem cortados, são transportados para o despacho por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e $27$ toneladas de carga. 
 
 
 \begin{figure}[htbp]
@@ -44,9 +60,16 @@ No processo final de cada corrida, os tarugos são cortados na máquina Oxicorte
 	\label{fig:despacho}
 \end{figure}
 
-Uma vez que os tarugos são colocados no despacho, no qual se encontram em uma temperatura média de 700 ºC, eles precisam esperar em torno de 15 a 20 horas até que fiquem em uma temperatura ideal (média de 150 ºC) e o operador possa pregar a etiqueta metálica de identificação. Para ajudar no resfriamento dos tarugos, é colocado sobre eles um jato de água através de uma torneira como mostrado na Figura \ref{fig:despacho} com uma frequencia constante apenas na face frontal, pois se a água for colocada diretamente no centro do tarugo irá empená-lo, uma vez que a temperatura central do tarugo ainda está muito mais quente que as extremidades.
+Os tarugos vão para a zona de despacho a uma temperatura de $\sim~700$ºC.
+%
+Após cerca de 20 horas, a temperatura cai para $150~$ºC, temperatura adequada para a fixação das etiquetas de identificação dos tarugos.
+%
+Um jato de água é direcionado aos tarugos para acelerar o resfriamento (Figura \ref{fig:despacho}) com frequência constante apenas na parte frontal.
+%
+A eventual injeção de água no centro do tarugo poderia empenar a peça, uma vez que a temperatura central do tarugo é está mais quente que as extremidades.
 
-Após esperar o tempo necessário para que o tarugo chegue na temperatura ideial, o operador responsável faz a impressão das etiquetas metálicas. Para que as etiquetas sejam pregadas com segurança, é utilizado Silicone Acético Transparente, no qual foi testada e comprovada sua eficácia na restência sobre alta temperatura. 
+
+Após o tempo necessário, o operador prega as etiquetas utilizando Silicone Acético Transparente, no qual foi testada e comprovada sua eficácia na resistência sobre alta temperatura.
 
 \begin{figure}[htbp]
 	\centering
@@ -55,7 +78,7 @@ Após esperar o tempo necessário para que o tarugo chegue na temperatura ideial
 	\label{fig:barcode}
 \end{figure}
 
-A rotulação dos tarugos é muito importante para que possa ser feita a rastreabilidade e a identificação do aço em processos posteriores como, por exemplo, na laminação até o cliente final. 
+A rotulação é importante pois evita a mistura de aço entre uma corrida e outra, viabiliza a rastreabilidade e identificação do aço em processos posteriores como, por exemplo, na laminação até o cliente final. 
 %A composição dos números intrinsecos ao códico de barra impresso na etiqueta metálica, como da Figura \ref{fig:barcode}, é o que permite a identificação supracitada a saber:
 
 \begin{table}[]
@@ -75,19 +98,21 @@ A rotulação dos tarugos é muito importante para que possa ser feita a rastrea
 	\label{tab:tag}
 \end{table}
 
-Vale ressaltar que o número de identificação da etiqueta pode ser reconhecido pelos dígitos ou pelo código de barras através de um leitor. Em cada etiqueta o código de barras e os dígitos acima deste correspondem à mesma sequência numérica.
+O número de identificação da etiqueta pode ser reconhecido pelos dígitos ou pelo código de barras através de um leitor de código de barras à \textit{laser}. Em cada etiqueta, o código de barras e os dígitos acima deste correspondem à mesma sequência numérica.
 
-Hoje em dias os problemas referente ao procedimento de identificação de peças se dão pelo fato de que:
+Os atuais problemas na identificação das etiquetas são: 
 \begin{enumerate}
-	\item O operador responsável pela rotuação precisa contar o número de tarugos existentes na pilha e conferir cada etiqueta se está certa com sistema, anotar e informar a quantia para sala de operação para que o operador da sala de controle valide com sistema de contagem de peças da MLC. Além disso, ele precisa verificar se o tarugo que está na pilha é da mesma corrida que os outros, para que não haja nenhuma mistura de aço, no que se acarreta em produtos finais com aços diferente, como por exemplo uma aço para fazer cabo de aço de elevador precisa ser mais resistente que o aço para fazer prego. Dessa forma, a aplicação proposta irá analisar todos os tarugos e trará, visivelmente para o operador, uma forma mais facil para que faça a verificaçãos dos mesmos.
+	\item O processo é atualmente manual e demorado.
 	\item O local em que a pilha de peças se encontra é perigoso devido ao fato de, a todo momento, uma ponte rolante estar trabalhando no mesmo local.
 \end{enumerate}
 
+% TODO Aqui é o momento ideal pra aparecer uns 2/3 parágrafos de revisão bibliográfica hein kkk Cite dos esforços em automatizar o processo (se houve) e o que outros autores já fizeram em áreas similares. :)
+
 \section{Objetivos} 
 
-O objetivo deste trabalho é desenvolver um sistema, de baixo custo, baseado nas tecnologias de \textit{Machine Learning}, Microserviços, Desenvolvimento Web e \textit{Cloud Computing} para automatizar o processo e reduzir o erro humano através da integração entre uma câmera e camadas de softwares. 
+Desenvolver um sistema automático para a identificação robusta e geração do relatório de corrida.
 
-O sistema, através de uma foto, será capaz de identificar as etiquetas fixadas no Tarugo, contar o número de etiquetas, identificar o código de barras que se econtra nelas e, além disso, identificar os números que se encontram acima do mesmo.
+Através de uma foto, o sistema será capaz de identificar as etiquetas fixadas no Tarugo, contar o número de etiquetas, identificar o código de barras e, além disso, identificar os números que se encontram acima do mesmo.
 
 Será criado uma aplicação Web com um servidor \textit{online} para que o usuário final possa administrar o sistema através de telas com um \textit{layout} mais amigável.
 

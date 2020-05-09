@@ -1,27 +1,30 @@
-\chapter{Linguagens, Métodos e \textit{Softwares}}
+\chapter{Metodologia}
 % ---
-Neste capítulo serão apresentados as linguagens de programação, os métodos e os \textit{softwares} utilizados na construção do sistema proposto.
+Neste capítulo serão apresentados as linguagens de programação, equipamentos e \textit{softwares} utilizados na construção do sistema proposto.
 % ---
-\section{Linguagens}
-As lingaugens de programação que foram utilizadas para a implementação do sistema estão presentes nesta seção.
+\section{Linguagens de programação}
+
+As linguagens de programação que foram utilizadas para a implementação do sistema estão presentes nesta seção.
 \subsection{Python}
 
 Python é uma linguagem de programação interpretada, de alto nível e de uso geral. Criado por Guido van Rossum e lançado pela primeira vez em 1991, a filosofia de design do Python enfatiza a legibilidade do código com seu uso notável de espaço em branco significativo. Suas construções de linguagem e abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código claro e lógico para projetos de pequena e grande escala.
 
 O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional. O Python é frequentemente descrito como uma linguagem "baterias incluídas" devido à sua abrangente biblioteca padrão.
 
-Os intérpretes de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento de Python. \cite{van2007python}
+Os intérpretes de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desen
+volvimento de Python. \cite{van2007python}
 
 \subsection{Node.JS}
 
 
-O Node.JS, também conhecido como Node, é uma estrutura EDA de código aberto para o desenvolvimento de aplicativos JavaScript no servidor. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
+O Node.JS, também conhecido como Node, é uma estrutura EDA de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
 
-O EDA é uma maneira de realizarmos a comunicação entre sistemas que consiste, principalmente, em operações assíncronas além de permitir aplicativos mais escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível. 
+O EDA é uma maneira de realizarmos a comunicação entre sistemas que consiste, principalmente em operações assíncronas além de permitir aplicativos escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível. 
 
 O Node é um dos ambientes e \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
 
 \subsection{HTML}
+
 De acordo com \citeauthor{html}, para publicar informações para distribuição global, é preciso uma linguagem universalmente compreendida, um tipo de publicação na língua materna que todos os computadores possam entender. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permitem o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language). 
 
 O HTML fornece aos autores os meios para: 
@@ -33,19 +36,20 @@ O HTML fornece aos autores os meios para:
 \end{itemize}
 
 \subsection{CSS}
-De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{O padrão W3C trata-se de uma grande organização internacional com mais de 400 membros, entre empresas, órgãos governamentais e associações independentes, responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal força motriz por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter \cite{badros1999constraint}. 
+De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{O padrão W3C trata-se de uma organização internacional com mais de 400 membros, entre empresas, órgãos governamentais e associações independentes, responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal força motriz por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter \cite{badros1999constraint}. 
 
-Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação humano-computador, design gráfico, além de habilidades de programação na web \cite{keller2010css}. Além disso, a linguagem possui várias características , como especificidade de herança, cascata e seletor, o que torna o entendimento de como as propriedades CSS são aplicadas aos elementos DOM em tempo de execução, uma tarefa assustadora para desenvolvedores da web.
+Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação humano-computador, design gráfico, além de habilidades de programação na web \cite{keller2010css}. Além disso, a linguagem possui várias características, como especificidade de herança, cascata e seletor, o que torna o entendimento de como as propriedades CSS são aplicadas aos elementos DOM em tempo de execução, uma tarefa assustadora para desenvolvedores da web.
 
 
 \section{Métodos}
+
 Os métodos e conceitos que foram utilizados para a implementação do sistema estão presentes nesta seção.
 
 \subsection{\textit{Bounding Box}}
 
 As \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) são um dos métodos de anotação de imagem mais populares e reconhecíveis usados em \textit{Machine Learning} e em \textit{Deep Learning}.
 
-Elas são caixas retangulares que podem ser determinadas pelas coordenadas dos eixos x1 e y1 no canto superior esquerdo e as coordenadas dos eixos x2 e y2 no canto inferior direito do retângulo. Definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem real.\cite{allDeep}
+Elas são caixas retangulares que podem ser determinadas pelas coordenadas dos eixos x1 e y1 no canto superior esquerdo e as coordenadas dos eixos x2 e y2 no canto inferior direito do retângulo. Com exemplo, definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem real .\cite{allDeep}
 
 \begin{figure}[htbp]
 		\centering
@@ -64,7 +68,7 @@ O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do c
 
 \subsection{\textit{Data Augmentation}}
 
-\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados. A partir de imagens originais, gerar mais imagens semelhantes através de vários métodos como, girar 25º, 90º, 45º, embaçar a imagem, entre outros para que possa agrupar em um dataset mais robusto.
+\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados. A partir de imagens originais, gerar mais imagens semelhantes através de vários métodos como girar 25º, 90º, 45º, embaçar a imagem, entre outros para que possa agrupar em um dataset mais robusto.
 
 Quanto mais dados um algoritmo de ML tiver acesso, mais eficaz ele poderá ser. Mesmo quando os dados são de qualidade inferior, os algoritmos podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram significativamente devido ao lançamento de um corpus de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros. Com esses conjuntos de dados grandes e não estruturados, no entanto, a tarefa passa a ser a de encontrar estrutura dentro de um mar de dados não estruturados. \cite{dataAug}
 
@@ -116,6 +120,11 @@ No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucion
 
 Cada célula do  \textit{grid} é usada para predizer B  \textit{bbox} e C probabilidades de classe. O conceito de interseção sobre união (IoU) tem um papel importante e a confiança de uma predição em YOLO é dada por:
 
+%\begin{equation}
+    
+%\end{equation}
+
+% TODO hey, jogue essa equação na estrutura que coloquei acima.
 \[Confianca = p_r(Object) X IoU_{pred}^{truth} , p_r(Object) \in \left \{ 1\right.,\left.0\right \}\]
 
 Em que, quando o \textit{target} estiver na \textit{grid}, \(p_r(Object)\) = 1 e 0 caso contrário. \(IoU_{pred}^{truth}\) é usado para denotar a interseção sobre união e a previsão da \textit{bbox}. A confiança reflete se a \textit{grid} contém objetos e a precisão da \textit{bbox} prevista. Quando várias \textit{bbox} detectam o mesmo \textit{target}, o YOLO usa o método de não supressão máxima (NMS) para selecionar a melhor \textit{bbox}.
@@ -134,7 +143,7 @@ Além de ser fácil de usar, o Colab é bastante flexível em sua configuração
 
 \begin{itemize}
     \item Suporte para Python 2.7 e Python 3.6;
-    \item Aceleração de GPU grátis;
+    \item Aceleração de GPU;
     \item Bibliotecas pré-instaladas: Todas as principais bibliotecas Python, como o TensorFlow, o Scikit-learn, o Matplotlib, entre muitas outras, estão pré-instaladas e prontas para serem importadas;
     \item Construído com base no Jupyter Notebook;
     \item Recurso de colaboração (funciona com uma equipe igual ao Google Docs): o Google Colab permite que os desenvolvedores usem e compartilhem o Jupyter notebook entre si sem precisar baixar, instalar ou executar qualquer coisa que não seja um navegador;
