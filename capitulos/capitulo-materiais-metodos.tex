@@ -4,12 +4,15 @@ Neste capítulo serão apresentados as linguagens de programação, equipamentos
 % ---
 \section{Linguagens de programação}
 
-As linguagens de programação que foram utilizadas para a implementação do sistema estão presentes nesta seção.
+ Escolhemos prioritariamente a linguagem de programação Python para implementação do sistema de Machine Learning devido à grande comunidade existente da linguagem, ao grande número de biblioteca de análise de dados e à ferramenta Google Colab utiliza-ló.
+ 
+ Também utilizaremos a linguagem Node.JS para implementar o \textit{back-end} do sistema web pois a instalação é muito simples e não necessita de dependência para configuração e por ser escrito em JavaScript, pouparia grande parte dos esforço caso opte por utilizar tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
+ 
 \subsection{Python}
 
-Python é uma linguagem de programação interpretada, de alto nível e de uso geral. Criado por Guido van Rossum e lançado pela primeira vez em 1991, a filosofia de design do Python enfatiza a legibilidade do código com seu uso notável de espaço em branco significativo. Suas construções de linguagem e abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código claro e lógico para projetos de pequena e grande escala.
+Python é uma linguagem de programação interpretada\footnote{Linguagem interpretada é uma linguagem de programação em que o código fonte nessa linguagem é executado por um programa de computador chamado interpretador, que em seguida é executado pelo sistema operacional ou processador.}, de alto nível, ou seja,com um nível de abstração relativamente elevado e de uso geral. Sua abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código para projetos de pequena e grande escala.
 
-O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional. O Python é frequentemente descrito como uma linguagem "baterias incluídas" devido à sua abrangente biblioteca padrão.
+O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional.
 
 Os intérpretes de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desen
 volvimento de Python. \cite{van2007python}
@@ -17,26 +20,25 @@ volvimento de Python. \cite{van2007python}
 \subsection{Node.JS}
 
 
-O Node.JS, também conhecido como Node, é uma estrutura EDA de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
+O Node.JS, também conhecido como Node, é uma estrutura EDA\footnote{Maneira de realizarmos a comunicação entre sistemas que consiste, principalmente em operações assíncronas além de permitir aplicativos escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível.} de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
 
-O EDA é uma maneira de realizarmos a comunicação entre sistemas que consiste, principalmente em operações assíncronas além de permitir aplicativos escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível. 
 
-O Node é um dos ambientes e \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
+O Node é um dos \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
 
 \subsection{HTML}
 
-De acordo com \citeauthor{html}, para publicar informações para distribuição global, é preciso uma linguagem universalmente compreendida, um tipo de publicação na língua materna que todos os computadores possam entender. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permitem o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language). 
+Para publicar informações para distribuição global, é preciso uma linguagem universalmente compreendida. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permitem o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language).\citeauthor{html}
 
 O HTML fornece aos autores os meios para: 
 \begin{itemize}
     \item Publicar documentos on-line com títulos, texto, tabelas, listas, fotos, etc. 
     \item Recuperar informações on-line por meio de links de hipertexto, com o clique de um botão. 
-    \item Crie formulários para realizar transações com serviços remotos, para uso em busca de informações, reservas, pedidos de produtos, etc. 
-    \item Inclua planilhas, videoclipes, clipes de som e outros aplicativos diretamente em seus documentos.
+    \item Criar formulários para realizar transações com serviços remotos, para uso em busca de informações, reservas, pedidos de produtos, etc. 
+    \item Incluir planilhas, videoclipes, clipes de som e outros aplicativos diretamente em seus documentos.
 \end{itemize}
 
 \subsection{CSS}
-De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{O padrão W3C trata-se de uma organização internacional com mais de 400 membros, entre empresas, órgãos governamentais e associações independentes, responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal força motriz por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter \cite{badros1999constraint}. 
+De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{O padrão W3C trata-se de uma organização internacional com mais de 400 membros, entre empresas, órgãos governamentais e associações independentes, responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal mecanismo por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter.\cite{badros1999constraint}
 
 Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação humano-computador, design gráfico, além de habilidades de programação na web \cite{keller2010css}. Além disso, a linguagem possui várias características, como especificidade de herança, cascata e seletor, o que torna o entendimento de como as propriedades CSS são aplicadas aos elementos DOM em tempo de execução, uma tarefa assustadora para desenvolvedores da web.
 
@@ -47,9 +49,9 @@ Os métodos e conceitos que foram utilizados para a implementação do sistema e
 
 \subsection{\textit{Bounding Box}}
 
-As \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) são um dos métodos de anotação de imagem mais populares e reconhecíveis usados em \textit{Machine Learning} e em \textit{Deep Learning}.
+A \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) é um dos métodos de anotação de imagem mais populares usados em \textit{Machine Learning} e em \textit{Deep Learning}.
 
-Elas são caixas retangulares que podem ser determinadas pelas coordenadas dos eixos x1 e y1 no canto superior esquerdo e as coordenadas dos eixos x2 e y2 no canto inferior direito do retângulo. Com exemplo, definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem real .\cite{allDeep}
+Elas são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Com exemplo, definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem superior na Figura \ref{fig:boundingBox}. \cite{allDeep}
 
 \begin{figure}[htbp]
 		\centering
@@ -68,17 +70,18 @@ O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do c
 
 \subsection{\textit{Data Augmentation}}
 
-\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados. A partir de imagens originais, gerar mais imagens semelhantes através de vários métodos como girar 25º, 90º, 45º, embaçar a imagem, entre outros para que possa agrupar em um dataset mais robusto.
+\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados de forma sintética. A partir uma imagem, ele pode gerar mais imagens semelhantes através de vários métodos como girar um ângulo qualquer X, embaçar a imagem fazendo com que ela perca o brilho ou até mesmo ofuscando-a, entre outros para que possa aumentar o tamanho do dataset.
 
-Quanto mais dados um algoritmo de ML tiver acesso, mais eficaz ele poderá ser. Mesmo quando os dados são de qualidade inferior, os algoritmos podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram significativamente devido ao lançamento de um corpus de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros. Com esses conjuntos de dados grandes e não estruturados, no entanto, a tarefa passa a ser a de encontrar estrutura dentro de um mar de dados não estruturados. \cite{dataAug}
+Mesmo quando os dados são de qualidade inferior como por exemplo imagens não nítidas, os algoritmos de ML podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros.\cite{dataAug}
+
 
 \subsection{TensorFlow}
 
-O TensorFlow é uma interface para expressar algoritmos de \textit{Machine Learning} e uma implementação para a execução de tais algoritmos. Um cálculo expresso usando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis como telefones e tablets até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como Placas de GPU. 
+O TensorFlow é uma biblioteca de código aberto compatível com Python para implementar algoritmos de \textit{Machine Learning} e uma implementação para a execução de tais algoritmos. Um código utilizando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis como telefones e tablets até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como Placas de GPU. 
 
 O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de aprendizado de máquina na produção em mais de uma dúzia de áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
 
-Vários serviços do Google uilizam o TensorFlow em sua produção, o lançaram como um projeto de código aberto e
+Vários serviços do Google uilizam o TensorFlow em sua produção, foi lançado como um projeto de código aberto e
 tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
 
 \subsection{Scikit-Image}
@@ -89,7 +92,7 @@ O objetivo do scikit-image é fornecer uma biblioteca de alta qualidade de ferra
 
 \subsection{ImageAI}
 
-ImageAI é uma biblioteca python de código aberto criada para capacitar os desenvolvedores a criar aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando simples e poucas linhas de código.
+ImageAI é uma biblioteca python de código aberto criada para capacitar os desenvolvedores a criar aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando poucas linhas de código.
 
 A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algoritmos diferentes de \textit{Machine Learning} treinados no conjunto de dados ImageNet-1000. O ImageAI também suporta detecção de objetos, detecção de vídeo e rastreamento de objetos usando RetinaNet, YOLOv3 e TinyYOLOv3 treinados no conjunto de dados COCO e PASCAL VOC.\cite{ImageAI}
 
@@ -99,7 +102,7 @@ Neste trabalho será utilizada uma classe da biblioteca ImageAI chamada \textit{
 
 A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} (\textit{bbox}) de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
 
-O YOLO é uma ordem de magnitude mais rápida (45 \textit{frames} por segundo) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}. Comparando a rede Faster R-CNN com a  R-CNN, a velocidade do treinamento  é 9 vezes mais rápida e a velocidade do teste é 213 vezes mais rápida. \cite{7960069}
+O YOLO é a frequência mais rápida (45 FPS) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}. Comparando a rede Faster R-CNN com a  R-CNN, a velocidade do treinamento  é 9 vezes mais rápida e a velocidade do teste é 213 vezes mais rápida. \cite{7960069}
 
 O YOLO impõe fortes restrições espaciais nas previsões de \textit{bbox}, pois cada célula da \textit{grid} prevê apenas duas \textit{box} e pode ter apenas uma classe. Essa restrição espacial limita o número de objetos próximos que o modelo pode prever. O modelo luta com pequenos objetos que aparecem em grupos, como por exemplo, bandos de pássaros. \cite{yolov3RealTime}
 
@@ -131,7 +134,7 @@ Em que, quando o \textit{target} estiver na \textit{grid}, \(p_r(Object)\) = 1 e
 
 \subsection{OpenCV}
 
-O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source} e \textit{cross-plataform} (Multiplataforma) que contém mais de 500 algoritmos otimizados para análise de imagem e vídeo. Desde sua introdução em 1999, ele foi amplamente adotado como a principal ferramenta de desenvolvimento pela comunidade de pesquisadores e desenvolvedores em visão computacional. O OpenCV foi originalmente desenvolvido na Intel por uma equipe liderada por Gary Bradski como uma iniciativa para avançar na pesquisa em visão e promover o desenvolvimento de aplicativos intensivos em CPU e baseados em visão. Após lançamentos de varias versões Beta,  a Version 1.0 foi lançada em 2006. Um segundo grande lançamento ocorreu em 2009 com o lançamento do OpenCV 2, que propunha mudanças importantes, especialmente a nova interface C++. Em 2012, o OpenCV reformulou sua fundação que hoje depende do financiamento coletivo para seu desenvolvimento futuro. \cite{opencv}
+O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source} e \textit{cross-plataform} (Multiplataforma) que contém mais de 500 algoritmos otimizados para análise de imagem e vídeo. Desde sua introdução em 1999, ele foi amplamente adotado como a principal ferramenta de desenvolvimento pela comunidade de pesquisadores e desenvolvedores em visão computacional.\cite{opencv}
 
 \section{Softwares}
 Os softwares que foram utilizados para a implementação do sistema estão presentes nesta seção.
@@ -139,7 +142,7 @@ Os softwares que foram utilizados para a implementação do sistema estão prese
 \subsection{Google Colaboratory}
 O Google Colaboratory, mais conhecido como "Google Colab" ou simplesmente "Colab", é um projeto de pesquisa para criar protótipos de modelos de \textit{Machine Learning} em poderosas opções de \textit{hardware}, como GPUs e TPUs. Ele fornece um ambiente de notebook Jupyter sem servidor para desenvolvimento interativo. O Google Colab é gratuito para usar como outros produtos do G Suite — que anteriormente era conhecido como Google Apps — no qual é um serviço oferecido pelo Google que fornece diversas ferramentas da própria empresa. Elas podem ser totalmente personalizadas com as informações do negócio, incluindo um domínio próprio.
 
-Além de ser fácil de usar, o Colab é bastante flexível em sua configuração e faz muito do trabalho pesado para você. \cite{colabdetail}
+Além de ser fácil de usar, o Colab é muito flexível em sua configuração e faz muito do trabalho pesado para você. \cite{colabdetail}
 
 \begin{itemize}
     \item Suporte para Python 2.7 e Python 3.6;
@@ -184,7 +187,7 @@ Utiliza-se a ferramenta para formar o \textit{dataset}, que é um dos fundamento
 	\label{fig:labelXml}
 \end{figure}
 
-O ImageNet dataset \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e anotações de locais de objetos na imagem. O conjunto de dados Imagenet é um dos conjuntos de dados mais usados no campo da aprendizagem profunda. A maior parte do trabalho de pesquisa, como classificação, localização e detecção de imagens, é baseada nesse conjunto de dados. O conjunto de dados Imagenet é detalhado e é muito fácil de usar. É amplamente utilizado no campo da pesquisa em visão computacional e se tornou o conjunto de dados 'padrão' do aprendizado profundo atual do domínio da imagem para testar o desempenho do algoritmo. \cite{zhou2017application}
+O ImageNet dataset \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e anotações de locais de objetos na imagem. O conjunto de dados Imagenet é um dos conjuntos de dados mais usados no campo da \textit{Deep Learning}. A maior parte do trabalho de pesquisa, como classificação, localização e detecção de imagens, é baseada nesse conjunto de dados. O conjunto de dados Imagenet é detalhado e é muito fácil de usar. É amplamente utilizado no campo da pesquisa em visão computacional e se tornou o conjunto de dados 'padrão' do aprendizado profundo atual do domínio da imagem para testar o desempenho do algoritmo. \cite{zhou2017application}
 
 O PASCAL VOC (análise de padrões, modelagem estatística e classes de objetos visuais de aprendizado computacional) \cite{everingham2010pascal} fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos e fornece um conjunto comum de ferramentas para acessar os conjuntos de dados e anotações. O conjunto de dados PASCAL VOC inclui 20 classes e tem um desafio baseado nesse conjunto de dados. O PASCAL VOC Challenge \cite{everingham2010pascal} não está mais disponível após 2012, mas seu conjunto de dados é de boa qualidade e bem marcado e permite a avaliação e comparação de diferentes métodos. E como a quantidade de dados do conjunto de dados PASCAL VOC é pequena, comparada ao conjunto de dados imagenet, muito adequada para os pesquisadores testarem programas de rede. Nosso conjunto de dados também é criado com base no padrão de conjunto de dados PASCAL VOC.\cite{zhou2017application}
 
