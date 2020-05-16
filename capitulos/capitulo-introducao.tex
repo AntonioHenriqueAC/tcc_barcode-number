@@ -4,10 +4,18 @@
 \chapter[Introdução]{Introdução}
 %\addcontentsline{toc}{chapter}{Introdução}
 % ----------------------------------------------------------
+
+ A siderurgia é o processo de transformar ferro, sucata, carbono e fundentes (\textit{e.g.} calcário e dolomita) em aço. Existem dois tipos de usinas siderúrgicas: (i) a usina simples que só utiliza como matéria prima o carvão mineral; (ii) a usina integrada que utiliza tanto o carvão mineral como o carvão vegetal em sua produção.
  
- % TODO Senti falta de uma parágrafo só introduzindo a siderurgia, indicando o que faz e tal. Considere que a pessoa que vai ler pode não saber nada de Aciaria... Em resumo, você deve sempre pensar que está escrevendo pra uma criança, sério. O quanto mais uma criança puder entender, mais o seu texto tá bem escrito.
- 
- Dentre os diversos processos de uma usina integrada, há na Aciaria o processo dos convertedores, que de acordo com \cite{machado2003siderurgia}, é o processo no qual ocorre a transformação do gusa líquido em aço que envolve:
+ O processo se inicia na Coqueria com a transformação do minério em pelotas e a destilação do carvão, para obtenção do coque, dele se obtendo ainda subprodutos carboquímicos.
+%
+ Nas usinas integradas há um processo adicional que é a Sinterização que tem como produto da aglomeração a quente do minério de ferro, fundentes e finos de coque, o sínter.
+%
+ O coque e o sínter são levado aos Alto-Fornos, cuja a temperatura é cerca de 1.500ºC, o ferro se liquefaz e passa a ser chamado de ferro gusa que é levado por carros torpedos para a aciaria onde ocorrerá o refino através da queima de impurezas e adições.
+  
+A transformação do ferro-gusa em aço acontece na Aciaria, através da oxidação dos elementos do gusa que se deseja mitigar, como o carbono, silício, fósforo e enxofre. O produto da Aciaria é o aço líquido que em seguida é encaminhado para o Lingotamento que, em processo de solidificação, é deformado mecanicamente e transformado em produtos siderúrgicos utilizados pela indústria de transformação, como tarugos, bobinas, arames etc. \cite{aco}
+
+ Dentre os diversos processos da Aciaria há os convertedores, onde ocorre a transformação do gusa líquido em aço que envolve:
 
 \begin{itemize}
 	\item a diminuição dos teores de carbono, silício, fósforo, enxofre e nitrogênio a níveis muito baixos;
@@ -19,22 +27,31 @@ Destaca-se a etapa de lingotamento contínuo na qual o aço é convertido do est
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.8\linewidth]{figuras/Steel/artigo_2.png}
+	\includegraphics[width=1.1\linewidth]{figuras/Steel/process.png}
 	\caption{Processo de lingotamento Contínuo de Tarugos}
 	\legend{Fonte: \citeauthor{freitas2013analise} (\citeyear{freitas2013analise})}
+	\begin{tabular}{r@{: }l r@{: }l}
+        1 & Câmera Fotográfica & 4 & Molde \\
+        2& Pilha de corridas & 5 & Máquina de Oxicorte \\
+        3 & Panela de aço& 6 & Transferidor de tarugos \\
+    \end{tabular}
 	\label{fig:processLing}
 \end{figure}
 
-O processo de lingotamento, na siderúrgica Gerdau, usina de Ouro Branco, consiste no despejamento de uma panela com $\sim~224$ toneladas de aço, a uma temperatura de $\sim~1550~$ºC, no distribuidor que precede o lingotamento (Figura \ref{fig:processLing}).
+Especificamente na usina da Gerdau em Ouro Branco (Minas Gerais), o processo de lingotamento consiste no despejamento de uma panela com $\sim~224$ toneladas de aço, a uma temperatura de $\sim~1550~$ºC, no distribuidor que precede o lingotamento em si (Figura \ref{fig:processLing}).
 %
 Este processo pode levar de horas a dias sem interrupção.
 %
-A cada batelada de panela da-se o nome de \textbf{corrida}.
+A cada batelada da panela da-se o nome de \textbf{corrida}.
 
 
-A etapa de solidificação ocorre de fora para dentro do veio\footnote{Veio é o nome que se dá ao conjunto formado pelo molde, a máquina Oxicorte e os rolos de extração e endireitadores. Quanto maior o número de veios, maior a produtividade da máquina, mas mais complexo se torna o seu controle.} em função do contato com as paredes refrigeradas do molde, aspersão de água em \textit{sprays} e perda de calor por radiação para o ambiente. Essa troca de calor faz com que o aço se solidifique gradativamente criando zonas onde o material pode ser encontrado em seus estados sólido na parte exterior do tarugo e líquido no interior.
+A etapa de solidificação ocorre de fora para dentro do veio
+%
+\footnote{\textit{Veio} é o nome que se dá ao conjunto formado pelo molde, a máquina Oxicorte e os rolos de extração e endireitadores. Quanto maior o número de veios, maior a produtividade da máquina, mas mais complexo se torna o seu controle.} 
+%
+em função do contato com as paredes refrigeradas do molde, aspersão de água em \textit{sprays} e perda de calor por radiação para o ambiente. Essa troca de calor faz com que o aço se solidifique gradativamente criando zonas onde o material pode ser encontrado ao mesmo tempo em seus estados sólido na parte exterior e líquido no interior (Figura \ref{fig:processLingSolid}).
 
-\begin{figure}[htbp]
+\begin{figure}[hbt!]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figuras/Steel/estadoSolidoLiq.png}
 	\caption{Estados do aço no processo de lingotamento contínuo}
@@ -42,7 +59,9 @@ A etapa de solidificação ocorre de fora para dentro do veio\footnote{Veio é o
 	\label{fig:processLingSolid}
 \end{figure}
 
-No processo final de cada corrida, os tarugos, produto cuja seção transversal é quadrada é usado como matéria prima para laminação,  são cortados na máquina Oxicorte \footnote{Corta o tarugo em um tamanho previamente definido, possibilitando assim o seu trasporte até a sua destinação final.} como mostrado na Figura \ref{fig:processLing}. Os cortes são feitos de acordo com a demanda do cliente e origina em média 100 tarugos, número este que depende do diâmetro das peças que podem ser todas de 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Após serem cortados, são transportados para o despacho por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e $27$ toneladas de carga. 
+No processo final de cada corrida, os tarugos são cortados na máquina Oxicorte \footnote{Corta o tarugo em um tamanho previamente definido, possibilitando assim o seu trasporte até a sua destinação final.} de modo que a sessão transversal de casa um seja quadrada, como mostrado na Figura \ref{fig:processLing}.  
+
+Os tamanhos dos cortes são feitos de acordo com a demanda do cliente e origina em média 100 tarugos. O número de tarugos que depende do diâmetro das peças que podem ser 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Todas as peças de uma mesma corrida têm o mesmo diâmetro e comprimento. Após serem cortados, os tarugos são transportados para o despacho por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e $27$ toneladas de carga. 
 
 
 \begin{figure}[htbp]
@@ -66,7 +85,7 @@ Após cerca de 20 horas, a temperatura cai para $150~$ºC, temperatura adequada 
 %
 Um jato de água é direcionado aos tarugos para acelerar o resfriamento (Figura \ref{fig:despacho}) com frequência constante apenas na parte frontal.
 %
-A eventual injeção de água no centro do tarugo poderia empenar a peça, uma vez que a temperatura central do tarugo é está mais quente que as extremidades.
+A eventual injeção de água no centro do tarugo pode empenar a peça, uma vez que a temperatura central do tarugo está mais quente que as extremidades.
 
 
 Após o tempo necessário, o operador prega as etiquetas utilizando Silicone Acético Transparente, no qual foi testada e comprovada sua eficácia na resistência sobre alta temperatura.
@@ -79,7 +98,7 @@ Após o tempo necessário, o operador prega as etiquetas utilizando Silicone Ac�
 \end{figure}
 
 A rotulação é importante pois evita a mistura de aço entre uma corrida e outra, viabiliza a rastreabilidade e identificação do aço em processos posteriores como, por exemplo, na laminação até o cliente final. 
-%A composição dos números intrinsecos ao códico de barra impresso na etiqueta metálica, como da Figura \ref{fig:barcode}, é o que permite a identificação supracitada a saber:
+%A composição dos números intrínsecos ao código de barra impresso na etiqueta metálica, como da Figura \ref{fig:barcode}, é o que permite a identificação supracitada a saber:
 
 \begin{table}[]
 	\centering
@@ -103,18 +122,21 @@ O número de identificação da etiqueta pode ser reconhecido pelos dígitos ou 
 Os atuais problemas na identificação das etiquetas são: 
 \begin{enumerate}
 	\item O processo é atualmente manual e demorado.
+	\item O principal problema é a mistura de aço de corridas consecutivas.
 	\item O local em que a pilha de peças se encontra é perigoso devido ao fato de, a todo momento, uma ponte rolante estar trabalhando no mesmo local.
 \end{enumerate}
+
+\section{Revisão bibliográfica} 
 
 % TODO Aqui é o momento ideal pra aparecer uns 2/3 parágrafos de revisão bibliográfica hein kkk Cite dos esforços em automatizar o processo (se houve) e o que outros autores já fizeram em áreas similares. :)
 
 \section{Objetivos} 
 
-Desenvolver um sistema automático para a identificação robusta e geração do relatório de corrida.
+Desenvolver um sistema automático para a identificação robusta e geração de relatório para cada corrida.
 
 Através de uma foto, o sistema será capaz de identificar as etiquetas fixadas no Tarugo, contar o número de etiquetas, identificar o código de barras e, além disso, identificar os números que se encontram acima do mesmo.
 
-Será criado uma aplicação Web com um servidor \textit{online} para que seja gerado um relatório  online detalhado de forma automática facilitando a conferência por parte do operador.
+Será criado uma aplicação Web com um servidor para que seja gerado um relatório detalhado de forma automática facilitando a conferência por parte do operador.
 
 \subsection{Objetivos específicos}
 

@@ -168,7 +168,6 @@
 
 % alterando o aspecto da cor azul
 \definecolor{blue}{RGB}{41,5,195}
-
 % informações do PDF
 \makeatletter
 \hypersetup{
@@ -304,16 +303,35 @@
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
  \noindent
-A finalidade deste trabalho consiste no desenvolvimento e na aplicação de um software que seja capaz de extrair e reconhecer, com precisão, os números  localizados nas etiquetas dos tarugos no processo de Lingotamento Contínuo possibilitando assim a confiabilidade e rastreabilidade e automação dos produtos na fabricação do aço. No processo siderúrgico, cada aço tem sua especificidade, e, com isso, para evitar que o produto se mistura nas etapas de fabricação, é essencial a idetificação detalhada em cada etapa do processo. Na última etapa do processo de Lingotamento Contínuo, no qual os tarugos são estocados, empilhados e serem despachados para o processo seguinte de Laminação, a identificação e contagem das peças são feitas manualmente e enviadas por um operador da Siderúrgica. Dessa forma, devido ao histórico de erros durante o procedimento, foi  pensado em uma alternativa para solucionar o problema criando uma aplicação no qual seria necessária apenas o uso de uma câmera fotográfica. 
+A finalidade deste trabalho é o desenvolvimento de um software capaz de extrair e reconhecer, com precisão, os números localizados nas etiquetas de identificação dos tarugos originados do processo de Lingotamento Contínuo (LC) de uma siderúrgica. 
+%
+Este software pretende incrementar a confiabilidade e automatização desta etapa de fabricação do aço além de tornar possível a rastreabilidade dos tarugos. 
+%
+No processo siderúrgico, o maior problema enfrentado é a mistura de diferentes tipos de aço durante as etapas de fabricação. Portanto a identificação detalhada de cada umas dessas etapas é essencial. 
+%
+No último passo do processo de LC, os tarugos são estocados e empilhados para depois serem despachados para o processo seguinte, a Laminação. 
+%
+Atualmente, a identificação e contagem dos tarugos do estoque são feitas manualmente. 
+Devido ao histórico de erros humanos durante o procedimento, foi pensada em uma alternativa para solucionar o problema criando uma aplicação simples, na qual seria necessária apenas o uso de uma câmera fotográfica digital.
 
- \textbf{Palavras-chaves}: aprendizado de máquina, computação da núvem, IoT, reconhecimento de imagem, código de barras, deep learning, desenvolvimento web.
+
+ \textbf{Palavras-chaves}: aprendizado de máquina, computação da nuvem, IoT, reconhecimento de imagem, código de barras, deep learning, desenvolvimento web.
 \end{resumo}
 
 % resumo em inglês
 \begin{resumo}[Abstract]
   \begin{otherlanguage*}{english}
 
- \noindent leri go.
+ \noindent 
+This study highlights a software developed to precisely extract and recognize billet’s identification numbers originated from the Continuous Casting (CC) of a steel mill.
+%
+This software intends to increase the reliability and automation of this stage of steel production, furthermore make the billets traceable. 
+%
+This software aims, not only to make billets traceable, but also to increase the reliability and automation at this stage of steel production.
+%
+One of the main issues in the steel production is the mix of different kinds of steel, therefore a detailed identification of each step becomes crucial, specially before going to the Lamination process, where billets are stocked and pilled up prior to this next step.
+%
+The identification and count of billets are currently done manually, however due to historical errors caused at this stage an opportunity to improve and automate this process was found. Therefore a simple software application that only requires a digital camera was developed to serve as an alternative solution to this issue in the CC process.
 
    \vspace{\onelineskip}
  
@@ -447,9 +465,7 @@ A finalidade deste trabalho consiste no desenvolvimento e na aplicação de um s
 % ---
 % Capitulo de revisão de literatura
 % ---
-\include{capitulos/capitulo-materiais-metodos}
-% ----------------------------------------------------------
-% PARTE
+
 % ----------------------------------------------------------
 %\part{Metodologia}
 % ----------------------------------------------------------
@@ -458,6 +474,10 @@ A finalidade deste trabalho consiste no desenvolvimento e na aplicação de um s
 % ---
 \include{capitulos/capitulo-metodologia}
 % ----------------------------------------------------------
+
+\include{capitulos/capitulo-desenvolvimento}
+% ----------------------------------------------------------
+% PARTE
 % PARTE
 % ----------------------------------------------------------
 %\part{Resultados}

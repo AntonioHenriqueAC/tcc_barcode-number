@@ -1,636 +1,605 @@
-\chapter{Código sistema de usuários} \label{ap:users}
+\chapter{Sistema de identificação} \label{ap:ident}
 
-Neste apêndice encontram-se algumas partes importantes do código do Sistema de Usuários. O código inteiro pode ser baixado no \textit{link}: \url{https://github.com/CamiloAvelar/user-service}
+Neste apêndice encontram-se algumas partes importantes dos códigos do método de \textit{Data Augmentation}, do Sistema de Identificação de Código de barras e de Identificação de Números. Os códigos inteiros podem ser encontrados através do \textit{link}:\url{https://github.com/AntonioHenriqueAC/Barcode_Number-Recognition/tree/master/google_colab}
+\newline
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} de criação do usuário]
-import Interactor from './interactor';
-import usersRep from '../repositories/users.rep';
-import bcrypt from 'bcrypt';
-import config from './../config/config';
+\begin{lstlisting}[caption=Método de \textit{Data augmentation}]
+import os
+import random
+from scipy import ndarray
 
-class CreateUserBs extends Interactor {
-	constructor(){
-		super();
-	}
-	
-	async execute({ name, password, allowedBathTime }) {
-	
-		if (!allowedBathTime) {
-			allowedBathTime = 10;
-		}
-	
-		const hash = await bcrypt.hash(password.toString(), config.bcrypt.saltRounds);
-	
-		const user = await usersRep.createUser({ name, password: hash, allowedBathTime });
-		
-		if(!user) {
-			throw 'Nao foi possivel criar o usuario!';
-		}
-		
-		const response = {
-			id: user.user_id,
-			name: user.user.name,
-			allowed_bath_time: user.allowed_bath_time,
-		};
-		
-		return response;
-	}
+# image processing library
+import skimage as sk
+from skimage import transform
+from skimage import util
+from skimage import io
+
+def random_rotation(image_array: ndarray):
+    # pick a random degree of rotation between 25% on the left and 25% on the right
+    random_degree = random.uniform(-10, 10)
+    return sk.transform.rotate(image_array, random_degree)
+
+def random_noise(image_array: ndarray):
+    # add random noise to the image
+    return sk.util.random_noise(image_array)
+
+def horizontal_flip(image_array: ndarray):
+    # horizontal flip doesn't need skimage, it's easy as flipping the image array of pixels !
+    return image_array[:, ::-1]
+
+# dictionary of the transformations we defined earlier
+available_transformations = {
+    'rotate': random_rotation,
+    'noise': random_noise,
+    'horizontal_flip': horizontal_flip
 }
 
-export default CreateUserBs;
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+
+folder_path = "PATH DAS IMAGENS ORIGINAIS"
+num_files_desired = 1000
+
+# find all files paths from the folder
+images = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+
+num_generated_files = 0
+while num_generated_files <= num_files_desired:
+    # random image from the folder
+    image_path = random.choice(images)
+    # read image as an two dimensional array of pixels
+    image_to_transform = sk.io.imread(image_path)
+    # random num of transformation to apply
+    num_transformations_to_apply = random.randint(1, len(available_transformations))
+
+    num_transformations = 0
+    transformed_image = None
+    while num_transformations <= num_transformations_to_apply:
+        # random transformation to apply for a single image
+        key = random.choice(list(available_transformations))
+        transformed_image = available_transformations[key](image_to_transform)
+        num_transformations += 1
+
+        new_file_path = '%s/augmented_image_%s.jpg' % (folder_path, num_generated_files)
+
+        # write image to the disk
+        io.imsave(new_file_path, transformed_image)
+        num_generated_files += 1
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} de edição de senha de usuários]
-import Interactor from './interactor';
-import usersRep from '../repositories/users.rep';
-import bcrypt from 'bcrypt';
-import config from './../config/config';
-
-class EditPasswordBs extends Interactor {
-	constructor(){
-		super();
-	}
-	
-	async execute({ id, new_password }) {
-	
-		const hash = await bcrypt.hash(new_password.toString(), config.bcrypt.saltRounds);
-		
-		const editedUser = await usersRep.editPassword({ id, password: hash });
-		
-		const response = editedUser[0] === 1 ? {
-			status: 200,
-			message: 'Usuario editado com sucesso'
-		} : 
-		{
-			status: 500,
-			message: 'Erro ao editar usuario'
-		};
-		
-		return response;
-	}
-}
-\end{lstlisting}
-
+%----------------------------------------------------------------------------
 \newpage
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} de edição de tempo de banho dos usuários]
-import Interactor from './interactor';
-import usersRep from '../repositories/users.rep';
+\begin{lstlisting}[caption=Treinamento do modelo de \textit{barcodes}]
+# Conectando o drive ao colab
+from google.colab import drive
+drive.mount('/content/drive')
+        
+# Baixando as bibliotecas necessarias
+!pip3 install tensorflow-gpu==1.13.1
+!pip3 install imageai --upgrade
 
-class EditUserTimeBs extends Interactor {
-	constructor() {
-		super();
-	}
-	
-	async execute({ id, new_time }) {
-	
-		const editedUser = await usersRep.editUserTime({ id, new_time });
-		
-		const response = editedUser[0] === 1 ? {
-			status: 200,
-			message: 'Usuario editado com sucesso'
-		} : 
-		{
-			status: 500,
-			message: 'Erro ao editar usuario'
-		};
-		
-		return response;
-	
-	}
-}
+# Treinar novo Modelo !
+# 1. Baixando a CNN pre-treinada
+!wget https://github.com/OlafenwaMoses/ImageAI/releases/download/essential-v4/pretrained-yolov3.h5
+
+# Carregando os arquivos do drive no colab
+!unzip "/content/drive/My Drive/Colab/datasets/barcode.zip"
+
+# 3. Treinando o modelo
+from imageai.Detection.Custom import DetectionModelTrainer
+
+trainer = DetectionModelTrainer()
+trainer.setModelTypeAsYOLOv3()
+trainer.setDataDirectory(data_directory="barcode")
+trainer.setTrainConfig(object_names_array=["barcode"], batch_size=4, num_experiments=11, train_from_pretrained_model="pretrained-yolov3.h5")
+trainer.trainModel()
+
+
+# 4. Avaliando os modelos gerados
+metrics = trainer.evaluateModel(model_path="barcode/models", json_path="/content/drive/My Drive/Colab/json/detection_config_barcode.json", iou_threshold=0.5, object_threshold=0.3, nms_threshold=0.5)
 \end{lstlisting}
 
+%----------------------------------------------------------------------------
 \newpage
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} de autorização de usuários]
-import Interactor from './interactor';
-import usersRep from '../repositories/users.rep';
-import bcrypt from 'bcrypt';
+\begin{lstlisting}[caption=Funções de eliminação de \textit{Bounding Boxes} sobrepostas e duplicadas]
+	# determine the (x, y)-coordinates of the intersection rectangle
+	xA = max(boxA[0], boxB[0])
+	yA = max(boxA[1], boxB[1])
+	xB = min(boxA[2], boxB[2])
+	yB = min(boxA[3], boxB[3])
+	# compute the area of intersection rectangle
+	interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
+	# compute the area of both the prediction
+	# rectangles
+	boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+	boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+	# compute the intersection over union by taking the intersection
+	# area and dividing it by the sum of prediction
+	# areas - the interesection area
+	iou = interArea / float(boxAArea + boxBArea - interArea)
+	# return the intersection over union value
+	return iou
 
-class AuthorizeUserBs extends Interactor {
-	constructor(){
-		super();
-	}
-	
-	async execute({ id, pass }) {
-		const user = await usersRep.getUser({ id });
-		
-		if(!user) {
-			throw {error: 'Usuario nao encontrado'};
-		}
-		
-		const match = await bcrypt.compare(pass.toString(), user.password);
-		
-		return {
-			allowed: match
-		};
-	}
-}
+def boxArea(boxA, boxB):
+	boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+	boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+	return boxAArea/boxBArea
+
+def removeDuplicatesLoop(detections):
+	i=0
+	k=0
+	for i, detection in enumerate(detections):
+		for k, detection in enumerate(detections):
+					inter = bb_intersection_over_union(detections[i]["box_points"] , detections[k]["box_points"])
+					if(inter > float(0.01) and inter < float(1)):
+						if(boxArea(detections[i]["box_points"] , detections[k]["box_points"]) > 1):
+							detections.pop(k)
+						else:
+							detections.pop(i)
+							removeDuplicatesLoop(detections)
 \end{lstlisting}
 
+%----------------------------------------------------------------------------
+\newpage
+\begin{lstlisting}[caption=Aumento da \textit{bouding box} e recorte dos \textit{barcodes} em imagens individuais]
+
+from imageai.Detection.Custom import CustomObjectDetection
+from prettytable import PrettyTable
+
+if( len(filesIMG) == len(dirs) ):
+  print("Nao ha mais imagem para treinar. Por favor insira mais imagens na pasta /Imagens_Originais")
+else:
+  detector = CustomObjectDetection()
+  detector.setModelTypeAsYOLOv3()
+  detector.setModelPath(modelPath)
+  detector.setJsonPath(JsonPath)
+  detector.loadModel()
+
+  detections = detector.
+                    detectObjectsFromImage(input_image = InputImage, 
+                    output_image_path="barcode-detected-OriginalBoxes.jpg",
+                    minimum_percentage_probability=30)
+                    
+  for e in detections:
+    e['box_points'][0] = e['box_points'][0] - 50 ## x1
+    e['box_points'][1] = e['box_points'][1] - 50 ## y1
+    e['box_points'][2] = e['box_points'][2] + 50 ## x2
+    e['box_points'][3] = e['box_points'][3] + 50 ## y2
+
+  removeDuplicatesLoop(detections)
+
+  header = PrettyTable(["Nome", "Porcentagem ", "box_points"])
+  for detection in detections:
+    header.add_row([detection["name"], detection["percentage_probability"], detection["box_points"]])
+
+  img = PrettyTable(["Barcodes identificados"])
+  img.add_row([len(detections)])
+\end{lstlisting}
+
+%----------------------------------------------------------------------------
 \newpage
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} de cadastro de banhos]
-import Interactor from './interactor';
-import bathsRep from '../repositories/baths.rep';
+\begin{lstlisting}[caption=Recorte das \textit{bounding box} e exportação para uma pasta tags-images]
+matplotlib inline
+import numpy as np
+import skimage.io
+import matplotlib.pyplot as plt
+import skimage.segmentation
+import cv2
 
-class BathsBs extends Interactor {
-	constructor(){
-		super();
-	}
-	
-	async execute({ user_id, bath_time }) {
-	
-		const bath = await bathsRep.createBath({
-			user_id,
-			bath_time
-		});
-		
-		if(!bath) {
-			throw 'Nao foi possivel cadastrar o banho';
-		}
-		
-		return bath;
-		}
-		
-		async getBaths ({ user_id }) {
-		
-		const baths = await bathsRep.getBaths({
-			user_id,
-		});
-		
-		return baths;
-	}
-}
+if( len(filesIMG) == len(dirs) ):
+  print("Nao ha mais imagem para treinar. 
+  Por favor insira mais imagens na pasta '/Imagens_Originais'")
+else:
+  Image_with_boxes = "barcode-detected-OriginalBoxes.jpg"
 
-export default BathsBs;
+  img = skimage.io.imread(InputImage)
+  bbox = []
+
+  for e in detections:
+      bbox.append(e['box_points'])
+
+  for i, (x1,y1,x2,y2) in enumerate(bbox):
+
+      if i in {0,1,2,3,4,5,6,7,8,9}:
+        i = '00' + str(i)
+      
+      if(int(i) > 9 and int(i) < 100):
+        i = '0' + str(i)
+
+      img2 = cv2.rectangle(img, (x1,y1), (x2,y2), (0,255,0), 0)
+      out = img[y1:y2, x1:x2]
+
+      cv2.imwrite('barcode-detected-objects/barcode-00'+str(i)+'.jpg', out)
+
+  cv2.imwrite('barcode-detected-New.jpg', img)
+
+  print("Boxes recortados com sucesso!")
+  print("..")
+  print("..")
+  print("..")
+  print("Imagem = 'barcode-detected-New.jpg' gerada.")
 \end{lstlisting}
 
+%----------------------------------------------------------------------------
+\newpage
+\begin{lstlisting}[caption=Função para fazer a diferença entre distância dos números para deletar o de menor Acurácia]
+def removeDuplicates():
+    i=0
+    for detection in detections:
+      if( i != len(detections)-1 ):
+          
+          Xa = (detections[i]['box_points'][0] + detections[i]['box_points'][2])/2
+          Ya = (detections[i]['box_points'][1] + detections[i]['box_points'][3])/2
+          Xb = (detections[i+1]['box_points'][0] + detections[i+1]['box_points'][2])/2
+          Yb = (detections[i+1]['box_points'][1] + detections[i+1]['box_points'][3])/2
+
+          Dab = ( (Xb-Xa)**2 + (Yb - Ya)**2 )**1/2
+          if(Dab < float(10)):
+              if(detections[i]["percentage_probability"] < detections[i+1]["percentage_probability"]):
+                  detections.pop(i)
+              else:
+                  detections.pop(i+1)
+      i=i+1
+\end{lstlisting}
+
+%----------------------------------------------------------------------------
+
+\begin{lstlisting}[caption=Identificando os números nas imagens com \textit{barcodes} individuais]
+from imageai.Detection.Custom import CustomObjectDetection
+import json
+from prettytable import PrettyTable
+
+modelPath = "Colab/models/number/detection_model-ex-034--loss-0012.508.h5"
+JsonPath = "Colab/json/detection_config_number.json"
+
+detector = CustomObjectDetection()
+detector.setModelTypeAsYOLOv3()
+detector.setModelPath(modelPath)
+detector.setJsonPath(JsonPath)
+detector.loadModel()
+
+avgCorrida = 0
+
+for x in range(file_count_tag):
+
+  i=0
+  soma=0
+  numero=''
+  execucoes = 0
+
+  if x in {0,1,2,3,4,5,6,7,8,9}:
+    x = '00' + str(x)
+  
+  if(int(x) > 9 and int(x) < 100):
+    x = '0' + str(x)
+
+  detections = detector.detectObjectsFromImage(input_image="Colab/Corridas/Corrida_"+str(corrida)+"/tags_images/barcode-00"+str(x)+".jpg", 
+                                          output_image_path="Colab/Corridas/Corrida_"+str(corrida)+"/tags_detected/digit-detected-"+str(x)+".jpg", 
+                                          display_percentage_probability=False, 
+                                          minimum_percentage_probability=60)
+  def boxPoints(e):
+    return e['box_points']
+
+  detections.sort(key=boxPoints)
+
+  menor = 100
+  while(len(detections) > 13):
+    execucoes = execucoes + 1
+    if(execucoes>10000):
+      for i, detection in enumerate(detections):
+        if(menor > detections[i]["percentage_probability"]):
+          menor = detections[i]["percentage_probability"]   
+      for k, detection in enumerate(detections):
+        if(detections[k]["percentage_probability"] == menor):
+          detections.pop(k)
+      break
+    removeDuplicates()
+
+  img = PrettyTable(["                     Imagem                    "])
+  img.add_row([x])
+  header = PrettyTable(["Numero", "Porcentagem ", "box_points"])
+  alert = ''
+  for i in range(len(detections)):
+    if(detections[i]["percentage_probability"] < 99):
+      detections[i].update({"alert" : "true"})
+      alert = "true"
+    else:
+      detections[i].update({"alert" : "false"})
+      alert = "false"
+    header.add_row([detections[i]["name"], detections[i]["percentage_probability"], detections[i]["box_points"]])
+    soma = soma + detections[i]["percentage_probability"]
+    numero = numero + ''.join(detections[i]["name"])
+
+  if(len(detections) != 0):
+    avg = soma/len(detections)
+  table = PrettyTable(["Numeros", "Quantidade", "Media"])
+  table.add_row([numero, len(detections), avg])
+  
+  avgCorrida = avgCorrida + avg
+  num=numero
+  config = {
+      "num": num,
+      "id": x,
+      "acc": avg,
+      "alert": alert
+    }
+  detections[:0] = [config]
+
+  with open('Colab/Corridas/Corrida_'+str(corrida)+'/tags_json/tag-'+ str(x) +'.json', 'w', encoding='utf-8') as f:
+    json.dump(detections, f, ensure_ascii=False, indent=4)
+\end{lstlisting}
+
+
+%----------------------------------------------------------------------------
 \newpage
 
-\begin{lstlisting}[caption=Exemplo do código do \textit{interactor} para recuperar informações dos usuários]
-import Interactor from './interactor';
-import usersRep from '../repositories/users.rep';
+\begin{lstlisting}[caption=Criando o arquivo config-x.json]
+avgCorrida = avgCorrida/float(file_count_tag)
 
-class GetUserBs extends Interactor{
-	constructor(){
-		super();
-	}
-	
-	async execute({ id }) {
-	const user = await usersRep.getUser({ id });
-	
-	if(!user) {
-		throw {error: 'Nao foi possivel localizar o usuario!'};
-	}
-	
-	const response = {
-		id: user.id,
-		name: user.name,
-		allowedBathTime: user.user_setting.allowed_bath_time
-	};
-	
-	return response;
-	}
+config = {
+    "numCorrida": num,
+    "Status": "Inadimplente",
+    "acc": avgCorrida,
+    "qte": file_count_tag
 }
+
+with open('Colab/Corridas/Corrida_'+str(corrida)+'/config_'+str(corrida)+'.json', 'w', encoding='utf-8') as f:
+    json.dump(config, f, ensure_ascii=False, indent=4)
 \end{lstlisting}
 
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/createuser.png}
-%	\caption{Código para criar usuário}
-%	\label{fig:createuser}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/editpassword.png}
-%	\caption{Código para editar senha do usuário}
-%	\label{fig:editpass}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/edittime.png}
-%	\caption{Código para editar tempo do usuário}
-%	\label{fig:edittime}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/authorizeuser.png}
-%	\caption{Código para autorizar usuário}
-%	\label{fig:autorizar}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/baths.png}
-%	\caption{Código para cadastrar banho do usuário}
-%	\label{fig:cadastra-banho}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/userservice/getuser.png}
-%	\caption{Código para recuperar usuários}
-%	\label{fig:getuser}
-%\end{figure}
 
-\chapter{Código sistema de comunicação MQTT} \label{ap:mqtt}
+%----------------------------------------------------------------------------
+\newpage
 
-Neste apêndice encontram-se algumas partes importantes do código do Sistema de comunicação. O código inteiro pode ser baixado no \textit{link}: \url{https://github.com/CamiloAvelar/mqtt-logger-service}
+\chapter{Aplicação Web} \label{ap:web}
 
-\begin{lstlisting}[caption=Exemplo do código de comunicação MQTT]
-const mqtt = require('mqtt');
-const EventEmitter = require('events');
+Neste apêndice encontram-se algumas partes importantes dos códigos do software web desenvolvido . Os códigos inteiros podem ser encontrados através do \textit{link}: \url{https://github.com/AntonioHenriqueAC/Barcode_Number-Recognition}
+\newline
 
 
-class MqttHandler extends EventEmitter {
-	constructor() {
-		super();
-		this.mqttClient = null;
-		this.host = 'mqtt://mosquitto';
-		this.username = 'mqtt_user'; // mqtt credentials if these are needed to connect
-		this.password = '100200300';
+%----------------------------------------------------------------------------
+
+\begin{lstlisting}[caption=Exemplo do código dos \textit{controllers}]
+var path = require('path');
+var rootPath = path.join(__dirname, '../../');
+var fs = require('fs');
+var CorridaBs = require('../business/corrida.bs');
+const image2base64 = require('image-to-base64');
+const util = require('util')
+var multer = require('multer');
+
+const readDirPromise = util.promisify(fs.readdir);
+const renamePromise = util.promisify(fs.rename)
+const readFilePromise = util.promisify(fs.readFile)
+const writeFilePromise = util.promisify(fs.writeFile)
+
+
+module.exports.list = async (req, res) =>{
+	var corrida = new CorridaBs();
+
+	await callListPage();
+	async function callListPage() {
+		await corrida.listHome();
+		const data = await corrida.list();
+			res.render('list', {
+			corrida: data
+			})
 	}
+
+}	
+
+module.exports.detailPage = async (req, res) => { 
+	var corrida = new CorridaBs(req);
+
+		await callDetailPage();
+		async function callDetailPage() {
+			let detail = await corrida.list();
+			await corrida.groupCorridaDetail(req);
+			let data = await corrida.listTags(req);
+			
+			const position = req.body.id - 1
+
+			detail = detail[position]
+			res.render('corrida-detail',{
+				corrida: data,
+				tags: data.length,
+				detail: detail,
+				position: position
+			})
+		}
+}
+
+
+module.exports.checkCorrida = async (req, res) => {
 	
-	
-	connect() {
-		const self = this;
-		this.mqttClient = mqtt.connect(this.host, { username: this.username, password: this.password });
-		
-		this.mqttClient.on('error', (err) => {
-			console.log(err);
-			this.mqttClient.end();
-		});
-		
-		this.mqttClient.on('connect', () => {
-			console.log(`mqtt client connected to ${this.host}`);
-		});
-		
-		this.mqttClient.on('close', () => {
-			console.log(`mqtt client disconnected`);
-		});
-		
-		this.mqttClient.on('message', (topic, message) => {
-			const builtMessage = {
-				topic,
-				message: message.toString()
-			};
-		
-			self.emit('messageReceived', builtMessage);
+	let corrida = new CorridaBs();
+	let targetCorrida = req.body.position;
+	let dir = rootPath + 'server/corridas_config/config/';
+
+	async function getDirectories(path) {
+		const files = await readDirPromise(path);
+		const file = parseInt(targetCorrida) 
+		let nameFile = files[file];
+
+		return new Promise((resolve) => {
+			resolve(path + nameFile);
 		})
 	}
-	
-	subscribe(topic) {
-		this.mqttClient.subscribe(topic, {qos: 0});
-	}
-	
-	sendMessage(message, topic) {
-		this.mqttClient.publish(topic, message);
-	}
-}
+	const fileName = await getDirectories(dir)
 
-module.exports = MqttHandler;
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Exemplo do código responsável por lidar com informações do tempo de banho]
-const requestService = require('./requestService');
-
-class timeHandler {
-	constructor(mqttClient) {
-		this.mqttClient = mqttClient;
-		this.allowedTime;
-		this.interval;
-		this.nowDate;
-		this.endDate;
-		this.userId;
-	}
 	
-	countTime(allowedTime, id) {
-		this.userId = id;
-		this.allowedTime = allowedTime;
-		this.nowDate = new Date();
+	await callCheckCorrida();
+	async function callCheckCorrida() {
+			let resultFull = await corrida.list();
+
+			result = resultFull[targetCorrida]
+			var corridaStatus = result.status;
 		
-		this.interval = setInterval(() => {
-		this.mqttClient.sendMessage('stop', 'actuator');
-		this.clearBathInterval();
-		}, this.allowedTime);
-	}
-	
-	async endTime() {
-		this.clearBathInterval();
-		this.endDate = new Date();
-		
-		const bathTime = this.endDate - this.nowDate;
-		
-		console.log('BATHTIME>>>', bathTime);
-		await this._requestUserService(bathTime);
-	}
-	
-	clearBathInterval(){
-		clearInterval(this.interval);
-	}
-	
-	async _requestUserService(time) {
-		const requestOptions = {
-			type: 'POST',
-			endpoint: 'banho',
-			body: {
-			user_id: this.userId,
-			bath_time: time
-			},
-		};
-		
-		return await requestService.userRequest(requestOptions);
-	}
-}
+			result.Status = "Despachada"
 
-module.exports = timeHandler;
-\end{lstlisting}
+			await writeFilePromise(fileName, JSON.stringify(result))
 
-\newpage
-
-\begin{lstlisting}[caption=Exemplo do código que lida com a comunicação com o InfluxDB]
-const requestService = require('./requestService');
-
-class KeysHandler {
-	constructor(mqttClient) {
-		this.keyBuffer = '';
-		this.working = false;
-		this.gettingPassword = false;
-		this.userId;
-		this.mqttClient = mqttClient;
-	}
-	
-	async handle(message) {
-		if(message === '*') {
-			this.working = !this.working;
-			this.gettingPassword = false;
-			return;
-		}
-	
-		if((this.working || this.gettingPassword) && message !== '#') {
-			this.keyBuffer += message;
-		}
-		
-		if(message === '#') {
-			this.working = false;
-			try {
-				const response = await this._requestUserService();
-				console.log(response);
-				this.gettingPassword ? (response.allowed ? this.mqttClient.sendMessage('start', 'actuator') : console.log('NAO AUTORIZADO')) : 
-				this.mqttClient.sendMessage(JSON.stringify(response), 'user');
-				this.gettingPassword = !this.gettingPassword;
-			} catch (err) {
-				console.log(err.message)
-			} finally {
-				this.keyBuffer = '';
+			if (corridaStatus == "Despachada") {
+				res.render('corrida-desp');
+			} else {
+				res.render('corrida-check', {
+				corrida: result.nuMCorrida
+				})
 			}
-		}
 	}
+
+}
+
+module.exports.deleteCorrida = async (req, res) => {
+var corrida = new CorridaBs();
+
+var dir = rootPath + 'server/corridas_config/config/';
+var dirDelete = rootPath + 'server/corridas_config/deleted/';
+
+
+async function getDirectories(path ) {
+	const files = await readDirPromise(path);
+	const file = parseInt(req.body.id) - 1
+	let nameFile = files[file];
+
+	return new Promise((resolve)=>{
+		resolve(path+nameFile);
+	})
+}
+
+ 	const result = await corrida.list()
+
+	let targetCorrida = parseInt(req.body.id) -1;
+	let corridaTarget = result[targetCorrida]
+
+	const fileName = await getDirectories(dir)
+
+	let moveFile = async (file, dir2) => {
+		let f = path.basename(file);
+		let dest = path.resolve(dir2, f);
+		await renamePromise(file, dest);
+	};
+
+	await moveFile(fileName, dirDelete);
+
+	res.render('corrida-delete', {
+			corrida: corridaTarget.nuMCorrida
+			})
+};
+
+
+module.exports.showImage = async (req, res) => {
+	target = req.body.id - 1
+	position = parseInt(req.body.position) + 1
+
+	if (target >= 0 && target < 10) target = '00' + target
+	if (target > 9 && target < 100) target = '0' + target
+
+	var path = rootPath + "server/corridas/Corrida_" + position + "/tags_images/barcode-00" + target + ".jpg"
+	var numCorrida = rootPath + "server/corridas/Corrida_" + position + "/tags_json/tag-" + target + ".json"
 	
-	async _requestUserService() {
-		const requestOptions = this.gettingPassword ? {
-			type: 'POST',
-			endpoint: `usuario/autorizar`,
-			body:{
-				id: this.userId,
-				password: this.keyBuffer
-			},
-			}: {
-				type: 'GET',
-				endpoint: `usuario/${this.keyBuffer}`,
-			body: null,
-		};
+	const img = await image2base64(path);
+	let result = await readFilePromise(numCorrida, 'utf8');
+	result = JSON.parse(result);
+	numCorrida = result[0].num
+
+	res.render('show-image', {
+		id: target,
+		img: img, 
+		numCorrida: numCorrida,
+		position: position
+	})
+}
+
+module.exports.editImage = async (req, res) => {
+
+	var corrida = new CorridaBs(req);
+	
+	var numCorrida = rootPath + "server/corridas/Corrida_" + req.body.id + "/tags_json/tag-" + req.body.target + ".json"
+	
+	let result = await readFilePromise(numCorrida, 'utf8');
+	result = JSON.parse(result);
+	result[0].num = req.body.num
+	
+	
+	fs.writeFile(numCorrida, JSON.stringify(result), function writeJSON(err) {
+		if (err) return console.log(err);
+	});
+	
+	await callDetailPage();
+	async function callDetailPage() {
+		let detail = await corrida.list();
+		await corrida.groupCorridaDetail(req);
+		let data = await corrida.listTags(req);
 		
-		return requestService.userRequest(requestOptions)
-		.then((response) => {
-			this.userId = this.gettingPassword ? this.userId : response.id;
-			return response
-		}).catch(err => {throw err});
+		const position = req.body.id - 1
+		detail = detail[position]
+		res.render('corrida-detail', {
+			corrida: data,
+			tags: data.length,
+			detail: detail,
+			position: position
+		})
 	}
 }
 
-module.exports = KeysHandler;
+module.exports.scriptPy = async (req, res) => {
+const path = rootPath + "server/images"
+const filesLenght = await readDirPromise(path);
+
+var storage = multer.diskStorage({
+	destination: function (req, file, callback) {
+		callback(null, './server/images');
+	},
+	filename: function (req, file, callback) {
+		callback(null, file.fieldname + (filesLenght.length + 1) + '.jpg');
+	}
+});
+
+var upload = multer({storage: storage}).single('img');
+
+upload(req, res, function (err) {
+	if (err) {
+			return res.end("Error uploading file.");
+		}
+	});
+
+let runPy = new Promise(function (success, nosuccess) {
+	const {spawn} = require('child_process');
+	const pyprog =	 spawn('python', [rootPath + 'recognize.py'], {shell: true}); // add shell:true so node will spawn it with your system shell.
+
+	let storeLines = []; // store the printed rows from the script
+	let storeErrors = []; // store errors occurred
+	pyprog.stdout.on('data', function (data) {
+		storeLines.push(data);
+	});
+
+	pyprog.stderr.on('data', (data) => {
+		storeErrors.push(data);
+	});
+
+	 pyprog.on('close', () => {
+		if (storeErrors.length) {
+			nosuccess(new Error(Buffer.concat(storeErrors).toString()));
+		} else {
+			success(storeLines);
+		}
+	});
+});
+
+ runPy.then( () =>{
+	 res.redirect('/');
+	 }
+ );
+
+}
 \end{lstlisting}
 
-\begin{lstlisting}[caption= Código principal do sistema]
-const mqttHandler = require('./mqtt_handler');
-const KeysTopicHandler = require('./keysTopicHandler');
-const TimeHandler = require('./timeHandler');
-const SUBSCRIBE_TOPICS = ['keys', 'actuator', 'user', 'sensor'];
-const influx = require('./influxHandler');
-const mqttClient = new mqttHandler();
-const keysHandler = new KeysTopicHandler(mqttClient);
-const timeHandler = new TimeHandler(mqttClient);
-const influxDB = new influx();
-influxDB.connect();
-mqttClient.connect();
-SUBSCRIBE_TOPICS.forEach((topic) => {
-  mqttClient.subscribe(topic);
-})
 
-let usuario;
-let sensorCount = 0;
-let actuatorOn;
-mqttClient.on('messageReceived', (received) => {
-  switch(received.topic) {
-    case 'keys':
-      if(!actuatorOn) {
-        keysHandler.handle(received.message);
-      }
-      break;
-    case 'actuator':
-      if(received.message === 'start') {
-        timeHandler.countTime(usuario.allowedBathTime * 60000, usuario.id) // usuario.allowedBathTime * 60000
-        mqttClient.sendMessage('ON', `homeassistant/binary_sensor/${usuario.name}/state`);
-        actuatorOn = true;
-      }
-
-      if(received.message === 'stop') {
-        timeHandler.endTime();
-        if(usuario) {
-          influxDB.getPoints(usuario.id)
-            .then(/*console.log*/);
-        }
-        sensorCount = 0;
-        actuatorOn = false;
-        mqttClient.sendMessage('OFF', `homeassistant/binary_sensor/${usuario.name}/state`);
-      }
-      break;
-    case 'sensor':
-      if(usuario) {
-        if(received.message < 10) sensorCount++;
-  
-        if(sensorCount > 10) {
-          mqttClient.sendMessage('stop', 'actuator');
-          sensorCount = 0;
-        };
-  
-        influxDB.writePoints(usuario.id, received.message)
-          .then(console.log)
-          .catch(console.log);
-      } else {
-        console.log('NO USER DETECTED, STOPPING ACTUATOR');
-        mqttClient.sendMessage('stop', 'actuator')
-      };
-      break;
-    case 'user':
-      const message = JSON.parse(received.message);
-      mqttClient.sendMessage(`{"name": "${message.name}", "device_class": "moisture", "state_topic": "homeassistant/binary_sensor/${message.name}/state"}`, `homeassistant/binary_sensor/${message.name}/config`);
-      usuario = message;
-      break;
-  }
-})
-\end{lstlisting}
-
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/mqttlogger/mqtt.png}
-%	\caption{Código para comunicação mqtt}
-%	\label{fig:mqtt}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/mqttlogger/time.png}
-%	\caption{Código que lida com o tempo do banho}
-%	\label{fig:time}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/mqttlogger/keystopic.png}
-%	\caption{Código que lida com as teclas apertadas no teclado numérico}
-%	\label{fig:keys}
-%\end{figure}
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/mqttlogger/influx.png}
-%	\caption{Código que lida com a comunicação com o InfluxDB}
-%	\label{fig:influx}
-%\end{figure}
-
-%\chapter{Docker-compose.yml}
-%
-%\begin{lstlisting}[language=Python]
-%version: "3.5"
-%
-%services:
-%	user:
-%		build: ./user-service
-%		command: gulp
-%		depends_on:
-%			- postgres
-%		volumes:
-%			- ./user-service:/app
-%		ports:
-%			- "3001:3001"
-%		networks:
-%			- default
-%
-%	mqtt-logger:
-%		build: ./mqtt-logger
-%		command: npm start
-%		depends_on:
-%			- mosquitto
-%		volumes:
-%			- ./mqtt-logger:/app
-%		ports:
-%			- "3002:3002"
-%
-%	postgres:
-%		image: postgres
-%		restart: always
-%		environment:
-%		POSTGRES_USER: pi
-%		POSTGRES_PASSWORD: 100200300
-%		POSTGRES_DB: postgres
-%		CONFIGS: "listen_addresses:'*'"
-%		volumes:
-%			- ./postgres/data:/var/lib/postgresql/data
-%		expose:
-%			- "5432"
-%		ports:
-%			- "5432:5432"
-%		networks:
-%			- default
-%
-%	migration:
-%		image: src_user:latest
-%		command: ["./wait-for-it/wait-for-it.sh", "postgres:5432", "--", "npm", "run", "migrate"]
-%		links:
-%			- postgres
-%		depends_on:
-%			- postgres
-%
-%	homeassistant:
-%		container_name: homeassistant
-%		restart: unless-stopped
-%		image: homeassistant/home-assistant
-%		volumes:
-%			- ./homeassistant:/config
-%		depends_on:
-%			- mosquitto
-%		network_mode: host
-%		privileged: true
-%		expose:
-%			- "8123"
-%		ports:
-%			- "8123:8123"
-%
-%	influxdb:
-%		image: influxdb:latest
-%		container_name: influxdb
-%		restart: always
-%		ports:
-%			- "8083:8083"
-%			- "8086:8086"
-%			- "8090:8090"
-%		volumes:
-%			# Data persistency
-%			# sudo mkdir -p /srv/docker/influxdb/data
-%			- ./influxdb/data:/var/lib/influxdb
-%
-%	grafana:
-%		image: grafana/grafana
-%		container_name: grafana
-%		restart: always
-%		ports:
-%			- "3003:3000"
-%		links:
-%			- influxdb
-%		volumes:
-%			# Data persistency
-%			# sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
-%			- ./grafana/data:/var/lib/grafana
-%	
-%	mosquitto:
-%		image: eclipse-mosquitto
-%		hostname: mosquitto
-%		container_name: mosquitto
-%		restart: always
-%		user: 1883:1883
-%		expose:
-%			- "1883"
-%			- "9001"
-%		ports:
-%			- "1883:1883"
-%			- "9001:9001"
-%		volumes:
-%			- ./mosquitto/config:/mosquitto/config
-%			# sudo chown 1883:1884 /mosquitto/logs
-%			- ./mosquitto/logs:/mosquitto/logs
-%		networks:
-%			- default
-%		networks:
-%		default:
-%		driver: bridge
-%		ipam:
-%		config:
-%			- subnet: 172.18.1.0/24
-%\end{lstlisting}
+%----------------------------------------------------------------------------
+\newpage

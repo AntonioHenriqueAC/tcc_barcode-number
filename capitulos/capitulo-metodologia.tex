@@ -1,468 +1,378 @@
  \chapter{Metodologia}
+ 
+Este capítulo apresenta a estrutura geral do sistema, que se divide em duas partes. A primeira parte consiste no \textit{backend} desenvolvido em Python com o objetivo de reconhecer as \textit{tags} utilizando técnicas de \textit{Machine Learning}. A segunda parte consiste na aplicação \textit{web}, desenvolvida em Node.JS, responsável pela visualização e gerenciamento do sistema através de relatórios e telas.
 
-EJS\footnote{O EJS é uma engine de visualização, com ele conseguimos de uma maneira fácil e simples transportar dados do back-end para o front-end, basicamente conseguimos utilizar códigos em javascript no html de nossas páginas.}
+A validação do projeto será feita através de um sistema que seja capaz de identificar números localizados em etiquetas em uma única imagem.
 
-Este Capítulo apresenta a estrutura geral do sistema, a configuração inicial do Raspberry Pi, a construção dos microsserviços, assim como as etapas de realização do projeto. A
-primeira etapa consiste no desenvolvimento do microsserviço de cadastro e controle de usuários. Em seguida, foi desenvolvido o sistema que recebe os dados via MQTT, guardando-os no InfluxDB. Com os dados sendo recebidos e devidamente guardados, foram configurados o HomeAssistant e Grafana.
+%------------------------------------------------
 
-A validação do projeto será feita através de um sistema criado para emular os dados vindos dos sensores, atuadores e teclado.
+\section{Visão geral do sistema} \label{sec:funcionamento}
 
-\section{Funcionamento do sistema} \label{sec:funcionamento}
-
-Nesta seção estão descritos os parâmetros utilizados pelo sistema, os dados que são gerados, assim como as respostas esperadas. A arquitetura geral do sistema pode ser visualizada na Figura \ref{fig:arqgeral}, mostrando os sistemas desenvolvidos, os tópicos do servidor MQTT e os sistemas que implementam os bancos de dados.
+Esta seção descreve as características operacionais do sistema, assim como as respostas esperadas. O fluxo geral do sistema pode ser visualizado na Figura \ref{fig:arqgeral}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figuras/ArquiteturaDoProjeto.png}
+	\includegraphics[width=1\linewidth]{capitulos/FluxoDoProjeto.png}
 	\caption{Arquitetura geral do projeto.}
+	\begin{tabular}{r@{: }l r@{: }l}
+    1 & Câmera Fotográfica & 4 & Identificação de números \\
+    2& Foto das peças da corrida & 5 & Aplicação WEB \\
+    3 & Identificação dos códigos de  barra
+    \end{tabular}
 	\label{fig:arqgeral}
 \end{figure}
 
-\subsection{Parâmetros de operação}
+Utilizando uma câmera fotográfica, a primeira etapa consiste em fotografar as peças de uma corrida no despacho. A partir dessa fotografia, o código de barras de cada tarugo será reconhecido, e posteriormente, os números que estão acima dele. Essas corridas serão salvas em um banco de dados e mostrados através de telas para que o usuário possa validá-las.
 
-Os parâmetros de operação são utilizados pelo sistema para garantir o funcionamento esperado. Estes parâmetros são:
+%------------------------------------------------
+
+\section{Backend em Python} \label{sec:backend}
+
+Para realizar o experimento é necessário treinar um modelo de rede neural que seja capaz de reconhecer código de barras e algarismos. Para isso, são efetuadas três etapas. Primeiro será coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens junto com a classe em que pertence. Então, é possível realizar a configuração e treinamento da rede neural. E por fim será calculada a acurácia, mediante imagens de teste, do modelo que teve a melhor performance no treinamento.
+
+Escolhemos prioritariamente a linguagem de programação Python para implementação do sistema de Machine Learning devido à grande comunidade existente da linguagem, ao grande número de bibliotecas de análise de dados disponiveis e à ferramenta Google Colab utiliza-ló.
+
+%------------------------------------------------
+
+\subsubsection*{Python}
+
+Python é uma linguagem de programação interpretada\footnote{Linguagem interpretada é uma linguagem de programação em que o código fonte nessa linguagem é executado por um programa de computador chamado interpretador, que em seguida é executado pelo sistema operacional ou processador.}, de alto nível, ou seja,com um nível de abstração relativamente elevado e de uso geral. Sua abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código para projetos de pequena e grande escala.
+
+O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional.
+
+Os interpretadores de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento do Python. \cite{van2007python}
+
+%------------------------------------------------
+
+\subsection{Preparação do dataset}
+
+Como o escopo do trabalho não contempla a automatizacão da recuperacão de informacões de \textit{websites} públicos, foi disponibilizado um repositório com imagens. Esse
+repositório possui 500 imagens e foi disponibilizado pelo laboratório Applied Recognition Technology Laboratory. As imagens se tratam de diferentes tipos de códigos de barras.\cite{Arte-Lab}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/MachineLearning/barcodes.png}
+	\caption{Dataset dos código de barras}
+	\label{fig:datasetBarcode}
+\end{figure}
+
+Para que possamos treinar um modelo de rede neural com alta taxa de acerto, é ideal que tenhamos o maior número possível de imagens no \textit{dataset}. Com isso, foi utilizado o método de \textit{data augmentation} para aumentar a quantidade de imagens que já tínhamos disponíveis. Como iremos utilizar uma rede já pré treinada, utilizaremos em média 1000 imagens em nossa rede.
+
+%------------------------------------------------
+
+\subsubsection*{\textit{Data Augmentation}}\label{sec:dataAugm}
+
+\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados de forma sintética. A partir uma imagem, ele pode gerar mais imagens semelhantes através de vários métodos como girar um ângulo qualquer, embaçar a imagem fazendo com que ela perca o brilho ou até mesmo ofuscando-a, entre outros para que possa aumentar o tamanho do \textit{dataset}.
+
+Mesmo quando os dados são de qualidade inferior como, por exemplo, imagens não nítidas, os algoritmos de ML podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros.\cite{dataAug}
+
+O uma parte do código \ref{cod:dataaug} do método mostra o momento em que é definido o tipo de ação que será feita em cada foto, como rotacionar em um ângulo aleatório, inserir ruído na imagem e girar horizontalmente. O método também possibilita escolher a quantidade de imagens que será gerada, neste caso, 1000 imagens.
+
+\begin{lstlisting}[caption=Exemplo de código do método \textit{data augmentation}, label=cod:dataaug][htb!]
+ num_files_desired = 1000
+ available_transformations = {
+                                'rotate': random_rotation,
+                                'noise': random_noise,
+                                'horizontal_flip': horizontal_flip
+                             }
+\end{lstlisting}
+
+%------------------------------------------------
+
+\subsection{Anotações das imagens}
+
+Após ter criado o dataset, teremos que fazer as anotações das imagens geradas. Isso quer dizer, criar um arquivo que contenha as posições dos pixels da \textit{Bounding Box} que engloba o objeto na imagem. Um dos formatos mais conhecidos é o Pascal VOC. O formato VOC do Pascal usa arquivos XML para armazenar as informações sobre os objetos anotados nas imagens. Para que possamos gerar esse arquivos mais facilmente, utilizaremos o software LabelImg para realizar essa tarefa.
+
+%------------------------------------------------
+
+\subsubsection*{\textit{Bounding Box}}
+
+A \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) é um dos métodos de anotação de imagem mais populares usados em \textit{Machine Learning} e em \textit{Deep Learning}.
+
+Elas são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Com exemplo, definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem superior na Figura \ref{fig:boundingBox}. \cite{allDeep}
+
+\begin{figure}[htbp]
+		\centering
+		\includegraphics[scale=0.6]{figuras/MachineLearning/catDog.png}
+		\caption{Execução de \textit{Bounding Boxes}.}
+		\legend{Fonte: \cite{133Ob9905723:online})}
+		\label{fig:boundingBox}
+\end{figure}
+
+O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do cachorro e do gato na imagem, respectivamente.
+
+\begin{lstlisting}[caption=Posições de X e Y nas \textit{Bounding Boxes}, label=cod:bbox]
+         dog_bbox, cat_bbox = [60, 45, 378, 516], [400, 112, 655, 493]
+\end{lstlisting}
+
+%------------------------------------------------
+
+\subsubsection*{LabelImg}\label{sub:LabelImg}
+
+O LabelImg (Figura \ref{fig:labelimg}) é uma ferramenta \textit{open source} de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Código \ref{cod:XML}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO no qual utilizaremos em nosso projeto. \cite{labelimg}
+
+O software em questão permite que você circule as \textit{bounding boxes} englobando o objeto de interesse nas imagens e criando automaticamente um arquivo XML com todas as especificações necessárias.
+
+Utiliza-se a ferramenta para formar o \textit{dataset}, que é um dos fundamentos da \textit{Deep Learning}. Para muitos pesquisadores, obter dados suficientes para realizar o experimento por si só é um grande problema, por isso precisamos de muitos \textit{datasets open source} para que todo mundo possa usar. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\linewidth]{figuras/MachineLearning/labelimg.png}
+	\caption{Procedimento de anotações das \textit{bounding boxes}}
+	\label{fig:labelimg}
+\end{figure}
+
+\begin{lstlisting}[caption=Arquivo XML gerado pelo LabelImg, label=cod:XML]
+<annotation>
+	<folder>images</folder>
+	<filename>05102009081.jpgbarcodeOrig.png</filename>
+	<path>C:\Users\antonio.cardoso\Desktop\tcc\barcode\train\images\05102009081.jpgbarcodeOrig.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>480</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>barcode</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>105</xmin>
+			<ymin>63</ymin>
+			<xmax>536</xmax>
+			<ymax>454</ymax>
+		</bndbox>
+	</object>
+</annotation>
+\end{lstlisting}
+
+O ImageNet dataset \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e anotações de locais de objetos na imagem. O conjunto de dados Imagenet é um dos conjuntos de dados mais usados no campo da \textit{Deep Learning}. A maior parte do trabalho de pesquisa, como classificação, localização e detecção de imagens, é baseada nesse conjunto de dados. O conjunto de dados Imagenet é detalhado e é muito fácil de usar. É amplamente utilizado no campo da pesquisa em visão computacional e se tornou o conjunto de dados 'padrão' do aprendizado profundo atual do domínio da imagem para testar o desempenho do algoritmo. \cite{zhou2017application}
+
+\subsubsection*{PASCAL VOC}
+O PASCAL VOC (análise de padrões, modelagem estatística e classes de objetos visuais de aprendizado computacional) \cite{everingham2010pascal} fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos e fornece um conjunto comum de ferramentas para acessar os conjuntos de dados e anotações. O conjunto de dados PASCAL VOC inclui 20 classes e tem um desafio baseado nesse conjunto de dados. O PASCAL VOC Challenge \cite{everingham2010pascal} não está mais disponível após 2012, mas seu conjunto de dados é de boa qualidade e bem marcado e permite a avaliação e comparação de diferentes métodos. E como a quantidade de dados do conjunto de dados PASCAL VOC é pequena, comparada ao conjunto de dados imagenet, muito adequada para os pesquisadores testarem programas de rede. Nosso conjunto de dados também é criado com base no padrão de conjunto de dados PASCAL VOC.\cite{zhou2017application}
+
+Depois de ter feito as anotações para todas as imagens, será necessário separar o conjunto de teste e treinamento. Criaremos uma pasta o dataset chamada barcodes e dentro dela, será criada também uma pasta de nome \textbf{train} e \textbf{validation}.
+
+Para o treinamento, separamos o conjunto de teste para que não possua nenhuma imagem presente no conjunto de treinamento. O \textit{dataset} de testes terá uma amostra bem menor que o conjunto de treinamento, portanto terá mais ou menos 25\% do total das imagens.
+
+Depois de fazer isso, a estrutura da pasta do  \textit{dataset} de  \textit{barcodes} será a seguinte:
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figuras/MachineLearning/foldersDataset.png}
+	\caption{Estrutura de pastas do \textit{dataset} de barcodes}
+	\label{fig:labelimg}
+\end{figure}
+
+Ou seja, para cada imagem, teremos um arquivo XML com as anotações registradas pelo Labelimg. Agora poderemos treinar nossos modelos.
+
+%------------------------------------------------
+
+\subsection{Infraestrutura}
+
+Com o intuito de acelerar o processo, foi utilizado um software online chamado Google Colaboratory que tem disponibilidade de configuração com GPU para o treinamento. 
+
+%------------------------------------------------
+
+\subsubsection{Google Colaboratory}
+O Google Colaboratory, mais conhecido como "Google Colab" ou simplesmente "Colab", é um projeto de pesquisa para criar protótipos de modelos de \textit{Machine Learning} em poderosas opções de \textit{hardware}, como GPUs e TPUs. Ele fornece um ambiente de notebook Jupyter sem servidor para desenvolvimento interativo. O Google Colab é gratuito para usar como outros produtos do G Suite — que anteriormente era conhecido como Google Apps — no qual é um serviço oferecido pelo Google que fornece diversas ferramentas da própria empresa. Elas podem ser totalmente personalizadas com as informações do negócio, incluindo um domínio próprio.
+
+Além de ser fácil de usar, o Colab é muito flexível em sua configuração e faz muito do trabalho pesado para você. \cite{colabdetail}
 
 \begin{itemize}
-	\item Tempo de banho permitido: é o tempo máximo de banho permitido para cada usuário;
-	\item Estado do chuveiro: ligado ou desligado;
-	\item Estado do usuário: autorizado ou não autorizado;
+    \item Suporte para Python 2.7 e Python 3.6;
+    \item Aceleração de GPU;
+    \item Bibliotecas pré-instaladas: Todas as principais bibliotecas Python, como o TensorFlow, o Scikit-learn, o Matplotlib, entre muitas outras, estão pré-instaladas e prontas para serem importadas;
+    \item Construído com base no Jupyter Notebook;
+    \item Recurso de colaboração (funciona com uma equipe igual ao Google Docs): o Google Colab permite que os desenvolvedores usem e compartilhem o Jupyter notebook entre si sem precisar baixar, instalar ou executar qualquer coisa que não seja um navegador;
+    \item Suporta comandos \textit{bash};
+    \item Os notebooks do Google Colab são armazenados no drive.
 \end{itemize}
 
-Ao se criar um usuário é necessário informar três dados: nome do usuário, senha e tempo de banho permitido. A senha é utilizada para autorizar o usuário a tomar o banho, para iniciar o banho, o usuário deve digitar sua senha no teclado numérico. O tempo de banho permitido é o tempo máximo em que o chuveiro pode ficar ligado; ao exceder este limite, o atuador irá interromper o fluxo de água.
-
-O estado do chuveiro poderá ser observado no HomeAssistant, que dirá se o usuário está com o chuveiro ligado ou desligado. O HomeAssistant proverá  informações personalizadas de acordo com o usuário.
-
-\subsection{Dados gerados}
-
-O usuário, ao digitar a sua senha correta no teclado numérico, liberará o atuador e o fluxo de água começará a passar pelo sensor de fluxo. Este sensor irá gerar dados que dizem informações a respeito do fluxo volumétrico de água passado por ele.
-
-Os dados do sensor são gravados no InfluxDB e poderão ser vistos no Grafana em forma de gráfico, sendo possível distinguir os usuários. O sistema, ao perceber uma parada no fluxo, ou se o tempo de banho ultrapassar o limite de banho do usuário, fecha o atuador e contabiliza o tempo total do banho tomado, salvando-o no Banco de Dados PostgreSQL.
-
-\subsection{Ligar/desligar atuador}
-
-Para ligar o atuador, o sistema necessita identificar o usuário e autenticá-lo. Esta identificação e autenticação é realizada via teclado numérico. O usuário é identificado pelo seu id, que é fornecido no momento do seu cadastro. Para realizar a identificação, o usuário deve pressionar a tecla \textit{*} seguido pelo seu id e \textit{\#}. Ao realizar a consulta, o sistema retorna o nome do usuário e requisita a senha.
-
-Após digitar a senha, a tecla \textit{\#} deve ser pressionada e o sistema irá comparar a senha digitada com a cadastrada no banco de dados. Caso as senhas forem iguais, o atuador é ligado; caso forem diferentes, o sistema retorna que o usuário não está autenticado e não liga o atuador. 
-
-A Figura \ref{fig:mockservice} mostra este fluxo de digitação, assim como a identificação do usuário pelo id.
-
-\section{Configuração do Raspberry Pi} \label{sec:confrasp}
-
-Para a configuração inicial do Raspberry Pi é preciso fazer o download de um sistema operacional compatível com o microcontrolador. Para o sistema deste projeto, utilizamos o Hassbian\footnote{\url{https://www.home-assistant.io/docs/installation/hassbian/installation/}}, que foi instalado no cartão SD a ser inserido no Raspberry Pi.
-
-
-Os sistemas deste projeto foram desenvolvidos diretamente no Raspberry Pi e, para possibilitar este desenvolvimento, é necessário primeiramente configurar o ambiente do Raspberry Pi.
-
-O Raspberry Pi foi configurado para ser \textit{headless}\footnote{\url{https://www.raspberrypi.org/documentation/configuration/wireless/headless.md}}, o que faz com que ele não necessite de teclado, mouse ou monitor para poder ser acessado. Para conseguir acessar o Raspberry Pi nesta configuração é necessária a utilização do SSH, ou \textit{Secure Shell}, que é um protocolo de rede criptográfico para operação de serviços de rede de forma segura\footnote{\url{https://www.ssh.com/ssh/}}. O SSH permite o login remoto no sistema operacional do Raspberry, possibilitando o completo controle do sistema operacional de forma remota.
-
-A configuração de rede do Raspberry Pi foi realizada para conter um IP estático (\textit{192.168.2.60}), que facilita o acesso SSH ao sistema.
-
-O Código \ref{cod:headless} mostra um exemplo do arquivo \textit{wpa\_supplicant.conf}, que faz parte da configuração \textit{headless}, servindo para conectar à rede automaticamente ao iniciar os Raspberry Pi. Já no Código \ref{cod:static}, podemos observar a configuração do ip estático.
-
-\begin{lstlisting}[caption=Exemplo de configuração \textit{headless}, label=cod:headless]
-update_config=1
-ctrl_interface=\var\run\wpa_supplicant
-
-network={
-    ssid="<Nome da sua rede Wi-Fi>"
-    psk="<Senha da sua rede Wi-Fi>"
-}
-\end{lstlisting}
-
-\newpage
-
-\begin{lstlisting}[caption=Exemplo de configuração do IP estático, label=cod:static]
-update_config=1
-interface <Sua interface de rede>
-static ip_adress=192.168.2.60
-static routers=192.168.2.1
-static domain_name_servers=192.168.2.1
-\end{lstlisting}
-
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=0.6\linewidth]{figuras/headless.png}
-%	\caption{Exemplo de configuração \textit{headless}}
-%	\label{fig:headless}
-%\end{figure}
-
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=0.6\linewidth]{figuras/rpiip.png}
-%	\caption{Exemplo de configuração do IP estático}
-%	\label{fig:rpiip}
-%\end{figure}
-
-\section{Criação das tabelas no PostgreSQL}
-
-Todos os dados de um banco de dados relacional são armazenados em tabelas. Uma tabela é uma simples estrutura de linhas e colunas. Em um banco de dados podem existir uma ou centenas de tabelas, sendo que o limite pode ser imposto tanto pela ferramenta de \textit{software} utilizada, quanto pelos recursos de hardware disponíveis no equipamento.
-
-As tabelas associam-se entre si por meio de regras de relacionamentos, que consistem em associar um ou vários atributos de uma tabela com um ou vários atributos de outra tabela
-
-A Figura \ref{fig:erpostgre} mostra o diagrama Entidade Relacionamento do banco de dados \textit{users} criado para a aplicação. Um diagrama Entidade Relacionamento é capaz de descrever um modelo de tabelas (entidades) que são ligadas umas as outras por relacionamentos que expressam as dependências e exigências entre si. No caso do sistema planejado, existem três entidades: Usuário, Configuração e Banho. O usuário se relaciona com as outras duas entidades: ele possui uma configuração e pode tomar um banho.
-
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.6\linewidth]{figuras/ERPostgre.png}
-	\caption{Modelo Entidade Relacionamento do PostgreSQL}
-	\label{fig:erpostgre}
+		\centering
+		\includegraphics[scale=0.4]{figuras/MachineLearning/colabGithub.png}
+		\caption{Utilização do Colab, Drive e Github}
+		\label{fig:colabGithub}
 \end{figure}
 
-\newpage
+O Colab se integra facilmente ao Google Drive, o que o torna uma opção natural para espaço de armazenamento, em que se armazena os dados e os modelos. Ao mesmo tempo, o Github é mais adequado para hospedagem de código e uso de diversas  bibliotecas gratuitas disponíveis pela comunidade. 
 
-Para o sistema desenvolvido, foi criado um banco de dados com o nome \textit{users} com três tabelas: \textit{user\_baths}, \textit{user\_settings} e \textit{users}.
+\subsection{Blibliotecas utilizadas}
 
-A tabela \textit{users} contém 5 colunas que guardam informações dos usuários cadastrados, que são mostradas na Tabela \ref{tab:users}.
+Todo o código foi implementado utilizando a linguagem de programacão Python, e as seguintes bibliotecas foram utilizadas:
 
-%\begin{itemize}
-%	\item id: gera um id que se auto incrementa e é único para cada usuário;
-%	\item \textit{name}: referente ao nome do usuário;
-%	\item \textit{password}: informação da senha do usuário, que é criptografada;
-%	\item \textit{created\_at}: data e hora da criação do usuário;
-%	\item \textit{updated\_at}: data e hora da ultima atualização do usuário;
-%\end{itemize}
+%------------------------------------------------
 
-\begin{table}[]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}Coluna} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}Função} \\ \hline
-		id                                                   & identificador único que se auto incrementa          \\ \hline
-		\textit{name}                                        & nome do usuário cadastrado                          \\ \hline
-		\textit{password}                                    & senha criptografada do usuário cadastrado           \\ \hline
-		\textit{created\_at}                                 & data e hora da criação do usuário                   \\ \hline
-		\textit{updated\_at}                                 & data e hora da última atualização no usuário        \\ \hline
-	\end{tabular}
-	\caption{Colunas da tabela \textit{users}.}
-	\label{tab:users}
-\end{table}
+\subsubsection{TensorFlow}
 
-A Tabela \ref{tab:user-settings} é a implementação da \textit{user\_settings}, que guarda informações de configuração dos usuários, e também contém 5 colunas.
+O TensorFlow é uma biblioteca Python de código aberto para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis como telefones e tablets até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU.
 
-%\begin{itemize}
-%	\item id: identificador único;
-%	\item \textit{user\_id}: referente ao id do usuário;
-%	\item \textit{allowedBathTime}: tempo de banho permitido do usuário;
-%	\item \textit{created\_at}: data e hora da criação do usuário;
-%	\item \textit{updated\_at}: data e hora da ultima atualização do usuário;
-%\end{itemize}
+O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de aprendizado de máquina na produção em mais de uma dúzia de áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
 
-\begin{table}[]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}Coluna} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}Função} \\ \hline
-		id                                                   & identificador único que se auto incrementa          \\ \hline
-		\textit{user\_id}                                    & referência ao id do usuário                         \\ \hline
-		\textit{allowed\_bath\_time}                         & tempo máximo de banho permitido                     \\ \hline
-		\textit{created\_at}                                 & data e hora da criação do usuário                   \\ \hline
-		\textit{updated\_at}                                 & data e hora da última atualização no usuário        \\ \hline
-	\end{tabular}
-	\caption{Colunas da tabela \textit{user\_settings}.}
-	\label{tab:user-settings}
-\end{table}
+Vários serviços do Google uilizam o TensorFlow em sua produção, foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
 
-A tabela \textit{user\_baths} guarda informações de tempo de todos os banhos tomados, possuindo 5 colunas, mostradas na Tabela \ref{tab:user-baths}.
+%------------------------------------------------
 
-%\begin{itemize}
-%	\item id: identificador único;
-%	\item \textit{user\_id}: referente ao id do usuário;
-%	\item \textit{time}: tempo total do banho, em milissegundos;
-%	\item \textit{created\_at}: data e hora da criação do usuário;
-%	\item \textit{updated\_at}: data e hora da ultima atualização do usuário;
-%\end{itemize}
+\subsubsection{Scikit-Image}
 
-\begin{table}[]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}Coluna} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}Função} \\ \hline
-		id                                                   & identificador único que se auto incrementa          \\ \hline
-		\textit{user\_id}                                    & referência ao id do usuário                         \\ \hline
-		\textit{time}                                        & tempo total do banho, em milissegundos              \\ \hline
-		\textit{created\_at}                                 & data e hora da criação do usuário                   \\ \hline
-		\textit{updated\_at}                                 & data e hora da última atualização no usuário        \\ \hline
-	\end{tabular}
-	\caption{Colunas da tabela \textit{user\_baths}.}
-	\label{tab:user-baths}
-\end{table}
+O Scikit-image, também conhecido como Skimage, é uma biblioteca de processamento de imagens que implementa algoritmos e utilitários para uso em aplicações de pesquisa, educação e indústria. É lançado sob a licença liberal de código aberto Modified BSD, fornece uma API bem documentada na linguagem de programação Python e é desenvolvido por uma equipe internacional ativa de colaboradores.
 
-A Figura \ref{fig:modeltables} ilustra o banco de dados criado juntamente com as tabelas contidas nele.
+O objetivo do scikit-image é fornecer uma biblioteca de alta qualidade de ferramentas poderosas e diversas de processamento de imagens, gratuitas e sem restrições. Esses princípios são a base para as práticas de desenvolvimento na comunidade de imagens scikit.\cite{skimage}
+
+%------------------------------------------------
+
+\subsubsection{ImageAI}
+
+ImageAI é uma biblioteca python de código aberto criada para capacitar os desenvolvedores a criar aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando poucas linhas de código.
+
+A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algoritmos diferentes de \textit{Machine Learning} treinados no conjunto de dados ImageNet-1000. O ImageAI também suporta detecção de objetos, detecção de vídeo e rastreamento de objetos usando RetinaNet, YOLOv3 e TinyYOLOv3 treinados no conjunto de dados COCO e PASCAL VOC.\cite{ImageAI}
+
+Neste trabalho será utilizada uma classe da biblioteca ImageAI chamada \textit{Custom Detection Model Training}, possibilitando o treinamento do meu próprio modelo de detecção de objetos utilizando a arquitetura da YOLOv3.
+
+%------------------------------------------------
+
+\subsubsection{OpenCV}
+
+O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source} e \textit{cross-plataform} (Multiplataforma) que contém mais de 500 algoritmos otimizados para análise de imagem e vídeo. Desde sua introdução em 1999, ele foi amplamente adotado como a principal ferramenta de desenvolvimento pela comunidade de pesquisadores e desenvolvedores em visão computacional.\cite{opencv}
+
+%------------------------------------------------
+
+\subsection{Treinamento dos modelos}
+
+Após gerado o conjunto de dados, é possível trabalhar no treinamento do modelo da rede neural. Para isso será utilizado o \textit{framework} TensorFlow destinado à \textit{Deep Learning}. Também será utilizado uma rede neural pré-treinada chamada YoloV3, escrita em Python que fará uso das funções disponibilizadas pela biblioteca ImageAI . Assim realizando o treinamento até atingir um valor aceitável de acerto no conjunto de teste. 
+
+Através do modelo da rede Yolov3, treinaremos mais dois novos modelos de redes neurais:
+\begin{itemize}
+    \item Modelo de rede neural para reconhecimento de \textit{barcodes};
+    \item Modelo de rede neural para reconhecimento de algarismos numéricos;
+\end{itemize}
+
+O resultado do treinamento serão arquivos no formato .h5\footnote{Um arquivo H5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.} representando o modelo que serão avaliados através da melhor acurácia\footnote{Indica uma performance geral do modelo. Dentre todas as classificações, quantas o modelo classificou corretamente;} e utilizados posteriormente.
+
+%------------------------------------------------
+
+\subsubsection*{YOLOv3}\label{sub:Yolov3}
+
+A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} (\textit{bbox}) de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
+
+O YOLO é a frequência mais rápida (45 FPS) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}. Comparando a rede Faster R-CNN com a  R-CNN, a velocidade do treinamento  é 9 vezes mais rápida e a velocidade do teste é 213 vezes mais rápida. \cite{7960069}
+
+O YOLO impõe fortes restrições espaciais nas previsões de \textit{bbox}, pois cada célula da \textit{grid} prevê apenas duas \textit{box} e pode ter apenas uma classe. Essa restrição espacial limita o número de objetos próximos que o modelo pode prever. O modelo luta com pequenos objetos que aparecem em grupos, como por exemplo, bandos de pássaros. \cite{yolov3RealTime}
 
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.6\linewidth]{figuras/bancousers.png}
-	\caption{Modelo das tabelas criadas no banco de dados}
-	\label{fig:modeltables}
+		\centering
+		\includegraphics[scale=0.2]{figuras/MachineLearning/yolo.png}
+		\caption{YOLO}
+		\label{fig:yolo}
 \end{figure}
 
-\newpage
-
-\section{Configuração do InfluxDB}
-
-Na configuração do InfluxDB, foi utilizada a biblioteca \textit{influx}\footnote{\url{https://www.npmjs.com/package/influx}}. Esta biblioteca permite a criação do banco de dados diretamente do código fonte do sistema, assim como as tabelas para guardar os dados temporais.
-
-Foi criado o banco de dados \textit{water\_flow\_data}, que guarda os dados temporais dos banhos dos usuários. Neste banco, os dados são guardados com a \textit{tag} referente ao id do usuário cadastrado no banco relacional PostgreSQL. Nos \textit{fields} são guardados os dados que chegam diretamente do sensor, ou seja, o fluxo de água naquele determinado instante.
-
-O InfluxDB salva automaticamente os \textit{timestamps}\footnote{\textit{Timestamps} são marcas temporais, informa a data e a hora que um certo evento ocorreu.} de cada dado incluido nele, o que facilita a manipulação dos dados, pois não é necessário informar a data e a hora toda vez que for incluir algum dado no banco.
-
-No \lstlistingname\ \ref{list:codigoinflux} está um exemplo de configuração e implementação das funções do InfluxDB no sistema.
-
-\newpage
-
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=1\linewidth]{figuras/influxconf.png}
-%	\caption{Código de configuração do InfluxDB}
-%	\label{fig:influxconf}
-%\end{figure}
-
-\begin{lstlisting}[label=list:codigoinflux, caption=Exemplo do código de configuração do InfluxDB]
-const Influx = require('influx');
-
-class InfluxHandler {
-	constructor() {
-		this.influx;
-		this.host = 'influxdb';
-		this.database = 'water_flow_data'
-	}
-	
-	connect() {
-		this.influx = new Influx.InfluxDB({
-			host: this.host,
-			database: this.database,
-			schema: [{
-				measurement: 'flow_data',
-				fields: { flow: Influx.FieldType.INTEGER },
-				tags: ['user_id']
-			}]
-		});
-		
-		this.influx.getDatabaseNames()
-			.then(names => {
-				if(!names.includes(this.database)) {
-				return this.influx.createDatabase(this.database);
-				}
-			})
-			.then(() => {
-				console.log('InfluxDB connected!');
-			})
-	}
-}
-\end{lstlisting}
-
-\section{Microsserviços}
-
-Nesta seção são apresentadas as etapas de desenvolvimento dos microsserviços utilizados no sistema elaborado, assim como o serviço de simulação para viabilizar os testes e validação do sistema.
-
-\subsection{\textit{Clean Architecture}}
-
-Os microsserviços desenvolvidos foram projetados para seguir a \textit{Clean Architecture}. Esta arquitetura consiste em dividir as responsabilidades dentro de uma aplicação, encapsulando e abstraindo o código para facilitar a leitura e entendimento das devidas funções de cada arquivo \cite{martin2000clean}.
-
-É possível ver a divisão dos arquivos utilizando a \textit{Clean Architecture} do Sistema de Usuários na Figura \ref{fig:clean}. Explicando esta divisão, na pasta routes encontram-se as configuração das rotas que são utilizadas no sistema, nos \textit{controllers}, são feitas o tratamento dos \textit{inputs} e respostas das rotas, redirecionando para os interactors, que é onde está a lógica principal da aplicação. Nos \textit{repositories} é onde acontece a interação com o banco de dados, neste caso, com o PostgreSQL.
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.22\linewidth]{figuras/cleanarch.png}
-	\caption{Divisão dos arquivos do Sistema de Usuários}
-	\label{fig:clean}
-\end{figure}
-
-
-
-\subsection{Sistema de usuários} \label{sec:usuarios}
-
-O propósito desta aplicação está em ter o controle e informações sobre o consumo de água em residências, para isso, é necessário ter um meio para conseguir as informações sobre os usuários do sistema. 
-
-O microsserviço de usuários é responsável por cadastrar e editar usuários, cadastrar informações sobre o tempo de banho do usuário e autorizar o usuário a tomar o banho.
-
-As operações são realizadas através dos \textit{endpoints} (Tabela \ref{tab:endpoints}), que é uma forma de comunicação entre os sistemas. O sistema os disponibiliza como endereços para acesso, que podem receber e enviar informações, dependendo do que foi programado.
-
-Este microsserviço salva todos os dados recebidos nas tabelas do PostgreSQL.
-
-%\begin{itemize} \label{item:endpoints}
-%	\item /cadastrar: possibilita cadastrar o usuário com as informações do nome, senha e tempo de banho permitido.
-%	\item /autorizar: recebe o id do usuário e a senha, compara a senha enviada com a senha cadastrada e retorna se o usuário está ou não autorizado.
-%	\item /editar-tempo: possibilita editar o tempo de banho permitido do usuário.
-%	\item /editar-senha: possibilita editar a senha do usuário.
-%	\item /banho: salva no banco de dados informações do banho, o tempo e o usuário que tomou o banho.
-%	\item /banho/:id: retorna informações sobre todos os banhos do usuário.
-%\end{itemize}
-
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-\begin{table}[]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Endpoint}} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}Característica}                                                                                                                      \\ \hline
-		/cadastrar                                             & \begin{tabular}[c]{@{}l@{}}possibilita cadastrar o usuário com as informações do nome, senha e\\ tempo de banho permitido\end{tabular}                                   \\ \hline
-		/autorizar                                    & \begin{tabular}[c]{@{}l@{}}recebe o id do usuário e a senha, compara a senha enviada com a senha\\ cadastrada e retorna se o usuário está ou não autorizado\end{tabular} \\ \hline
-		/editar-tempo                                 & possibilita editar o tempo de banho permitido do usuário                                                                                                                 \\ \hline
-		/editar-senha                                 & possibilita editar a senha do usuário                                                                                                                                    \\ \hline
-		/banho                                        & \begin{tabular}[c]{@{}l@{}}salva no banco de dados informações do banho, o tempo e o usuário que\\ tomou o banho\end{tabular}                                            \\ \hline
-		/banho/:id                                             & retorna informações sobre todos os banhos do usuário                                                                                                                     \\ \hline
-	\end{tabular}
-	\caption{\textit{Endpoints} do sistema de usuários.}
-	\label{tab:endpoints}
-\end{table}
-
-Os códigos de implementação deste sistema podem ser observados no Apêndice \ref{ap:users}.
-
-\subsection{Sistema de comunicação MQTT} \label{sec:sistemacomunicacao}
-
-Este microsserviço é responsável pelo recebimento e manipulação dos dados recebidos dos sensores e do teclado numérico via MQTT. Também é responsável por comunicar com o sistema de usuários para a autorização do usuário, ligar ou desligar o atuador, além de salvar os dados no InfluxDB.
-
-O sistema de comunicação recebe informações sobre as teclas digitadas e comunica com o sistema de usuários para autorizar ou não o ligamento do atuador, que significa o início do banho.
-
-O sistema se subscreve nos tópicos do \textit{broker} MQTT descritos na Tabela \ref{tab:topics} para receber e enviar as informações.
-
-%\begin{itemize}
-%	\item \textit{keys}: é o tópico em que contém a tecla digitada no teclado numérico
-%	\item \textit{actuator}: é o tópico para enviar informações do atuador, para liga-lo ou desliga-lo
-%	\item \textit{user}: é o tópico para enviar informações do usuário, como o nome e se ele está autorizado ou não.
-%	\item \textit{sensor}: é o tópico para enviar informações do sensor de fluxo.
-%\end{itemize}
-
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-
-\begin{table}[]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}Tópico} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}Função}                        \\ \hline
-		\textit{keys}                                        & contém a tecla digitada no teclado numérico                                    \\ \hline
-		\textit{actuator}                                    & envia informações do atuador, para liga-lo ou desliga-lo                       \\ \hline
-		\textit{user}                                        & envia informações sobre o usuário, como o nome e se ele está autorizado ou não \\ \hline
-		\textit{sensor}                                      & envia informações do sensor de fluxo                                           \\ \hline
-	\end{tabular}
-	\caption{Tópicos do \textit{broker} MQTT.}
-	\label{tab:topics}
-\end{table}
-
-Os códigos de implementação deste sistema podem ser observados no Apêndice \ref{ap:mqtt}.
-
-\newpage
-
-\subsection{Sistema de simulação de dados} \label{sec:sistemasimulacao}
-
-O sistema de simulação de dados emula todos os dados que podem ser capturados e enviados ao sistema físico, que são:
+No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucional prediz tanto os \textit{bounding boxes} quanto as probabilidades de pertinencia a classe de cada objeto detectado. Para isso, YOLO funciona da seguinte forma:
 
 \begin{itemize}
-	\item Dados do fluxo de água: informação recebida pelo sensor YF-S201 (Seção \ref{sec:sensor});
-	\item Dados do teclado numérico: informação de qual tecla foi pressionada (Seção \ref{sec:teclado});
-	\item Informações para o atuador: informação para ligar/desligar o atuador (Seção \ref{sec:valvula});
+    \item Toma-se uma imagem e divide-se-a em um grid SxS de células (S = 6);
+    \item Usando o \textit{grid} como referência, gera-se N \textit{bounding boxes};
+    \item \textit{Bounding boxes} com probabilidade acima de um limiar são selecionados e usados para localizar o objeto dentro da imagem.
 \end{itemize}
 
-Este sistema se inscreve nos tópicos do servidor MQTT e envia os dados simulados como se fosse o próprio sistema físico. Ao se iniciar o sistema, ele fica em estado de espera até alguma tecla for pressionada. Ao se pressionar uma tecla, ele a envia para o tópico \textit{keys}. O Sistema de Comunicação, que se inscreve nesse tópico, reconhece a tecla e toma as devidas ações, como requisitar a senha ou ligar/desligar o atuador.
+Cada célula do  \textit{grid} é usada para predizer B  \textit{bbox} e C probabilidades de classe. O conceito de interseção sobre união (IoU) tem um papel importante e a confiança de uma predição em YOLO é dada por:
 
-Os dados do fluxo de água são número inteiros que são passados para o tópico \textit{sensor} do servidor MQTT, para simular estes dados envia-se um valor inteiro ao tópico em um intervalo pre-determinado de tempo (50 ms).
+\begin{equation}
+    Confianca = p_r(Object) X IoU_{pred}^{truth} , p_r(Object) \in \left \{ 1\right.,\left.0\right \}
+\end{equation}
 
-A Figura \ref{fig:mockservice} mostra o sistema de simulação funcionando, com o usuário com o id 3 sendo autorizado e o sinal de ligar/desligar o atuador enviado.
+Em que, quando o \textit{target} estiver na \textit{grid}, \(p_r(Object)\) = 1 e 0 caso contrário. \(IoU_{pred}^{truth}\) é usado para denotar a interseção sobre união e a previsão da \textit{bbox}. A confiança reflete se a \textit{grid} contém objetos e a precisão da \textit{bbox} prevista. Quando várias \textit{bbox} detectam o mesmo \textit{target}, o YOLO usa o método de não supressão máxima (NMS) para selecionar a melhor \textit{bbox}.
+
+%------------------------------------------------
+
+\section{Aplicação Web} \label{sec:web}
+
+Neste seção mostraremos as etapas necessárias de criação da aplicação web desenvolvida para consumir os resultados do sistema de \textit{Deep Learning} mostrado anteriormente. 
+
+O sistema web foi criado para facilitar o gerenciamento, visualização e rastreabilidade das corridas para o operador através de um \textit{layout} amigável.
+
+Para essa etapa, utilizaremos a linguagem Node.JS para implementar o \textit{back-end} e as linguagens HTML, CSS, EJS\footnote{O EJS é uma engine de visualização, com ele conseguimos de uma maneira fácil e simples transportar dados do back-end para o front-end, basicamente conseguimos utilizar códigos em javascript no html de nossas páginas.} e JavaScript para implementar o \textit{front-end}. A escolha do Node.JS foi devido aos seguintes fatores:
+
+\begin{itemize}
+    \item Instalação ser simples pois não necessita de dependência para configuração
+    \item Você consegue executar aplicações Node em qualquer plataforma.
+    \item I/O não bloqueante. Isso significa que quando você precisa acessar um arquivo no disco, se comunicar com um \textit{Web Service} ou acessar um banco de dados esse acesso é feito de forma assíncrona por padrão.
+    \item Por ser escrito em JavaScript, pouparia grande parte dos esforço caso opte por utilizar tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
+\end{itemize}
+ 
+%------------------------------------------------
+
+\subsection{Node.JS}
+
+O Node.JS, também conhecido como Node, é uma estrutura EDA\footnote{Maneira de realizarmos a comunicação entre sistemas que consiste, principalmente em operações assíncronas além de permitir aplicativos escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível.} de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
+
+O Node é um dos \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
+
+%------------------------------------------------
+
+\subsection{HTML}
+
+Para publicar informações para distribuição global, é preciso uma linguagem universalmente compreendida. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permitem o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language).\citeauthor{html}
+
+O HTML fornece aos autores os meios para: 
+\begin{itemize}
+    \item Publicar documentos on-line com títulos, texto, tabelas, listas, fotos, etc. 
+    \item Recuperar informações on-line por meio de links de hipertexto, com o clique de um botão. 
+    \item Criar formulários para realizar transações com serviços remotos, para uso em busca de informações, reservas, pedidos de produtos, etc. 
+    \item Incluir planilhas, videoclipes, clipes de som e outros aplicativos diretamente em seus documentos.
+\end{itemize}
+
+%------------------------------------------------
+
+\subsection{CSS}
+De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{Trata-se de uma organização internacional responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal mecanismo por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter.\cite{badros1999constraint}
+
+Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação humano-computador, design gráfico, além de habilidades de programação na web \cite{keller2010css}. Além disso, a linguagem possui várias características, como especificidade de herança, cascata e seletor, o que torna o entendimento de como as propriedades CSS são aplicadas aos elementos DOM em tempo de execução, uma tarefa assustadora para desenvolvedores da web.
+
+%------------------------------------------------
+
+% \subsection{Docker}
+
+% Docker é um projeto \textit{open source} que foi inicialmente lançado em 2013, atraiu grande atenção na industria de TI. É uma plataforma de conteinerização que possibilita usuários a construir sua aplicação dentro de um conteiner e transferir conteiners através de máquinas com diferentes sistemas operacionais de um jeito simples. \cite{chang2017kubernetes}
+
+% Existem três componentes principais do Docker:
+
+% \begin{itemize}
+% 	\item \textit{Docker images}: são \textit{templates} de leitura que servem como base para a criação de conteiners.;
+% 	\item \textit{Docker registries}: é o local onde estão uma grande coleção de \textit{Docker images}.;
+% 	\item \textit{Docker containers}: são as instâncias virtuais em que as aplicações estão rodando. Cada conteiner contem uma aplicação rodando e todas os seus arquivos de dependências, como o código, bibliotecas e utilitários do sistema.
+% \end{itemize}
+
+% A construção de imagens pode ser feita de duas maneiras. É possível criar um conteiner através de uma imagem já existente (\textit{docker run}), realizar modificações e instalações dentro do conteiner, parar o container e depois salvar o estado atual do conteiner como uma nova imagem (\textit{docker commit}). Este processo é parecido com uma instalação clássica de uma máquina virtual, mas deve ser feito para cada imagem caso haja alguma atualização, já que as imagens são padronizadas. Para automatizar o processo, \textit{Dockerfiles} nos permite especificar uma imagem de base e uma sequência de comandos que serão executados quando a imagem é construída, juntamente com outras opções de especificações, como portas a serem expostas. A imagem é depois construída com o comando \textit{docker build}.\cite{DiPietro}
+
+
+%------------------------------------------------
+\section{Arquitetura do projeto}
+
+Ao fazer a escolha da arquitetura do projeto, optamos utilizar a arquitetura de \textit{microservices} pois como teremos mais de um módulo de software com linguagens e características diferentes, ficaria mais fácil escalar e fazer manutenções de maneiras independentes.
+
+\subsection{Microsserviços}
+Seguindo a definição de \citeauthor{ms1} (\citeyear{ms1}), a arquitetura de microsserviços trata do desenvolvimento de uma aplicação que baseia na existência de diversos pequenos serviços independentes. Cada um dos serviços deve rodar em seu próprio processo independente. Estes serviços podem comunicar entre si utilizando mecanismos leves de comunicação (geralmente em torno no HTTP). Os serviços devem ser absolutamente independentes.
+
+Um exemplo da arquitetura de microsserviços está na Figura \ref{fig:arquitetura-microsservicos}.
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{figuras/mockservice.png}
-	\caption{Exemplo do sistema de simulação}
-	\label{fig:mockservice}
+	\includegraphics[width=1\linewidth]{figuras/WebService/microservices.png}
+	\caption{Exemplo arquitetura de microsserviços.}
+	\label{fig:arquitetura-microsservicos}
 \end{figure}
 
-\newpage
+Microsserviços são os resultados da decomposição funcional de uma aplicação. São caracterizados pela definição de sua interface e função no sistema. Como cada serviço deve ser independente, uma alteração na sua implementação não deve afetar o funcionamento dos demais. \cite{Pahl}
 
-\section{Configuração do HomeAssistant}
-
-O HomeAssistant pode ser instalado a partir de diversos métodos\footnote{\url{https://www.home-assistant.io/docs/installation}}, neste sistema, a instalação foi feita utilizando o Hassbian, que é um sistema operacional linux para o Raspberry Pi com o HomeAssistant pré-instalado.
-
-Para configurar o HomeAssistant no Raspberry Pi é necessário realizar o download da imagem do Hassbian. Com o download concluído, deve-se copiar a imagem para o cartão SD a ser inserido no Raspberry Pi. Para isto, utilizamos o \textit{balenaEtcher}.
-
-Com a imagem devidamente escrita no cartão SD, basta inseri-lo no Raspberry Pi, configurar a rede como descrito na Seção \ref{sec:confrasp}, e, ao iniciar o sistema, o HomeAssistant será carregado automaticamente.
-
-O HomeAssistant utiliza a porta 8123 e, para conseguir visualizar sua interface, o IP do servidor deve ser acessado por esta porta. No caso deste sistema, o IP do Raspberry Pi foi colocado como estático \textit{192.168.2.60}. Então, para acessar a interface deve-se estar conectado na mesma rede do Raspberry Pi e acessar o link \textit{http://192.168.2.60:8123}, como podemos ver na Figura \ref{fig:homeassistanthome}.
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=1\linewidth]{figuras/homeassistanthome.png}
-	\caption{Página inicial do HomeAssistant acessado por um cliente conectado na mesma rede local do servidor Hassbian.}
-	\label{fig:homeassistanthome}
-\end{figure}
-
-\subsection{Sensores}
-
-A interface do HomeAssistant permite diversas configurações e inclusão de diferentes sensores, como mostra a Figura \ref{fig:homeassistant-dash}. No sistema desenvolvido neste trabalho, foi utilizado o sensor binário, que mostra o estado do chuveiro como ligado ou desligado. Cada usuário terá um sensor próprio, e seu estado será mostrado na interface.
+%------------------------------------------------
 
 
-\section{Configuração do Grafana}
-
-A instalação do Grafana foi realizada através do download\footnote{\url{https://grafana.com/get}} e extração do pacote para o sistema operacional Debian.
-
-Com o pacote devidamente instalado no sistema, o Grafana utiliza a porta 3003 como interface. Para acessá-la, deve-se conectar à porta 3003 do Raspberry Pi, ou seja, acessar o link \textit{http://192.168.2.60:3003}, como na Figura \ref{fig:grafanahome}.
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=1\linewidth]{figuras/grafanahome.png}
-	\caption{Página inicial do Grafana.}
-	\label{fig:grafanahome}
-\end{figure}
-
-\newpage
-
-Ao acessar a interface do Grafana, é necessário criar um \textit{dashboard}\footnote{\textit{Dashboards} são painéis que mostram métricas e indicadores importantes para alcançar objetivos e metas traçadas de forma visual, facilitando a compreensão das informações geradas.} para a visualização dos dados do InfluxDB. Neste sistema criamos o \textit{dashboard AllBaths}, que se conecta no ip e porta do InfluxDB e realiza as consultas no banco \textit{water\_flow\_data} criado para guardar os dados temporais do fluxo de água.
-
-A configuração do gráfico no Grafana pode ser observada na Figura \ref{fig:grafanaconf}.
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=1\linewidth]{figuras/grafanaconf.png}
-	\caption{Configuração do gráfico no Grafana.}
-	\label{fig:grafanaconf}
-\end{figure}
-
-Após a configuração do \textit{dashboard}, um atalho será criado na página inicial do Grafana, e para visualizar os dados, basta clicar neste atalho e será aberto um gráfico com os fluxos medidos no sensor.
-
-%\section{Configuração do Docker}
-%
-%Toda a configuração do Docker é realizada a partir do arquivo \textit{Dockerfile}, que deve ser criado no diretório do projeto em que se deseja configurar.
-%
-%No \textit{Dockerfile} alguns parâmetros devem ser passados para conseguir o resultado esperado, um deles é definir qual imagem do Docker será usada como base, no caso dos projetos desenvolvidos, todos utilizam o Node como imagem base, esta imagem é definida com o comando \textit{FROM node}.
-%
-%Outro parâmetro que precisa ser configurado é o \textit{WORKDIR}, que define o diretório que será usado como base dentro da imagem do Docker, no caso, dentro da imagem do Node.
-%
-%Um comando importante é o \textit{COPY}, que serve para copiar os arquivos do diretório raiz do Docker, para o \textit{WORKDIR} dentro da imagem do Node.
-%
-%Após copiar os arquivos, é necessário executar os comandos para instalar os pacotes dos projetos, com o comando \textit{RUN npm install}.
-%
-%Finalmente, deve-se definir um comando de entrada, que irá executar o projeto dentro da imagem no Docker, que é o comando \textit{CMD npm start}. Caso o projeto utilize alguma porta para configuração, deve-se também expor a porta para garantir o funcionamento com o comando \textit {EXPOSE numeroDaPorta}.
-%
-%O exemplo do \textit{Dockerfile} do Sistema de Usuários pode ser verificado na Figura \ref{fig:dockerfile}.
-%
-%\begin{figure}[htbp]
-%	\centering
-%	\includegraphics[width=0.7\linewidth]{figuras/dockerfile.png}
-%	\caption{Exemplo de \textit{Dockerfile} do Sistema de Usuários}
-%	\label{fig:dockerfile}
-%\end{figure}
-%
-%\subsection{Docker-compose}
-%
-%O \textit{Dockerfile} permite a execução única do projeto em que ele está presente, para iniciar os projetos utilizando apenas o \textit{Dockerfile} é necessário iniciar um por um.
-%
-%Para contornar este problema, o \textit{docker-compose} permite a execução de todos os projetos com apenas um comando, desde que um arquivo \textit{docker-compose.yml} esteja devidamente configurado. Este arquivo permite também a instalação e configuração automática de todos os programas utilizados neste trabalho, como o PostgreSQL, o InfluxDB, o Grafana e o Mosquitto.
-%
-%A configuração do \textit{docker-compose.yml} é simples como a do \textit{Dockerfile}, nele, deve-se especificar a versão que deseja utilizar, neste projeto foi utilizada a 3.5, com o comando \textit{version}:"3.5".
-%
-%Após a definição da versão, deve-se especificar os \textit{services}, que são as imagens que devem iniciar com o Docker. Neste projeto foram utilizados os \textit{builds} dos projetos já implementados com os devidos \textit{Dockerfiles} configurados. 
-%
-%Além dos projetos já implementados, foram especificados também os programas que foram utilizados no sistema, com o comando \textit{image:}postgres, \textit{image:}homeassistant, \textit{image:}eclipse-mosquitto, \textit{image:}grafana, \textit{image:}influxdb.
-%
-%O código implementado do \textit{docker-compose.yml} do projeto pode ser verificado no Apêndice C.
 
 
 
