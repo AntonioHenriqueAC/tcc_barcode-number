@@ -105,7 +105,7 @@ metrics = trainer.evaluateModel(model_path="barcode/models", json_path="/content
 %----------------------------------------------------------------------------
 \newpage
 
-\begin{lstlisting}[caption=Funções de eliminação de \textit{Bounding Boxes} sobrepostas e duplicadas]
+\begin{lstlisting}[caption=Funções de eliminação de \textit{Bounding Boxes} sobrepostas e duplicadas, label=ap:IoU]
 	# determine the (x, y)-coordinates of the intersection rectangle
 	xA = max(boxA[0], boxB[0])
 	yA = max(boxA[1], boxB[1])
@@ -141,11 +141,12 @@ def removeDuplicatesLoop(detections):
 						else:
 							detections.pop(i)
 							removeDuplicatesLoop(detections)
+							
 \end{lstlisting}
 
 %----------------------------------------------------------------------------
 \newpage
-\begin{lstlisting}[caption=Aumento da \textit{bouding box} e recorte dos \textit{barcodes} em imagens individuais]
+\begin{lstlisting}[caption=Aumento da \textit{bouding box} e recorte dos \textit{barcodes} em imagens individuais, label=ap:AumentaBbox]
 
 from imageai.Detection.Custom import CustomObjectDetection
 from prettytable import PrettyTable
@@ -227,7 +228,7 @@ else:
 
 %----------------------------------------------------------------------------
 \newpage
-\begin{lstlisting}[caption=Função para fazer a diferença entre distância dos números para deletar o de menor Acurácia]
+\begin{lstlisting}[caption=Função para fazer a diferença entre distância dos números para deletar o de menor Acurácia, label=ap:removeNumber]
 def removeDuplicates():
     i=0
     for detection in detections:
@@ -249,7 +250,7 @@ def removeDuplicates():
 
 %----------------------------------------------------------------------------
 
-\begin{lstlisting}[caption=Identificando os números nas imagens com \textit{barcodes} individuais]
+\begin{lstlisting}[caption=Identificando os números nas imagens com \textit{barcodes} individuais, label=ap:identNumber]
 from imageai.Detection.Custom import CustomObjectDetection
 import json
 from prettytable import PrettyTable

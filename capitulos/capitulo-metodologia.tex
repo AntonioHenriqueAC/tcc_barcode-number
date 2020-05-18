@@ -1,6 +1,6 @@
  \chapter{Metodologia}
  
-Este capítulo apresenta a estrutura geral do sistema, que se divide em duas partes. A primeira parte consiste no \textit{backend} desenvolvido em Python com o objetivo de reconhecer as \textit{tags} utilizando técnicas de \textit{Machine Learning}. A segunda parte consiste na aplicação \textit{web}, desenvolvida em Node.JS, responsável pela visualização e gerenciamento do sistema através de relatórios e telas.
+Este capítulo apresenta a estrutura geral do sistema, que se divide em duas partes. A primeira parte consiste no \textit{backend} desenvolvido em Python com o objetivo de reconhecer as etiquetas utilizando técnicas de \textit{Machine Learning}. A segunda parte consiste na aplicação web, desenvolvida em Node.JS, responsável pela visualização e gerenciamento do sistema através de relatórios e telas.
 
 A validação do projeto será feita através de um sistema que seja capaz de identificar números localizados em etiquetas em uma única imagem.
 
@@ -8,7 +8,7 @@ A validação do projeto será feita através de um sistema que seja capaz de id
 
 \section{Visão geral do sistema} \label{sec:funcionamento}
 
-Esta seção descreve as características operacionais do sistema, assim como as respostas esperadas. O fluxo geral do sistema pode ser visualizado na Figura \ref{fig:arqgeral}.
+Esta seção descreve as características operacionais do sistema, assim como os resultados esperados. O fluxo geral do sistema pode ser visualizado na Figura \ref{fig:arqgeral}.
 
 \begin{figure}[htbp]
 	\centering
@@ -22,31 +22,33 @@ Esta seção descreve as características operacionais do sistema, assim como as
 	\label{fig:arqgeral}
 \end{figure}
 
-Utilizando uma câmera fotográfica, a primeira etapa consiste em fotografar as peças de uma corrida no despacho. A partir dessa fotografia, o código de barras de cada tarugo será reconhecido, e posteriormente, os números que estão acima dele. Essas corridas serão salvas em um banco de dados e mostrados através de telas para que o usuário possa validá-las.
+Em suma, o processo será realizado em diversos passos sequenciais. Será iniciado ao se fotografar as peças de uma corrida no setor de despacho utilizando uma câmera digital. A fotografia vai automaticamente para o sistema e a partir dela dá-se início reconhecimento da imagem. O código de barras de cada tarugo é detectado como um bloco e, em seguida, os números que estão acima de cada um dos blocos é identificado.Esse processo é chamado de corrida. 
+
+A corrida é salva em um banco de dados e exibidas através de telas para que o usuário possa validá-las.
 
 %------------------------------------------------
 
 \section{Backend em Python} \label{sec:backend}
 
-Para realizar o experimento é necessário treinar um modelo de rede neural que seja capaz de reconhecer código de barras e algarismos. Para isso, são efetuadas três etapas. Primeiro será coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens junto com a classe em que pertence. Então, é possível realizar a configuração e treinamento da rede neural. E por fim será calculada a acurácia, mediante imagens de teste, do modelo que teve a melhor performance no treinamento.
+Para realizar o experimento é necessário treinar um modelo de rede neural que seja capaz de reconhecer código de barras e algarismos. Para isso, são efetuadas três etapas. Primeiro é coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens juntamente com a classe em que pertence. Então, é possível realizar a configuração e treinamento da rede neural. Por fim é calculada a acurácia, mediante imagens de teste, do modelo que obteve a melhor performance no treinamento.
 
-Escolhemos prioritariamente a linguagem de programação Python para implementação do sistema de Machine Learning devido à grande comunidade existente da linguagem, ao grande número de bibliotecas de análise de dados disponiveis e à ferramenta Google Colab utiliza-ló.
+A linguagem de programação Python para implementação do sistema de Machine Learning foi prioritariamente escolhida devido à grande comunidade existente da linguagem, ao grande número de bibliotecas de análise de dados disponíveis e ao fato da ferramenta Google Colab utilizá-lo, permitindo o processamento que não seria possível em um computador de baixa performance.
 
 %------------------------------------------------
 
 \subsubsection*{Python}
 
-Python é uma linguagem de programação interpretada\footnote{Linguagem interpretada é uma linguagem de programação em que o código fonte nessa linguagem é executado por um programa de computador chamado interpretador, que em seguida é executado pelo sistema operacional ou processador.}, de alto nível, ou seja,com um nível de abstração relativamente elevado e de uso geral. Sua abordagem orientada a objetos têm como objetivo ajudar os programadores a escrever código para projetos de pequena e grande escala.
+Python é uma linguagem de programação interpretada\footnote{Linguagem interpretada é uma linguagem de programação em que o código fonte é executado por um programa de computador chamado interpretador, que em seguida é executado pelo sistema operacional ou processador.} de alto nível, ou seja, com um nível de abstração relativamente elevado e de uso geral. Sua abordagem orientada a objetos tem a finalidade de ajudar os programadores a escrever código para projetos de pequena e grande escala.
 
 O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional.
 
-Os interpretadores de Python estão disponíveis para muitos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento do Python. \cite{van2007python}
+Os interpretadores de Python estão disponíveis para diversos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento do Python. \cite{van2007python}
 
 %------------------------------------------------
 
 \subsection{Preparação do dataset}
 
-Como o escopo do trabalho não contempla a automatizacão da recuperacão de informacões de \textit{websites} públicos, foi disponibilizado um repositório com imagens. Esse
+Como o escopo do trabalho não contempla a automatizacão da recuperação de informações de \textit{websites} públicos, foi disponibilizado um repositório com imagens. Esse
 repositório possui 500 imagens e foi disponibilizado pelo laboratório Applied Recognition Technology Laboratory. As imagens se tratam de diferentes tipos de códigos de barras.\cite{Arte-Lab}
 
 \begin{figure}[htbp]
@@ -56,7 +58,7 @@ repositório possui 500 imagens e foi disponibilizado pelo laboratório Applied 
 	\label{fig:datasetBarcode}
 \end{figure}
 
-Para que possamos treinar um modelo de rede neural com alta taxa de acerto, é ideal que tenhamos o maior número possível de imagens no \textit{dataset}. Com isso, foi utilizado o método de \textit{data augmentation} para aumentar a quantidade de imagens que já tínhamos disponíveis. Como iremos utilizar uma rede já pré treinada, utilizaremos em média 1000 imagens em nossa rede.
+Para o treinamento de um modelo de rede neural com alta taxa de acerto é ideal que se tenha o maior número possível de imagens no \textit{dataset}. Para isso foi utilizado o método de \textit{Data Augmentation}.  
 
 %------------------------------------------------
 
@@ -64,11 +66,11 @@ Para que possamos treinar um modelo de rede neural com alta taxa de acerto, é i
 
 \textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados de forma sintética. A partir uma imagem, ele pode gerar mais imagens semelhantes através de vários métodos como girar um ângulo qualquer, embaçar a imagem fazendo com que ela perca o brilho ou até mesmo ofuscando-a, entre outros para que possa aumentar o tamanho do \textit{dataset}.
 
-Mesmo quando os dados são de qualidade inferior como, por exemplo, imagens não nítidas, os algoritmos de ML podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da Web não filtradas e conter muitos erros.\cite{dataAug}
+Mesmo quando os dados são de qualidade inferior como, por exemplo, imagens não nítidas, os algoritmos de ML podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da web não filtradas e conter muitos erros.\cite{dataAug}
 
-O uma parte do código \ref{cod:dataaug} do método mostra o momento em que é definido o tipo de ação que será feita em cada foto, como rotacionar em um ângulo aleatório, inserir ruído na imagem e girar horizontalmente. O método também possibilita escolher a quantidade de imagens que será gerada, neste caso, 1000 imagens.
+O Código \ref{cod:dataaug} abaixo mostra o momento em que é definido o tipo de ação que será feita em cada foto, como rotacionar em um ângulo aleatório, inserir ruído na imagem e girar horizontalmente. O método também possibilita escolher a quantidade de imagens que será gerada, neste caso, 1000 imagens.
 
-\begin{lstlisting}[caption=Exemplo de código do método \textit{data augmentation}, label=cod:dataaug][htb!]
+\begin{lstlisting}[caption=Exemplo de código do método \textit{data augmentation}, label=cod:dataaug][H]
  num_files_desired = 1000
  available_transformations = {
                                 'rotate': random_rotation,
@@ -81,7 +83,7 @@ O uma parte do código \ref{cod:dataaug} do método mostra o momento em que é d
 
 \subsection{Anotações das imagens}
 
-Após ter criado o dataset, teremos que fazer as anotações das imagens geradas. Isso quer dizer, criar um arquivo que contenha as posições dos pixels da \textit{Bounding Box} que engloba o objeto na imagem. Um dos formatos mais conhecidos é o Pascal VOC. O formato VOC do Pascal usa arquivos XML para armazenar as informações sobre os objetos anotados nas imagens. Para que possamos gerar esse arquivos mais facilmente, utilizaremos o software LabelImg para realizar essa tarefa.
+Após ter criado o \textit{dataset}, as anotações das imagens geradas são feitas. Isso quer dizer que é criado um arquivo que contenha as posições dos pixels da \textit{Bounding Box} que engloba o objeto na imagem. Um dos formatos mais conhecidos é o Pascal VOC. O formato VOC do Pascal utiliza arquivos XML para armazenar as informações sobre os objetos anotados nas imagens. Para que seja possível gerar tais arquivos mais facilmente, foi utilizado o software LabelImg.
 
 %------------------------------------------------
 
@@ -89,9 +91,9 @@ Após ter criado o dataset, teremos que fazer as anotações das imagens geradas
 
 A \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) é um dos métodos de anotação de imagem mais populares usados em \textit{Machine Learning} e em \textit{Deep Learning}.
 
-Elas são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Com exemplo, definiremos as \textit{Bounding Boxes} do cachorro e do gato com base nas informações de coordenadas da imagem superior na Figura \ref{fig:boundingBox}. \cite{allDeep}
+As bbox são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Com exemplo, as bbox do cachorro e do gato da Figura \ref{fig:boundingBox} são definidas com base nas informações de coordenadas da imagem superior. \cite{allDeep}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.6]{figuras/MachineLearning/catDog.png}
 		\caption{Execução de \textit{Bounding Boxes}.}
@@ -109,11 +111,11 @@ O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do c
 
 \subsubsection*{LabelImg}\label{sub:LabelImg}
 
-O LabelImg (Figura \ref{fig:labelimg}) é uma ferramenta \textit{open source} de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Código \ref{cod:XML}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO no qual utilizaremos em nosso projeto. \cite{labelimg}
+O LabelImg (Figura \ref{fig:labelimg}) é uma ferramenta \textit{open source} de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Código \ref{cod:XML}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO que é utilizado no presente projeto. \cite{labelimg}
 
-O software em questão permite que você circule as \textit{bounding boxes} englobando o objeto de interesse nas imagens e criando automaticamente um arquivo XML com todas as especificações necessárias.
+O software em questão permite que as bbox sejam circuladas englobando o objeto de interesse nas imagens e criando automaticamente um arquivo XML com todas as especificações necessárias.
 
-Utiliza-se a ferramenta para formar o \textit{dataset}, que é um dos fundamentos da \textit{Deep Learning}. Para muitos pesquisadores, obter dados suficientes para realizar o experimento por si só é um grande problema, por isso precisamos de muitos \textit{datasets open source} para que todo mundo possa usar. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes.
+Utiliza-se o LabelImg para formar o \textit{dataset} que é usado para testar desempenho do algoritmo. Obter dados suficientes para realizar o experimento costuma ser uma dificuldade visto que é necessário um grande volume. Os \textit{datasets open source} ajudam a resolver esta questão ao disponibilizar diversos conjuntos de dados. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes:
 
 \begin{figure}[htbp]
 	\centering
@@ -151,25 +153,29 @@ Utiliza-se a ferramenta para formar o \textit{dataset}, que é um dos fundamento
 </annotation>
 \end{lstlisting}
 
-O ImageNet dataset \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e anotações de locais de objetos na imagem. O conjunto de dados Imagenet é um dos conjuntos de dados mais usados no campo da \textit{Deep Learning}. A maior parte do trabalho de pesquisa, como classificação, localização e detecção de imagens, é baseada nesse conjunto de dados. O conjunto de dados Imagenet é detalhado e é muito fácil de usar. É amplamente utilizado no campo da pesquisa em visão computacional e se tornou o conjunto de dados 'padrão' do aprendizado profundo atual do domínio da imagem para testar o desempenho do algoritmo. \cite{zhou2017application}
+O ImageNet \textit{dataset} \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e de locais de objetos na imagem. O conjunto de dados ImageNet é um dos mais usados no campo da \textit{Deep Learning} por ser detalhado e de uso intuitivo. \cite{zhou2017application}
 
-\subsubsection*{PASCAL VOC}
-O PASCAL VOC (análise de padrões, modelagem estatística e classes de objetos visuais de aprendizado computacional) \cite{everingham2010pascal} fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos e fornece um conjunto comum de ferramentas para acessar os conjuntos de dados e anotações. O conjunto de dados PASCAL VOC inclui 20 classes e tem um desafio baseado nesse conjunto de dados. O PASCAL VOC Challenge \cite{everingham2010pascal} não está mais disponível após 2012, mas seu conjunto de dados é de boa qualidade e bem marcado e permite a avaliação e comparação de diferentes métodos. E como a quantidade de dados do conjunto de dados PASCAL VOC é pequena, comparada ao conjunto de dados imagenet, muito adequada para os pesquisadores testarem programas de rede. Nosso conjunto de dados também é criado com base no padrão de conjunto de dados PASCAL VOC.\cite{zhou2017application}
+\subsubsection*{Pascal VOC}
+O Pascal VOC é uma coleção de \textit{datasets} também utilizada para o desenvolvimento deste trabalho. Fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos, além de ferramentas para acessar as anotações.O conjunto de dados não é atualizado desde 2012, porém é de boa qualidade e permite a avaliação e comparação de diferentes métodos. \cite{zhou2017application, everingham2010pascal}.
 
-Depois de ter feito as anotações para todas as imagens, será necessário separar o conjunto de teste e treinamento. Criaremos uma pasta o dataset chamada barcodes e dentro dela, será criada também uma pasta de nome \textbf{train} e \textbf{validation}.
+%-------------
 
-Para o treinamento, separamos o conjunto de teste para que não possua nenhuma imagem presente no conjunto de treinamento. O \textit{dataset} de testes terá uma amostra bem menor que o conjunto de treinamento, portanto terá mais ou menos 25\% do total das imagens.
+\subsection{Separação do Conjunto de Teste}
 
-Depois de fazer isso, a estrutura da pasta do  \textit{dataset} de  \textit{barcodes} será a seguinte:
+Os passos seguintes às anotações das imagens são a separação do conjunto de teste e posteriormente o treinamento do modelo de rede neural. Para a separação, cria-se uma pasta chamada "barcodes" e dentro dela, outras duas pastas de nomes \textbf{train} e \textbf{validation}.
 
-\begin{figure}[htbp]
+Nenhuma imagem da pasta "train" (conjunto de treinamento) pode estar presente dentro da pasta "validation" (conjunto de validação). O \textit{dataset} de testes tem uma amostra menor que o conjunto de treinamento, cerca de 25\% do total das imagens.
+
+A estrutura da pasta do \textit{dataset} de \textit{barcodes} pode ser visualizada a seguir:
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/MachineLearning/foldersDataset.png}
 	\caption{Estrutura de pastas do \textit{dataset} de barcodes}
 	\label{fig:labelimg}
 \end{figure}
 
-Ou seja, para cada imagem, teremos um arquivo XML com as anotações registradas pelo Labelimg. Agora poderemos treinar nossos modelos.
+Ou seja, para cada imagem, há um arquivo XML com as anotações registradas pelo Labelimg. A etapa é o treinamento do modelo. Para tanto é necessário a compreensão da infraestrutura e bibliotecas utilizadas no projeto.
 
 %------------------------------------------------
 
@@ -180,28 +186,27 @@ Com o intuito de acelerar o processo, foi utilizado um software online chamado G
 %------------------------------------------------
 
 \subsubsection{Google Colaboratory}
-O Google Colaboratory, mais conhecido como "Google Colab" ou simplesmente "Colab", é um projeto de pesquisa para criar protótipos de modelos de \textit{Machine Learning} em poderosas opções de \textit{hardware}, como GPUs e TPUs. Ele fornece um ambiente de notebook Jupyter sem servidor para desenvolvimento interativo. O Google Colab é gratuito para usar como outros produtos do G Suite — que anteriormente era conhecido como Google Apps — no qual é um serviço oferecido pelo Google que fornece diversas ferramentas da própria empresa. Elas podem ser totalmente personalizadas com as informações do negócio, incluindo um domínio próprio.
-
-Além de ser fácil de usar, o Colab é muito flexível em sua configuração e faz muito do trabalho pesado para você. \cite{colabdetail}
+O Google Colaboratory, mais conhecido como "Google Colab" ou simplesmente "Colab", é um projeto de pesquisa para criar protótipos de modelos de \textit{Machine Learning} em poderosas opções de \textit{hardware}, como GPUs e TPUs. Fornece um ambiente de notebook Jupyter sem servidor para desenvolvimento interativo. O Google Colab é gratuito para usar como outros produtos do G Suite, ferramenta corporativa do Google. \cite{colabdetail}
+ 
+Características e Funcionalidades do Google Colab:
 
 \begin{itemize}
     \item Suporte para Python 2.7 e Python 3.6;
     \item Aceleração de GPU;
-    \item Bibliotecas pré-instaladas: Todas as principais bibliotecas Python, como o TensorFlow, o Scikit-learn, o Matplotlib, entre muitas outras, estão pré-instaladas e prontas para serem importadas;
-    \item Construído com base no Jupyter Notebook;
-    \item Recurso de colaboração (funciona com uma equipe igual ao Google Docs): o Google Colab permite que os desenvolvedores usem e compartilhem o Jupyter notebook entre si sem precisar baixar, instalar ou executar qualquer coisa que não seja um navegador;
+    \item Bibliotecas pré-instaladas: diversas bibliotecas Python, como TensorFlow, Scikit-learn, Matplotlib etc.
+    \item Recurso de colaboração: permite que os desenvolvedores usem e compartilhem o Jupyter notebook entre si sem precisar baixar, instalar ou executar qualquer coisa que não seja um navegador;
     \item Suporta comandos \textit{bash};
     \item Os notebooks do Google Colab são armazenados no drive.
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.4]{figuras/MachineLearning/colabGithub.png}
 		\caption{Utilização do Colab, Drive e Github}
 		\label{fig:colabGithub}
 \end{figure}
 
-O Colab se integra facilmente ao Google Drive, o que o torna uma opção natural para espaço de armazenamento, em que se armazena os dados e os modelos. Ao mesmo tempo, o Github é mais adequado para hospedagem de código e uso de diversas  bibliotecas gratuitas disponíveis pela comunidade. 
+O Google Colab se integra facilmente ao Google Drive, o que o torna uma opção natural para espaço de armazenamento dos dados e modelos. Porém há também outras opções de hospedagem de código, como na plataforma Github, escolhida para este trabalho.
 
 \subsection{Blibliotecas utilizadas}
 
