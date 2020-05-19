@@ -206,7 +206,7 @@ Características e Funcionalidades do Google Colab:
 		\label{fig:colabGithub}
 \end{figure}
 
-O Google Colab se integra facilmente ao Google Drive, o que o torna uma opção natural para espaço de armazenamento dos dados e modelos. Porém há também outras opções de hospedagem de código, como na plataforma Github, escolhida para este trabalho.
+O Google Colab se integra facilmente ao Google Drive, fato que o torna uma opção natural para espaço de armazenamento dos dados e modelos. Porém há também outras opções de hospedagem de código, como por exemplo, a plataforma Github, escolhida para este trabalho.
 
 \subsection{Blibliotecas utilizadas}
 
@@ -216,9 +216,9 @@ Todo o código foi implementado utilizando a linguagem de programacão Python, e
 
 \subsubsection{TensorFlow}
 
-O TensorFlow é uma biblioteca Python de código aberto para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis como telefones e tablets até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU.
+O TensorFlow é uma biblioteca Python de código aberto para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis, como telefones e tablets, até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU.
 
-O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de aprendizado de máquina na produção em mais de uma dúzia de áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
+O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de \textit{Machine Learning} na produção de diversas áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
 
 Vários serviços do Google uilizam o TensorFlow em sua produção, foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
 
@@ -228,47 +228,47 @@ Vários serviços do Google uilizam o TensorFlow em sua produção, foi lançado
 
 O Scikit-image, também conhecido como Skimage, é uma biblioteca de processamento de imagens que implementa algoritmos e utilitários para uso em aplicações de pesquisa, educação e indústria. É lançado sob a licença liberal de código aberto Modified BSD, fornece uma API bem documentada na linguagem de programação Python e é desenvolvido por uma equipe internacional ativa de colaboradores.
 
-O objetivo do scikit-image é fornecer uma biblioteca de alta qualidade de ferramentas poderosas e diversas de processamento de imagens, gratuitas e sem restrições. Esses princípios são a base para as práticas de desenvolvimento na comunidade de imagens scikit.\cite{skimage}
+O objetivo do scikit-image é fornecer uma biblioteca de alta qualidade de ferramentas e diversas de processamento de imagens, gratuitas e sem restrições. \cite{skimage}
 
 %------------------------------------------------
 
 \subsubsection{ImageAI}
 
-ImageAI é uma biblioteca python de código aberto criada para capacitar os desenvolvedores a criar aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando poucas linhas de código.
+ImageAI é uma biblioteca Python de código aberto desenvolvida para capacitar os desenvolvedores a criarem aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando poucas linhas de código.
 
 A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algoritmos diferentes de \textit{Machine Learning} treinados no conjunto de dados ImageNet-1000. O ImageAI também suporta detecção de objetos, detecção de vídeo e rastreamento de objetos usando RetinaNet, YOLOv3 e TinyYOLOv3 treinados no conjunto de dados COCO e PASCAL VOC.\cite{ImageAI}
 
-Neste trabalho será utilizada uma classe da biblioteca ImageAI chamada \textit{Custom Detection Model Training}, possibilitando o treinamento do meu próprio modelo de detecção de objetos utilizando a arquitetura da YOLOv3.
+Este trabalho utiliza a classe da biblioteca ImageAI chamada \textit{Custom Detection Model Training}, que possibilita o treinamento modelo próprio de detecção de objetos utilizando a arquitetura da YOLOv3.
 
 %------------------------------------------------
 
 \subsubsection{OpenCV}
 
-O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source} e \textit{cross-plataform} (Multiplataforma) que contém mais de 500 algoritmos otimizados para análise de imagem e vídeo. Desde sua introdução em 1999, ele foi amplamente adotado como a principal ferramenta de desenvolvimento pela comunidade de pesquisadores e desenvolvedores em visão computacional.\cite{opencv}
+O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source} e \textit{cross-plataform} (Multiplataforma) que contém mais de 500 algoritmos otimizados para análise de imagem e vídeo. \cite{opencv}
 
 %------------------------------------------------
 
 \subsection{Treinamento dos modelos}
 
-Após gerado o conjunto de dados, é possível trabalhar no treinamento do modelo da rede neural. Para isso será utilizado o \textit{framework} TensorFlow destinado à \textit{Deep Learning}. Também será utilizado uma rede neural pré-treinada chamada YoloV3, escrita em Python que fará uso das funções disponibilizadas pela biblioteca ImageAI . Assim realizando o treinamento até atingir um valor aceitável de acerto no conjunto de teste. 
+Após gerado o conjunto de dados, é possível trabalhar no treinamento do modelo da rede neural. Para isso foi utilizado o \textit{framework} TensorFlow destinado à \textit{Deep Learning}. Além de uma rede neural pré-treinada chamada YoloV3, escrita em Python que faz uso das funções disponibilizadas pela biblioteca ImageAI . Assim o treinamento foi realizado até atingir um valor considerado aceitável de acerto no conjunto de teste. 
 
-Através do modelo da rede Yolov3, treinaremos mais dois novos modelos de redes neurais:
+Através do modelo da rede Yolov3, treina-se mais dois novos modelos de redes neurais:
 \begin{itemize}
     \item Modelo de rede neural para reconhecimento de \textit{barcodes};
     \item Modelo de rede neural para reconhecimento de algarismos numéricos;
 \end{itemize}
 
-O resultado do treinamento serão arquivos no formato .h5\footnote{Um arquivo H5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.} representando o modelo que serão avaliados através da melhor acurácia\footnote{Indica uma performance geral do modelo. Dentre todas as classificações, quantas o modelo classificou corretamente;} e utilizados posteriormente.
+O resultado do treinamento são arquivos no formato .h5\footnote{Um arquivo H5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.}. Cada arquivo é um modelo que é avaliado através da melhor acurácia\footnote{Indica uma performance geral do modelo. Dentre todas as classificações, quantas o modelo classificou corretamente;}.
 
 %------------------------------------------------
 
 \subsubsection*{YOLOv3}\label{sub:Yolov3}
 
-A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de \textit{bounding boxes} (\textit{bbox}) de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
+A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de bbox de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
 
-O YOLO é a frequência mais rápida (45 FPS) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}. Comparando a rede Faster R-CNN com a  R-CNN, a velocidade do treinamento  é 9 vezes mais rápida e a velocidade do teste é 213 vezes mais rápida. \cite{7960069}
+O YOLO é a frequência mais rápida (45 FPS) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}.
 
-O YOLO impõe fortes restrições espaciais nas previsões de \textit{bbox}, pois cada célula da \textit{grid} prevê apenas duas \textit{box} e pode ter apenas uma classe. Essa restrição espacial limita o número de objetos próximos que o modelo pode prever. O modelo luta com pequenos objetos que aparecem em grupos, como por exemplo, bandos de pássaros. \cite{yolov3RealTime}
+O YOLO impõe fortes restrições espaciais nas previsões de bbox, pois cada célula da \textit{grid} prevê apenas duas \textit{box} e pode ter apenas uma classe. Essa restrição espacial limita o número de objetos próximos que o modelo pode prever. \cite{yolov3RealTime}
 
 \begin{figure}[htbp]
 		\centering
@@ -277,7 +277,7 @@ O YOLO impõe fortes restrições espaciais nas previsões de \textit{bbox}, poi
 		\label{fig:yolo}
 \end{figure}
 
-No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucional prediz tanto os \textit{bounding boxes} quanto as probabilidades de pertinencia a classe de cada objeto detectado. Para isso, YOLO funciona da seguinte forma:
+No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucional prediz tanto os bbox quanto as probabilidades de pertinência à classe de cada objeto detectado. Para isso, YOLO funciona da seguinte forma:
 
 \begin{itemize}
     \item Toma-se uma imagem e divide-se-a em um grid SxS de células (S = 6);
@@ -285,7 +285,7 @@ No modelo de detecção YOLO (Figura \ref{fig:yolo}) uma única rede convolucion
     \item \textit{Bounding boxes} com probabilidade acima de um limiar são selecionados e usados para localizar o objeto dentro da imagem.
 \end{itemize}
 
-Cada célula do  \textit{grid} é usada para predizer B  \textit{bbox} e C probabilidades de classe. O conceito de interseção sobre união (IoU) tem um papel importante e a confiança de uma predição em YOLO é dada por:
+Cada célula do  \textit{grid} é usada para predizer B bbox e C probabilidades de classe. O conceito de interseção sobre união (IoU) tem um papel importante e a confiança de uma predição em YOLO é dada por:
 
 \begin{equation}
     Confianca = p_r(Object) X IoU_{pred}^{truth} , p_r(Object) \in \left \{ 1\right.,\left.0\right \}
@@ -297,17 +297,17 @@ Em que, quando o \textit{target} estiver na \textit{grid}, \(p_r(Object)\) = 1 e
 
 \section{Aplicação Web} \label{sec:web}
 
-Neste seção mostraremos as etapas necessárias de criação da aplicação web desenvolvida para consumir os resultados do sistema de \textit{Deep Learning} mostrado anteriormente. 
+Essa seção mostra as etapas necessárias de criação da aplicação web desenvolvida para mostrar ao usuário final os resultados do sistema de detecção de objetos.
 
 O sistema web foi criado para facilitar o gerenciamento, visualização e rastreabilidade das corridas para o operador através de um \textit{layout} amigável.
 
-Para essa etapa, utilizaremos a linguagem Node.JS para implementar o \textit{back-end} e as linguagens HTML, CSS, EJS\footnote{O EJS é uma engine de visualização, com ele conseguimos de uma maneira fácil e simples transportar dados do back-end para o front-end, basicamente conseguimos utilizar códigos em javascript no html de nossas páginas.} e JavaScript para implementar o \textit{front-end}. A escolha do Node.JS foi devido aos seguintes fatores:
+Nessa etapa foi utilizada a linguagem Node.JS para implementar o \textit{back-end} e as linguagens HTML, CSS, EJS\footnote{O EJS é uma linguagem de visualização, com ele é possível transportar dados do back-end para o front-end de maneira simple, basicamente utiliza-se códigos em javascript no html das páginas.} e JavaScript para implementar o \textit{front-end}. A escolha do Node.JS foi devido aos seguintes fatores:
 
 \begin{itemize}
-    \item Instalação ser simples pois não necessita de dependência para configuração
-    \item Você consegue executar aplicações Node em qualquer plataforma.
-    \item I/O não bloqueante. Isso significa que quando você precisa acessar um arquivo no disco, se comunicar com um \textit{Web Service} ou acessar um banco de dados esse acesso é feito de forma assíncrona por padrão.
-    \item Por ser escrito em JavaScript, pouparia grande parte dos esforço caso opte por utilizar tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
+    \item Instalação ser simples, pois não necessita de dependência para configuração.
+    \item Possibilidade de executar aplicações Node em qualquer plataforma.
+    \item I/O não bloqueante. Isso significa que quando é necessário acessar um arquivo no disco, se comunicar com um \textit{Web Service} ou acessar um banco de dados, esse acesso é feito de forma assíncrona por padrão.
+    \item Por ser escrito em JavaScript, poupa grande parte dos esforço caso opte por utilizar tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
 \end{itemize}
  
 %------------------------------------------------

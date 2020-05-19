@@ -1,5 +1,5 @@
 
-\chapter{Desenvolvimento}
+\chapter{Desenvolvimento e Resultados}
 
 Este capítulo descreve o desenvolvimento do projeto proposto. O projeto é composto por 5 tarefas de implementação:
 
@@ -313,65 +313,86 @@ Utilizaremos a \textit{engine} EJS para que o \textit{back-end}, em Node.JS, com
 
 Os \textit{controllers} possuem módulos que são responsáveis pela renderização, navegação das paginas através dos \textit{endpoints}, bem como no envio de dados para o navegador.
 
-Os módulos tem como função utilizar o método \textit{render}, do pacote do EJS, e chamar os \textit{business} para que seja executada a regra de negócio.   
-
+Os \textit{business} são os responsáveis pelas regras de negócio do sistema de modo que cada método tenha uma função especifica. Comunicação entre os aquivos JSON e listagem dos objetos são suas principais funções.
 
 \subsection{Front-end}
 
+Nesta seção será apresentada as telas e suas funcionalidades utilizando o \textit{frontend} da aplicação. No desenvolvimento foi utilizada as tecnologias HTML, CSS, JavaScript e EJS, responsável pela comunicação entre \textit{frontend} e \textit{backend}.
 
-\begin{figure}[htbp]
+A tela inicial do sistema é composta pela lista de corridas que já foram identificadas e pelo componente responsável por fazer o \textit{upload}\footnote{ação de enviar um arquivo para determinado local.} de uma nova imagem.(Figura \ref{fig:list1})
+
+A imagem será enviada para a pasta \textit{images} (Figura \ref{fig:folderSystem}) e automaticamente treinada pelo sistema de detecção.
+
+Toda corrida que é inicialmente treinada, terá o status como "Inadimplente", pois ainda não foi despachada para as Laminações. Dessa forma, o sistema terá diversas opções para que o usuário tenha total controle da mesma.
+
+A lista de corridas tem como funcionalidade as opções de visualizar detalhadamente ou deletar a corrida escolhida. Caso a corrida seja deletada, a tela será redirecionada para tela de \textit{delete}(Figura \ref{fig:corrida_delete}) e no \textit{backend} o arquivo config\_x.json é movido para pasta \textit{deleted}(Figura \ref{fig:folderSystem}).
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{figuras/WebService/Screens/list  1.png}
-	\caption{Divisão dos arquivos do Sistema Web}
+	\caption{Componente para \textit{upload} de novas imagens}
 	\label{fig:list1}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{figuras/WebService/Screens/list 2.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Lista de corridas coletadas}
+	\label{fig:list2}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/WebService/Screens/corrida_delete.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Corrida deletada.}
+	\label{fig:corrida_delete}
 \end{figure}
 
-\begin{figure}[htbp]
+A segunda tela é o detalhamento da corrida em que é mostrado o número da corrida, a quantidade de peças, a acurácia média das etiquetas e o status atual. (Figura \ref{fig:detalCorrida})
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figuras/WebService/Screens/detail 1.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Detalhamento da corrida selecionada}
+	\label{fig:detalCorrida}
 \end{figure}
 
-\begin{figure}[htbp]
+Na mesma tela de detalhamento, é mostrada todas as peças (etiquetas) que foram detectadas pelo sistema de detecção. A lista detalha o identificador, o número da peça que é referente ao número localizado acima do código de barras da etiqueta, a acurácia de cada uma e um botão para visualizar a imagem da etiqueta.(Figura \ref{fig:detail2.1})
+
+Cada etiqueta tem como característica, caso algum algarismo tenha acurácia menor que 98\%, o fundo da cédula preenchido pela cor vermelha, alertando o usuário que possivelmente aquela etiqueta tem um número que foi detectado erroneamente.
+
+O botão despachar tem a função de despachar a corrida e alterar seu status para "Despachada" no banco de dados (Figura \ref{fig:corrida_desp}). Caso o status da corrida já esteja como "Despachada", o sistema redirecionará o usuário para tela de erro com a seguinte mensagem (Figura \ref{fig:corrida_desp_x}) 
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.65\linewidth]{figuras/WebService/Screens/detail 2.1.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Detalhamento das peças da corrida}
+	\label{fig:detail2.1}
 \end{figure}
 
-
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/WebService/Screens/corrida_desp.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Corrida despachada pelo usuário}
+	\label{fig:corrida_desp}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/WebService/Screens/corrida_desp_X.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Mensagem de erro para status de corrida despachada}
+	\label{fig:corrida_desp_x}
 \end{figure}
 
-\begin{figure}[htbp]
+A última tela do sistema é referente ao detalhamento da etiqueta que foi escolhida através do botão "\textit{Image}".
+
+Nesta tela, o usuário terá permissão para editar a etiqueta caso tenha identificado que há algum algarismo numérico detectado que seja diferente da imagem ao lado.
+
+Ao salvar ele será redirecionado para tela de detalhamento da corrida para que então continue o procedimento de, verificar as outras etiquetas ou despachar a corrida.
+
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{figuras/WebService/Screens/detail_tag.png}
-	\caption{Divisão dos arquivos do Sistema Web}
-	\label{fig:cleanArchtecture}
+	\caption{Edição dos números da etiqueta.}
+	\label{fig:detail_tag}
 \end{figure}
