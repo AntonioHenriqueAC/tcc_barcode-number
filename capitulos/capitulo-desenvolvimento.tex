@@ -1,32 +1,33 @@
 
 \chapter{Desenvolvimento e Resultados}
 
-Este capítulo descreve o desenvolvimento do projeto proposto. O projeto é composto por 5 tarefas de implementação:
+Este capítulo descreve as cinco etapas de desenvolvimento do projeto proposto:
 
 \begin{itemize}
-    \item Montar os \textit{datasets} de \textit{barcodes} e números;
-    \item Treinar, avaliar e selecionar o melhor modelo de rede neural para \textit{barcodes} e números;
-    \item Implementar o algoritmo de detecção dos \textit{barcodes}.
-    \item Implementar o algoritmo de detecção dos números.
-    \item Implementar a aplicação web
+    \item construir os \textit{datasets} de \textit{barcodes} e números;
+    \item treinar e avaliar o melhor modelo de rede neural para código de barras e números;
+    \item implementar o algoritmo de detecção dos código de barras;
+    \item implementar o algoritmo de detecção dos números;
+    \item implementar o sistema web.
 \end{itemize}
 
-Utilizaremos a Figura \ref{fig:imagemBase} como referência para a explicação do sistema ao longo do capítulo.
+A Figura \ref{fig:imagemBase} é utilizada como referência para a explicação do sistema ao longo do capítulo.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/img1.jpg}
-	\caption{Foto tirada da corrida de tarugos.}
+	\caption{Imagem exemplo uma corrida de tarugos.}
 	\label{fig:imagemBase}
 \end{figure}
 
 \section{Montagem dos \textit{datasets}}
 
-Nesta seção faremos a montagem dos dois \textit{datasets} para que, posteriormente, as redes neurais sejam treinadas. 
+Nesta seção é feita a montagem de dois \textit{datasets} para viabilizar o treinamento das redes neurais. 
 
-Inicialmente faremos o \textit{download} do conjunto de dados de \textit{barcodes} disponibilizado pelo laboratório \citeauthor{Arte-Lab}. Teremos por volta de 500 imagens de código de barras para o nosso \textit{dataset} inicial.
+Inicialmente é feito o \textit{download} do conjunto de dados de \textit{barcodes} disponibilizado pelo laboratório \citeauthor{Arte-Lab}\footnote{http://artelab.dista.uninsubria.it/}. Há por volta de 500 imagens de código de barras para o nosso \textit{dataset} inicial.
 
-Criaremos pastas no seguinte modelo de divisão para nosso \textit{dataset}. (Código \ref{cod:folders})
+
+Cria-se pastas no seguinte modelo de divisão para o \textit{dataset}. (Código \ref{cod:folders})
 \begin{lstlisting}[caption=Divisão dos arquivos para dataset, label=cod:folders][htb!]
         +---barcode
         |   +---train
@@ -45,9 +46,12 @@ Criaremos pastas no seguinte modelo de divisão para nosso \textit{dataset}. (C�
         |       \---images
 \end{lstlisting}
 
-Através do método \textit{Data Augmentation} \ref{sec:dataAugm}, aumentaremos nossa base de dados para que, após o treino, a acurácia do modelo de nossa rede neural seja a maior possível. Aplicaremos o modelo nas imagens 500 imagens resultando em $\sim~1500$ imagens de código de barras.
+Através do método \textit{Data Augmentation} (Seção \ref{sec:dataAugm}), amplia-se a base de dados para melhorar os resultados da rede. O modelo é aplicado nas 500 imagens do \textit{dataset}, resultando assim em 1263 imagens de código de barras.
 
-Utilizando a Figura \ref{fig:imagemBase}, cortaremos as etiquetas com a ajuda do software \textit{Paint} do \textit{Windows}, para sera gerada nossa base de dados de números. Optamos por utilizar os números localizados nas etiquetas uma vez que foram feitos diversos treinamento com fontes numéricas diferentes e, portanto, não obtivemos uma acurácia de detecção do número esperada.(Figura \ref{fig:barcodeDataset})
+
+Com a imagem completa da corrida dos tarugos (Figura \ref{fig:imagemBase}), recorta-se manualmente as etiquetas, gerando assim a base de dados de números. Foi escolhido utilizar os números localizados nas etiquetas após diversos treinamentos realizados com fontes numéricas diferentes que não resultaram em uma acurácia de detecção do número satisfatória (Figura \ref{fig:barcodeDataset}).
+
+A acurácia ou \textit{Accuracy} é uma métrica para avaliar modelos de classificação. Informalmente, acurácia é a fração das previsões que o modelo acertou.
 
 \begin{figure}[htbp]
 	\centering
@@ -56,26 +60,26 @@ Utilizando a Figura \ref{fig:imagemBase}, cortaremos as etiquetas com a ajuda do
 	\label{fig:barcodeDataset}
 \end{figure}
 
-Colocaremos 75\% das imagens na pasta validation e resto em train tanto no \textit{dataset} de \textit{barcodes} como no de números.
+Parte das imagens, 75\%, são alocadas na pasta "/validation" e as demais em "/train"  tanto no \textit{dataset} de \textit{barcodes} como no de números.
 
 \subsection{Anotações das imagens}
 
-Utilizando o software LabelImg (Subseção \ref{sub:LabelImg}), faremos as anotações das imagens para que seja gerado o arquivo PASCAL VOC no formato XML. (Figura \ref{fig:barNumAn})
+O software LabelImg (Subseção \ref{sub:LabelImg}) é utilizado para fazer as anotações das imagens para que seja gerado o arquivo PASCAL VOC no formato XML (Figura \ref{fig:barNumAn}).
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=1\linewidth]{figuras/MachineLearning/barNumAn.png}
+	\includegraphics[width=0.9\linewidth]{figuras/MachineLearning/barNumAn.png}
 	\caption{Anotações das imagens (Números e \textit{Barcodes})}
 	\label{fig:barNumAn}
 \end{figure}
 
 \section{Fase de treinamento}
 
-Nesta seção iremos treinar, avaliar e selecionar o melhor modelo de \textit{barcode} e número a partir da rede neural pré-treinada YOLOv3 (Subseção \ref{sub:Yolov3}).
+Nesta seção treina-se, avalia-se e seleciona-se o melhor modelo de \textit{barcode} e número a partir da rede neural pré-treinada YOLOv3 (Subseção \ref{sub:Yolov3}).
 
 \subsection{Treinando o modelo}
 
-Utilizando a biblioteca ImageAI, e importando a classe \textit{DetectionModelTrainer}, treinaremos o modelo (Código \ref{cod:modeTrain}).
+Utilizando a biblioteca ImageAI e importando a classe \textit{DetectionModelTrainer}, treina-se o modelo da seguinte forma (Código \ref{cod:modeTrain}):
 
 \begin{lstlisting}[caption=Exemplo de código do método \textit{data augmentation}, label=cod:modeTrain][htb!]
 from imageai.Detection.Custom import DetectionModelTrainer
@@ -84,38 +88,38 @@ trainer = DetectionModelTrainer()
 trainer.setModelTypeAsYOLOv3()
 trainer.setDataDirectory(data_directory="barcode")
 trainer.setTrainConfig(object_names_array=["barcode"], batch_size=4, 
-                        num_experiments=11, 
-                        train_from_pretrained_model=
-                                            "pretrained-yolov3.h5")
+                    num_experiments=11,
+                    train_from_pretrained_model="pretrained-yolov3.h5")   
 trainer.trainModel()
 \end{lstlisting}
 
 \begin{itemize}
-    \item \textit{object\_names\_array}: matriz que contém os nomes dos objetos em nosso \textit{dataset};
+    \item \textit{object\_names\_array}: matriz que contém os nomes dos objetos no \textit{dataset};
     \item \textit{batch\_size}: indica o tamanho do \textit{batch} para o treinamento;
-    \item \textit{num\_experiments}: indica o número de vezes que a rede treinará sobre todas as imagens de treinamento, também chamadas de \textit{Epochs};
+    \item \textit{num\_experiments}: indica o número de vezes que a rede treinará sobre todas as imagens da base de dados.
 \end{itemize}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\linewidth]{figuras/MachineLearning/barcodeTraining.png}
-	\caption{Anotações das imagens (Números e \textit{Barcodes})}
+	\caption{Exemplo de treinamento do modelo de código de barras.}
 	\label{fig:barTrain}
 \end{figure}
 
-    A figura acima significa o progresso do treinamento.
 \begin{itemize}
-    \item Para cada experimento (\textit{Epoch}), a perda total geral de validação (por exemplo - \textit{loss}: 4.7582) é relatada.
-    \item Para cada queda em \textit{loss} após uma experiência, um modelo é salvo na pasta barcode/models. Quanto menor a perda, melhor o modelo, de um modo geral, é desenhada para mostrar o quão longe estamos da solução "ideal". 
+    \item Para cada experimento, a perda total geral de validação (por exemplo - \textit{loss}: 4.7582) é relatada.
+    \item Após cada treinamento, se há redução do atributo \textit{loss}, um novo modelo é salvo na pasta "/barcode/models". Quanto menor o número absoluto do \textit{loss}, melhor é o modelo de um modo geral. Ele indica o quão longe está da solução "ideal". 
 \end{itemize}
 
-O método \textit{trainer.evaluateModel} mostrará as métricas de saída de cada modelo e a partir dos modelos gerados, avaliaremos o mAP \footnote{AP (precisão média) é uma métrica popular na medição da precisão de detectores de objetos;} de cada modelo de detecção salvo.  (Código \ref{cod:metrics})
+A função de perda ou \textit{Loss}, é um método de avaliar quão bem o modelo lida com o \textit{dataset}. Caso o modelo estiver mal treinado, o que acontece normalmente em função dos dados utilizados, sua função de perda produzirá um valor elevado. Se o modelo for muito bom, o resultado será um número menor. A medida que é alterada partes do  algoritmo para tentar aprimorar o modelo, a função de perda informa se está chegando à solução "ideal".
+
+O método \textit{trainer.evaluateModel} mostra as métricas de saída de cada modelo e a partir dele, avaliaremos o mAP\footnote{mAP (Precisão Média) é uma métrica popular na medição da precisão de detectores de objetos.} de cada um destes modelos de detecção (Código \ref{cod:metrics}).
 
 \begin{lstlisting}[caption=Métricas de saída do modelo, label=cod:metrics][htb!]
 metrics = trainer.evaluateModel(model_path="detection_model-ex-013--loss-0003.066.h5", json_path="detection_config_barcode.json", iou_threshold=0.5, object_threshold=0.3, nms_threshold=0.5)
 \end{lstlisting}
 
-Obtivemos o seguintes resultados para nossos modelos de barcodes e números:
+Melhores resultados encontrados de modelos de \textit{barcodes} e números aplicando a métrica de avaliação:
 
 \begin{table}[H]
 	\centering
@@ -124,50 +128,38 @@ Obtivemos o seguintes resultados para nossos modelos de barcodes e números:
 		\rowcolor[HTML]{ECF4FF} 
 		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Característica}} &
 		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Barcode}} & \multicolumn{1}{c|}{\cellcolor[HTML]{ECF4FF}\textit{Number}}\\ \hline
-		\textit{Epochs} & 7 & 53\\ \hline
 		\textit{Loss} & 3.066 & 12.296\\ \hline
 		\textit{mAP} & 91.07\% & 77.90\%  \\ \hline
 	\end{tabular}
-	\caption{Melhores resultados encontrados nos modelos.}
+	\caption{Resultados obtidos dos modelos de \textit{barcode} e número.}
 	\label{tab:Result}
 \end{table}
 
-Ao detalhar a média de precisão dos números, podemos observar a porcentagem da probabilidade de cada número.
+Ao detalhar a média de precisão dos números, observa-se a probabilidade de cada número ter sido corretamente identificado como também o mAP do modelo.
 
-\begin{table}[H]
+
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{|l|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{\textit{Number}}} &
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Média}}\\ \hline 
-		0&  78.38\% \\ \hline
-		1&  49.64\% \\ \hline
-		2&  85.21\% \\ \hline
-		3&  78.55\%\\ \hline
-		4&  83.47\% \\ \hline
-		5&  67.46\% \\ \hline
-		6&  80.00\% \\ \hline
-		7&  85.66\% \\ \hline
-		8&  84.31\% \\ \hline
-		9&  86.36\% \\ \hline
-		mAP&  77.90\% \\ \hline 
-		
-	\end{tabular}
+	\includegraphics[width=0.7\linewidth]{figuras/MachineLearning/numberTrained.png}
 	\caption{Médias de precisões dos números.}
-	\label{tab:avgNumbersResult}
-\end{table}
+	\label{fig:numberTrained}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figuras/MachineLearning/barcodeTrained.png}
+	\caption{Médias de precisões dos \textit{barcodes}.}
+	\label{fig:barcodeTrained}
+\end{figure}
 
 
 \section{Implementação dos algoritmos de detecção}
 
-Nesta seção iremos implementar os algoritmos de detecção de \textit{barcodes} e números utilizando os modelos de redes reunais treinadas na seção anterior. Para que o sistema complete o fluxo e entregue os dados à aplicação WEB de forma correta, será necessário \textit{scripts} \footnote{Programas escritos para um sistema de tempo de execução especial que automatiza a execução de tarefas que poderiam alternativamente ser executadas uma por vez por um operador humano.} de criações de pastas ao longo das etapas.
-
-O cógido é disponibilizado através do link: \textbf{\textit{shorturl.at/bluOV}}
+Nesta seção implementa-se os algoritmos\footnote{\textit{shorturl.at/bluOV}} de detecção de \textit{barcodes} e números utilizando os modelos de redes neurais treinadas na seção anterior. Para que o sistema complete o fluxo e entregue os dados ao sistema web de forma correta, será necessário \textit{scripts} \footnote{Conjunto de instruções para que uma função seja executada em determinado aplicativo.} de criações de pastas ao longo das etapas.
 
 \subsection*{Divisão dos arquivos}
 
-A arquitetura de pastas do sistema de detecção foi pensada e desenvolvida de acordo com as necessidades que o sistema web teria para que pudesse ter uma boa comunicação entre os serviços. (Figura \ref{fig:folderSystem})
+A divisão de pastas do sistema de detecção foi elaborada para facilitar a comunicação entre os serviços, de acordo com as necessidades da aplicação web.(Figura \ref{fig:folderSystem})
 
 \begin{figure}[H]
 	\centering
@@ -178,50 +170,52 @@ A arquitetura de pastas do sistema de detecção foi pensada e desenvolvida de a
 
 
 \begin{itemize}
-    \item \textbf{config}: Arquivos de configuração do sistema como os modelos de \textit{barcode} e números e os arquivos JSON de configuração para treinar a rede.
-    \item \textbf{corridas}: Pastas contendo todas as corridas corridas.
+    \item \textbf{config}: Arquivos de configuração do sistema, como os modelos de \textit{barcode} e números e os arquivos JSON de configuração para treinar a rede.
+    \item \textbf{corridas}: Pastas contendo todas as corridas.
     \begin{itemize}
         \item \textbf{Corrida\_1}
             \begin{itemize}
-                \item \textbf{tags\_detected}: Imagens das etiquetas recortadas contendo as \textit{bounding boxes} dos números;
+                \item \textbf{tags\_detected}: Imagens das etiquetas recortadas contendo as bbox dos números;
                 \item \textbf{tags\_images}: Imagens das etiquetas recortadas;
-                \item \textbf{tags\_json}: Arquivos  de configuração de cada etiqueta como, por exemplo, números detectados, accurácias, posições das \textit{bounding boxes} de cada número.
-                \item \textbf{barcode-detected-New.jpg}: Imagem contendo as \textit{bounding boxes} aumentadas pelo script.
-                \item \textbf{barcode-detected-OriginalBoxes.jpg}: Imagem contendo as \textit{bounding boxes} originais.
-                \item \textbf{database.json}: Arquivo resumindo as configurações das etiquetas que se encontram na pasta "/tags\_json".
+                \item \textbf{tags\_json}: Arquivos  de configuração de cada etiqueta como, por exemplo, números detectados, acurácias, posições das bbox de cada número;
+                \item \textbf{barcode-detected-New.jpg}: Imagem contendo as bbox aumentadas pelo script;
+                \item \textbf{barcode-detected-OriginalBoxes.jpg}: Imagem contendo as bbox originais;
+                \item \textbf{database.json}: Arquivo resumindo as configurações das etiquetas que se encontram na pasta "/tags\_json";
             \end{itemize}
     \end{itemize}
      \item \textbf{corridas\_config}
         \begin{itemize}
-            \item \textbf{config}: Arquivos de configuração resumo de cada corrida para consumo o sistema web;
-            \item \textbf{deleted}: Pasta referente as corridas que forem deletadas pelo sistema web;
+            \item \textbf{config}: Arquivos de configuração resumo de cada corrida para consumo do sistema web;
+            \item \textbf{deleted}: Pasta referente às corridas deletadas pelo sistema web;
         \end{itemize}
-    \item \textbf{images}: Pasta contendo todas as imagens que são \textit{input} do sistema. (Ex: Figura \ref{fig:imagemBase})
+    \item \textbf{images}: Pasta contendo todas as imagens que são \textit{input} do sistema (Ex: Figura \ref{fig:imagemBase}).
 \end{itemize}
 
 
 
 \subsection{Detecção de \textit{barcode}}
 
-Inicialmente para que seja detectado os códigos de barras, será criada funções para verificar se a mesma \textit{bounding box} está sendo detectada duas ou mais vezes. Para isso, faremos uma função de interseção sobre união entre duas \textit{bounding boxes}, comparando cada uma com todas as outras existentes na imagem. Assim, caso seja retornado um valor diferente de zero da função, uma \textit{bounding box} será deletada. (Código \ref{ap:IoU})
+O reconhecimento dos \textit{barcodes} é essencial para a separação das etiquetas e posterior identificação dos números.
 
-Ao iniciar o treinamento do modelo, identificamos que as \textit{bounding boxes} estavam ficando menores que a etiqueta (Figura \ref{fig:bboxNew}) e tivemos que aumentar 50 \textit{pixels} em cada uma manualmente para que seja recortada a etiquetada com os números que serão detectados posteriormente. (Código \ref{ap:AumentaBbox})
+Inicialmente, para a detecção dos códigos de barras, são criadas funções para verificar se a mesma bbox está sendo detectada duas ou mais vezes. Para isso é feita uma função de interseção sobre união entre duas bbox, comparando cada uma com todas as outras existentes na imagem. Assim, caso seja retornado um valor da função diferente de zero, uma bbox é deletada (Código \ref{ap:IoU}).
+
+Ao iniciar o treinamento do modelo, identificou-se que as bbox ficavam menores que as etiquetas (Figura \ref{fig:bboxNew}) o que levava à perda de alguns números. Para que isso não acontecesse, foi necessário aumentar, manualmente, 50 \textit{pixels} em cada bbox (Código \ref{ap:AumentaBbox}).
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\linewidth]{figuras/MachineLearning/bboxNew.png}
-	\caption{ Resultado do aumento das \textit{bounding boxes}}
+	\caption{Resultado do aumento das bbox}
 	\label{fig:bboxNew}
 \end{figure}
 
-Cada imagem de \textit{bounding boxes} serão salvas na pasta "/tags\_images" para que seja utilizada pelo modelo de detecção de números na próxima etapa.
+Cada imagem de bbox é salva na pasta "/tags\_images" para ser utilizada pelo modelo de detecção de números na próxima etapa.
 
-O resultado da saída do modelo da rede neural de \textit{barcodes} é o nome do objeto detectado, a acurácia e a posição da bounding box de cada código de barras. (Figura \ref{fig:indentBarcodes})
+Os resultados da saída do modelo da rede neural de \textit{barcodes} são o nome do objeto detectado, a acurácia de cada \textit{barcode} e a posição da bbox de cada código de barras (Figura \ref{fig:indentBarcodes}).
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\linewidth]{figuras/MachineLearning/indentBarcodes.png}
-	\caption{ Resultado do modelo de detecção de barcodes}
+	\caption{ Resultado do modelo de detecção de \textit{barcodes}}
 	\label{fig:indentBarcodes}
 \end{figure}
 
@@ -229,9 +223,9 @@ O resultado da saída do modelo da rede neural de \textit{barcodes} é o nome do
 \subsection{Detecção de número}
 
 
-O algoritmo de detecção de números utilizará as imagens que foram recortadas pelo modelo anterior que estão localizados na pasta "/tags\_images". 
+O algoritmo de detecção de números utiliza as imagens localizados na pasta "/tags\_images", que foram recortadas pelo modelo anterior.
 
-Semelhante ao modelo de detecção de \textit{barcodes}, verificamos que pela posição das \textit{bounding boxes} dos números nas etiquetas, podemos afirmar que cada número estava sendo identificado mais de uma vez. (Figura \ref{fig:numDup})
+Tendo como referência a Figura \ref{fig:numDup}, verifica-se que mais de uma bbox abrangia um mesmo número, fazendo com que este fosse identificado repetidamente. 
 
 \begin{figure}[H]
 	\centering
@@ -240,20 +234,48 @@ Semelhante ao modelo de detecção de \textit{barcodes}, verificamos que pela po
 	\label{fig:numDup}
 \end{figure}
 
-Para solucionar este problema, desenvolvemos uma função que calcula a coordenada central de cada \textit{bounding box} dos números e aplicamos a equação de Distância Euclidiana \footnote{Distância entre dois pontos.} para saber a distância entre duas \textit{bounding boxes}. 
+Para solucionar este problema foi preciso reconhecer quais bbox estavam superpostas. Para isso, analisando as imagens, foi identificado que dois números consecutivos, teriam seus centros distantes, pelo menos, 6 \textit{pixels} entre si. 
+
+Para este cálculo foi utilizada  uma função que calcula a coordenada central de cada bbox e aplicada a equação de Distância Euclidiana\footnote{Distância entre dois pontos.} para saber o afastamento entre dois centros subsequentes.
+
+A distância identificada, Dab, menor que 6 \textit{pixels} revela a repetição do número.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figuras/MachineLearning/dab.png}
+	\caption{Cálculo da distância entre dois números}
+	\label{fig:dab}
+\end{figure}
+
+Calculo da coordenada central de cada região:
+\begin{equation} 
+ac = [\frac{(a_{x1} + a_{x2})}{2} \quad  \frac{(a_{y1} + a_{y2})}{2}] = [(a_{cx}\quad  a_{cy})]
+\label{eq: central_a}
+\end{equation}
 
 \begin{equation} 
-dist(x_{i}, x_{j}) = \sqrt{(x_{i1} - x_{j1})^2 + (x_{i2} - x_{j2})^2 +...+ (x_{ir} - x_{jr})^2}.
+bc = [\frac{(b_{x1} + b_{x2})}{2} \quad  \frac{(b_{y1} + b_{y2})}{2}] = [(b_{cx}\quad  b_{cy})]
+\label{eq: central_b}
+\end{equation}
+
+
+Distância entre coordenadas as centrais:
+\begin{equation} 
+Dab = \sqrt{(b_{cx} - a_{cx})^2 + (b_{cy} - a_{cy})^2}.
 \label{eq: euclid}
 \end{equation}
 
-Ao identificar que dois números foram detectados duas vezes, iremos escolher o número com maior acurácia para que possamos ter certeza que aquele número é provavelmente o número correto. (Código \ref{ap:removeNumber})
+Ao identificar os números repetidos, escolhe-se o de maior acurácia para manter, pois quanto maior a acurácia, maior a probabilidade do número estar correto (Código \ref{ap:removeNumber}).
 
-No final da execução do \textit{script} de remoção de números duplicados, verificamos a quantidade de números identificados na etiqueta, pois ainda pode ser que haja algum número duplicado que não conseguimos identificar devido estar fora do parâmetro de comparação estabelecido por nós como distância entre dois números. 
+No final da execução do \textit{script} de remoção de números duplicados, verifica-se a quantidade de dígitos identificados na etiqueta, pois ainda podem existir números repetidos por estarem fora do parâmetro de comparação de distância entre os centros.
 
-Como em cada etiqueta temos 13 números, o \textit{script} verifica se a quantidade total de números detectados pelo modelo é igual a 13, pois enquanto não for, serão deletados os número com menor acurácia até que o total de números seja 13. (Código \ref{ap:identNumber})
+Caso haja mais de 13 dígitos, aqueles de menor acurácia são deletados até que restem 13 números (Código \ref{ap:identNumber}).
 
-Também é gravada uma \textit{flag} \footnote{Mecanismo lógico que funciona como semáforo: uma entidade (objeto) detém como ativa uma determinada \textit{flag} se a característica associada a essa \textit{flag} estiver presente.} de alerta em cada número da etiqueta caso a acurácia seja menor que 98\% para que seja mostrada pelo \textit{front-end} para que o usuario fique alerta a essa etiqueta pois pode ser que esteja errada.
+Para chamar atenção do usuário final a um possível erro de identificação, é gravada uma \textit{flag}
+%
+\footnote{Mecanismo lógico que funciona como semáforo: uma entidade (objeto) detém como ativa uma determinada \textit{flag} se a característica associada a essa \textit{flag} estiver presente.} 
+%
+de alerta em cada número da etiqueta que tenha acurácia menor que 98\%. Este aviso será mostrado pelo \textit{front-end}. 
 
 \begin{figure}[H]
 	\centering
@@ -262,17 +284,16 @@ Também é gravada uma \textit{flag} \footnote{Mecanismo lógico que funciona co
 	\label{fig:imageTag}
 \end{figure}
 
-O resultado da saída do modelo da rede neural de números que é gravado em um arquivo "database.json", são objetos detectados (números), a acurácia, a posição da \textit{bounding box} e a \textit{flag} de alerta de cada número. (Figura \ref{fig:imageTag})
+O resultado da saída do modelo da rede neural de números é gravado em um arquivo "database.json", contendo os objetos detectados (números), a acurácia, a posição da bbox e a \textit{flag} de alerta de cada número (Figura \ref{fig:imageTag}).
 
-\section{Aplicação Web}
-
-O propósito desta aplicação é para que o usuário final tenha o controle detalhado de forma automática facilitando a conferência das corridas que foram já foram coletadas.
+\section{Sistema Web}
+O propósito desta aplicação é que a conferência das corridas pelo usuário final sejam facilitadas. Com o sistema web, ele terá o controle detalhado e de forma automática os dados de cada corrida.
 
 Nesta seção são apresentadas as etapas de desenvolvimento dos microsserviços utilizados no sistema elaborado, assim como o \textit{back-end} e o \textit{front-end}. 
 
 \subsection*{Divisão dos arquivos}
 
-Os microsserviços desenvolvidos foram projetados para seguir a \textit{Clean Architecture}. Esta arquitetura consiste em dividir as responsabilidades dentro de uma aplicação, encapsulando e abstraindo o código para facilitar a leitura e entendimento das devidas funções de cada arquivo \cite{martin2000clean}.
+Os microsserviços desenvolvidos foram projetados para seguir a \textit{Clean Architecture}. Esta arquitetura consiste em dividir as responsabilidades dentro de uma aplicação, encapsulando e abstraindo o código para facilitar a leitura e entendimento das funções de cada arquivo \cite{martin2000clean}.
 
 \begin{figure}[htbp]
 	\centering
@@ -281,17 +302,19 @@ Os microsserviços desenvolvidos foram projetados para seguir a \textit{Clean Ar
 	\label{fig:cleanArchtecture}
 \end{figure}
 
-É possível ver a divisão dos arquivos utilizando a \textit{Clean Architecture} do Sistema Web na Figura \ref{fig:cleanArchtecture}. Explicando esta divisão, na pasta config/routes encontram-se as configuração das rotas que são utilizadas no sistema, nos \textit{controllers}, são feitas o tratamento dos \textit{inputs} e respostas das rotas, redirecionando para os \textit{business}, que é onde está a lógica principal da aplicação. No arquivo database.json é onde acontece a interação com o banco de dados. 
+A Figura \ref{fig:cleanArchtecture} mostra a divisão dos arquivos utilizando a \textit{Clean Architecture} do Sistema Web.
+
+Na pasta \textit{"/config/routes"} encontram-se as configuração das rotas utilizadas no sistema. Em \textit{controllers} é feito o tratamento dos \textit{inputs} e respostas das rotas, redirecionando para os \textit{business}, que é onde está a lógica principal da aplicação. No arquivo database.json é onde acontece a interação com o banco de dados. 
 
 O \textit{front-end} da aplicação se encontra nas pastas css, js e views, sendo responsáveis pela interface gráfica do sistema.
 
 \subsection{Back-end}
 
-Nesta seção iremos tratar da regra de negócio do sistema, bem como a comunicação com banco de dados que estão gravados em arquivos JSON\footnote{Javascript Object Notation (JSON), é um formato compacto de troca de dados simples e rápida entre sistema}.
+Esta seção trata da regra de negócio\footnote{Regra de negócio é a lógica que guia o comportamento e define "O que, onde, quando, por que e como" será feito, além de como o negócio será gerenciado ou governado.} do sistema, bem como a comunicação com banco de dados que estão gravados em arquivos JSON.
 
-As operações são realizadas através dos \textit{endpoints}, que é uma forma de comunicação entre os sistemas. O sistema os disponibiliza como endereços para acesso, que podem receber e enviar informações, dependendo do que foi programado. (Tabela \ref{tab:endpoints})
+As operações são realizadas através dos \textit{endpoints}, que é uma forma de comunicação entre os sistemas. O sistema os disponibiliza como endereços para acesso, que podem receber e enviar informações, dependendo do que foi programado (Tabela \ref{tab:endpoints}).
 
-Utilizaremos a \textit{engine} EJS para que o \textit{back-end}, em Node.JS, comunique com \textit{front-end} através do consumos\footnote{O termo "consumir um \textit{endpoint}" significa enviar informações para o \textit{endpoint}, esperando algum retorno, de sucesso ou falha.} dos \textit{endpoints}.
+A \textit{engine} EJS foi utilizada para que o \textit{back-end}, em Node.JS, comunique com \textit{front-end} através do consumo dos \textit{endpoints}, que significa enviar informações para estes \textit{endpoints}, esperando algum retorno, de sucesso ou falha.
 
 \begin{table}[H]
 	\centering
@@ -305,7 +328,7 @@ Utilizaremos a \textit{engine} EJS para que o \textit{back-end}, em Node.JS, com
 		/corrida-delete & \begin{tabular}[c]{@{}l@{}} deleta a corrida e move seu arquivo "config\_x.json"\\ para pasta /deleted\\\end{tabular}\\ \hline
 		/show-image & \begin{tabular}[c]{@{}l@{}}redireciona para tela de edição da etiqueta\end{tabular}\\ \hline
 		/edit-image & possibilita a edição do número da etiqueta\\ \hline
-		/upload-image & \begin{tabular}[c]{@{}l@{}}carrega uma foto para dar \textit{start} no sistema de \\reconhecimento de objetos. \\\end{tabular}\\ \hline
+		/upload-image & \begin{tabular}[c]{@{}l@{}}carrega uma foto para dar \textit{start} no sistema de \\detecção de objetos. \\\end{tabular}\\ \hline
 	\end{tabular}
 	\caption{\textit{Endpoints} do sistema WEB.}
 	\label{tab:endpoints}
@@ -313,19 +336,19 @@ Utilizaremos a \textit{engine} EJS para que o \textit{back-end}, em Node.JS, com
 
 Os \textit{controllers} possuem módulos que são responsáveis pela renderização, navegação das paginas através dos \textit{endpoints}, bem como no envio de dados para o navegador.
 
-Os \textit{business} são os responsáveis pelas regras de negócio do sistema de modo que cada método tenha uma função especifica. Comunicação entre os aquivos JSON e listagem dos objetos são suas principais funções.
+Os \textit{business} são os responsáveis pelas regras de negócio do sistema de modo que cada método tenha uma função especifica. Suas principais funções são comunicação entre os aquivos JSON e listagem dos objetos.
 
 \subsection{Front-end}
 
-Nesta seção será apresentada as telas e suas funcionalidades utilizando o \textit{frontend} da aplicação. No desenvolvimento foi utilizada as tecnologias HTML, CSS, JavaScript e EJS, responsável pela comunicação entre \textit{frontend} e \textit{backend}.
+Nesta seção serão apresentadas as telas e suas funcionalidades utilizando o \textit{frontend} da aplicação. No desenvolvimento foram utilizadas as tecnologias HTML, CSS, JavaScript e para comunicação entre \textit{frontend} e \textit{backend}, o EJS.
 
-A tela inicial do sistema é composta pela lista de corridas que já foram identificadas e pelo componente responsável por fazer o \textit{upload}\footnote{ação de enviar um arquivo para determinado local.} de uma nova imagem.(Figura \ref{fig:list1})
+A tela inicial do sistema é composta pela lista de corridas que já foram identificadas e pelo componente responsável por fazer o \textit{upload} de uma nova imagem (Figura \ref{fig:list1}).
 
 A imagem será enviada para a pasta \textit{images} (Figura \ref{fig:folderSystem}) e automaticamente treinada pelo sistema de detecção.
 
-Toda corrida que é inicialmente treinada, terá o status como "Inadimplente", pois ainda não foi despachada para as Laminações. Dessa forma, o sistema terá diversas opções para que o usuário tenha total controle da mesma.
+Toda corrida que é inicialmente treinada terá o status de "Inadimplente" pois ainda não foi despachada para Laminações. Dessa forma, o sistema possui diversas opções para que o usuário tenha total controle da mesma.
 
-A lista de corridas tem como funcionalidade as opções de visualizar detalhadamente ou deletar a corrida escolhida. Caso a corrida seja deletada, a tela será redirecionada para tela de \textit{delete}(Figura \ref{fig:corrida_delete}) e no \textit{backend} o arquivo config\_x.json é movido para pasta \textit{deleted}(Figura \ref{fig:folderSystem}).
+A lista de corridas tem, como funcionalidade, as opções de visualizar detalhadamente ou deletar a corrida escolhida. Caso a corrida seja deletada, a tela será redirecionada para a página de \textit{delete} (Figura \ref{fig:corrida_delete}) e no \textit{backend} o arquivo config\_x.json é movido para pasta \textit{deleted} (Figura \ref{fig:folderSystem}).
 
 \begin{figure}[H]
 	\centering
@@ -348,20 +371,20 @@ A lista de corridas tem como funcionalidade as opções de visualizar detalhadam
 	\label{fig:corrida_delete}
 \end{figure}
 
-A segunda tela é o detalhamento da corrida em que é mostrado o número da corrida, a quantidade de peças, a acurácia média das etiquetas e o status atual. (Figura \ref{fig:detalCorrida})
+A segunda tela é o detalhamento da corrida selecionada em que é mostrado seu número, a quantidade de peças, a acurácia média das etiquetas e o status atual (Figura \ref{fig:detalCorrida}).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{figuras/WebService/Screens/detail 1.png}
+	\includegraphics[width=0.7\linewidth]{figuras/WebService/Screens/detail 1.png}
 	\caption{Detalhamento da corrida selecionada}
 	\label{fig:detalCorrida}
 \end{figure}
 
-Na mesma tela de detalhamento, é mostrada todas as peças (etiquetas) que foram detectadas pelo sistema de detecção. A lista detalha o identificador, o número da peça que é referente ao número localizado acima do código de barras da etiqueta, a acurácia de cada uma e um botão para visualizar a imagem da etiqueta.(Figura \ref{fig:detail2.1})
+Ainda na tela de detalhamento, são mostradas todas as peças (etiquetas) que foram detectadas pelo sistema. A lista detalha o identificador, o número da peça que é referente ao número localizado acima do código de barras da etiqueta, a acurácia de identificação de cada dígito e um botão para visualizar a imagem da etiqueta (Figura \ref{fig:detail2.1}).
 
-Cada etiqueta tem como característica, caso algum algarismo tenha acurácia menor que 98\%, o fundo da cédula preenchido pela cor vermelha, alertando o usuário que possivelmente aquela etiqueta tem um número que foi detectado erroneamente.
+Caso algum algarismo tenha acurácia menor que 98\%, o fundo da cédula é preenchido pela cor vermelha, alertando ao usuário que o número identificado pode estar errado.
 
-O botão despachar tem a função de despachar a corrida e alterar seu status para "Despachada" no banco de dados (Figura \ref{fig:corrida_desp}). Caso o status da corrida já esteja como "Despachada", o sistema redirecionará o usuário para tela de erro com a seguinte mensagem (Figura \ref{fig:corrida_desp_x}) 
+O botão despachar tem a função de alterar o status da corrida para "Despachada" no banco de dados (Figura \ref{fig:corrida_desp}) e assim deixá-la disponível para a Laminação. Caso o status da corrida já esteja como "Despachada", o sistema redirecionará o usuário para tela de erro como mostrado na Figura \ref{fig:corrida_desp_x}. 
 
 \begin{figure}[H]
 	\centering
@@ -386,9 +409,9 @@ O botão despachar tem a função de despachar a corrida e alterar seu status pa
 
 A última tela do sistema é referente ao detalhamento da etiqueta que foi escolhida através do botão "\textit{Image}".
 
-Nesta tela, o usuário terá permissão para editar a etiqueta caso tenha identificado que há algum algarismo numérico detectado que seja diferente da imagem ao lado.
+Nesta tela, o usuário terá permissão para editar a etiqueta caso tenha identificado algum algarismo erroneamente reconhecido.
 
-Ao salvar ele será redirecionado para tela de detalhamento da corrida para que então continue o procedimento de, verificar as outras etiquetas ou despachar a corrida.
+Ao salvar, redireciona-se para tela de detalhamento da corrida para a continuidade do processo de verificação das demais etiquetas ou despache a corrida.
 
 \begin{figure}[H]
 	\centering
@@ -396,3 +419,29 @@ Ao salvar ele será redirecionado para tela de detalhamento da corrida para que 
 	\caption{Edição dos números da etiqueta.}
 	\label{fig:detail_tag}
 \end{figure}
+
+
+Foi concluído que 99.05\% dos códigos de barras foram identificados corretamente e a Tabela \ref{tab:numberRecognize} mostra o resultado da porcentagem de acerto total de cada número detectado.
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\rowcolor[HTML]{ECF4FF} 
+		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{\textit{Número}}} &
+		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Porcentagem}}\\ \hline 
+		0&  98.18\% \\ \hline
+		1&  92.20\% \\ \hline
+		2&  87.01\% \\ \hline
+		3&  94.66\%\\ \hline
+		4&  72.07\% \\ \hline
+		5&  85.96\% \\ \hline
+		6&  96.11\% \\ \hline
+		7&  97.86\% \\ \hline
+		8&  98.39\% \\ \hline
+		9&  96.24\% \\ \hline
+	\end{tabular}
+	\caption{Assertividade dos números}
+	\label{tab:numberRecognize}
+\end{table}

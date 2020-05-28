@@ -1,6 +1,6 @@
  \chapter{Metodologia}
  
-Este capítulo apresenta a estrutura geral do sistema, que se divide em duas partes. A primeira parte consiste no \textit{backend} desenvolvido em Python com o objetivo de reconhecer as etiquetas utilizando técnicas de \textit{Machine Learning}. A segunda parte consiste na aplicação web, desenvolvida em Node.JS, responsável pela visualização e gerenciamento do sistema através de relatórios e telas.
+Este capítulo apresenta a estrutura geral do sistema, que se divide em duas partes. A primeira consiste no \textit{backend} desenvolvido em Python com o objetivo de reconhecer as etiquetas utilizando técnicas de \textit{Machine Learning}. A segunda parte compreende o sistema web, desenvolvida em Node.JS, responsável pela visualização e gerenciamento do sistema através de relatórios e telas.
 
 A validação do projeto será feita através de um sistema que seja capaz de identificar números localizados em etiquetas em uma única imagem.
 
@@ -8,7 +8,7 @@ A validação do projeto será feita através de um sistema que seja capaz de id
 
 \section{Visão geral do sistema} \label{sec:funcionamento}
 
-Esta seção descreve as características operacionais do sistema, assim como os resultados esperados. O fluxo geral do sistema pode ser visualizado na Figura \ref{fig:arqgeral}.
+Esta seção descreve as características operacionais do sistema, assim como os resultados esperados. O fluxo geral do sistema é apresentado visualizado na Figura \ref{fig:arqgeral}.
 
 \begin{figure}[htbp]
 	\centering
@@ -16,31 +16,39 @@ Esta seção descreve as características operacionais do sistema, assim como os
 	\caption{Arquitetura geral do projeto.}
 	\begin{tabular}{r@{: }l r@{: }l}
     1 & Câmera Fotográfica & 4 & Identificação de números \\
-    2& Foto das peças da corrida & 5 & Aplicação WEB \\
+    2& Foto das peças da corrida & 5 & Sistema WEB \\
     3 & Identificação dos códigos de  barra
     \end{tabular}
 	\label{fig:arqgeral}
 \end{figure}
 
-Em suma, o processo será realizado em diversos passos sequenciais. Será iniciado ao se fotografar as peças de uma corrida no setor de despacho utilizando uma câmera digital. A fotografia vai automaticamente para o sistema e a partir dela dá-se início reconhecimento da imagem. O código de barras de cada tarugo é detectado como um bloco e, em seguida, os números que estão acima de cada um dos blocos é identificado.Esse processo é chamado de corrida. 
+O projeto será organizado será realizado em etapas sequenciais. Será iniciado ao se fotografar as peças de uma corrida no setor de despacho utilizando uma câmera comum. 
 
-A corrida é salva em um banco de dados e exibidas através de telas para que o usuário possa validá-las.
+A fotografia iniciará automaticamente o fluxo do sistema e, a partir dela, terá início o reconhecimento da imagem. Os códigos de barras localizados nas etiquetas de cada tarugo são detectados, recortados automaticamente e salvos separadamente em imagens contendo apenas uma etiqueta. Em seguida, os números são identificados.
+
+A corrida é salva em um banco de dados e exibida através de telas para que o usuário possa validá-las.
+
+A comunicação entre os dois sistemas, de detecção e web, acontece através do resultado da saída do sistema de detecção, que são os números localizados acima do código de barras de cada etiqueta. Posteriormente estes números são  gravados em um arquivo JSON para que o sistema web possa receber e mostrar através das telas. 
 
 %------------------------------------------------
 
 \section{Backend em Python} \label{sec:backend}
 
-Para realizar o experimento é necessário treinar um modelo de rede neural que seja capaz de reconhecer código de barras e algarismos. Para isso, são efetuadas três etapas. Primeiro é coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens juntamente com a classe em que pertence. Então, é possível realizar a configuração e treinamento da rede neural. Por fim é calculada a acurácia, mediante imagens de teste, do modelo que obteve a melhor performance no treinamento.
+Para realizar o experimento, é necessário treinar um modelo de rede neural que seja capaz de reconhecer código de barras e algarismos numéricos. Para isso, são efetuadas três etapas. Primeiro é coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens juntamente com a classe em que pertence. Então, é possível realizar a configuração e treinamento da rede neural. Por fim é calculada a acurácia, mediante imagens de teste, do modelo que obteve a melhor performance no treinamento.
 
-A linguagem de programação Python para implementação do sistema de Machine Learning foi prioritariamente escolhida devido à grande comunidade existente da linguagem, ao grande número de bibliotecas de análise de dados disponíveis e ao fato da ferramenta Google Colab utilizá-lo, permitindo o processamento que não seria possível em um computador de baixa performance.
+A linguagem de programação Python para implementação do sistema de detecção foi prioritariamente escolhida devido à grande comunidade existente, ao grande número de bibliotecas de análise de dados disponíveis e ao fato da ferramenta Google Colab utilizá-lo, permitindo o alto processamento dos dados, o que não seria possível em um computador de baixa performance.
 
 %------------------------------------------------
 
 \subsubsection*{Python}
 
-Python é uma linguagem de programação interpretada\footnote{Linguagem interpretada é uma linguagem de programação em que o código fonte é executado por um programa de computador chamado interpretador, que em seguida é executado pelo sistema operacional ou processador.} de alto nível, ou seja, com um nível de abstração relativamente elevado e de uso geral. Sua abordagem orientada a objetos tem a finalidade de ajudar os programadores a escrever código para projetos de pequena e grande escala.
+Linguagem interpretada é uma linguagem de programação em que o código fonte é executado por um \textit{software} chamado interpretador, que em seguida é executado pelo sistema operacional ou processador
 
-O Python suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional.
+Python é uma linguagem de programação interpretada de alto nível, ou seja, com um nível de abstração relativamente elevado e de uso geral. 
+
+Suporta vários paradigmas de programação, incluindo programação estruturada (principalmente processual), orientada a objetos e funcional.
+
+Sua abordagem orientada a objetos tem a finalidade de ajudar os programadores a escrever código para projetos de pequena e grande escala.
 
 Os interpretadores de Python estão disponíveis para diversos sistemas operacionais. Uma organização sem fins lucrativos, a Python Software Foundation, gerencia e direciona recursos para o desenvolvimento do Python. \cite{van2007python}
 
@@ -48,8 +56,7 @@ Os interpretadores de Python estão disponíveis para diversos sistemas operacio
 
 \subsection{Preparação do dataset}
 
-Como o escopo do trabalho não contempla a automatizacão da recuperação de informações de \textit{websites} públicos, foi disponibilizado um repositório com imagens. Esse
-repositório possui 500 imagens e foi disponibilizado pelo laboratório Applied Recognition Technology Laboratory. As imagens se tratam de diferentes tipos de códigos de barras.\cite{Arte-Lab}
+Em \textit{websites} públicos é possível encontrar diversos \textit{datasets} \textit{open source}. Utiliza-se um repositório aberto com imagens de código de barras. Esse repositório possui 500 imagens e foi disponibilizado pelo laboratório \textit{Applied Recognition Technology Laboratory}. O grande volume de imagens compreende especificamente diferentes tipos de códigos de barras.\cite{Arte-Lab}
 
 \begin{figure}[htbp]
 	\centering
@@ -58,17 +65,17 @@ repositório possui 500 imagens e foi disponibilizado pelo laboratório Applied 
 	\label{fig:datasetBarcode}
 \end{figure}
 
-Para o treinamento de um modelo de rede neural com alta taxa de acerto é ideal que se tenha o maior número possível de imagens no \textit{dataset}. Para isso foi utilizado o método de \textit{Data Augmentation}.  
+Para o treinamento de um modelo de rede neural é desejável que se tenha o maior número possível de imagens no \textit{dataset} para um treinamento mais preciso. Além da grande quantidade já obtida com o repositório, utiliza-se o método de \textit{Data Augmentation} para aumentar a quantidade de dados para o treinamento.  
 
 %------------------------------------------------
 
 \subsubsection*{\textit{Data Augmentation}}\label{sec:dataAugm}
 
-\textit{Data Augmentation} é o processo de aumentar a quantidade e a diversidade de dados de forma sintética. A partir uma imagem, ele pode gerar mais imagens semelhantes através de vários métodos como girar um ângulo qualquer, embaçar a imagem fazendo com que ela perca o brilho ou até mesmo ofuscando-a, entre outros para que possa aumentar o tamanho do \textit{dataset}.
+\textit{Data Augmentation} é o processo de aumentar a quantidade e diversidade de dados de forma sintética. A partir de uma imagem, é possível gerar mais imagens similares através de métodos como girar um ângulo arbitrário, embaçar a imagem, alterar o brilho, e/ou ofuscando-a.
 
-Mesmo quando os dados são de qualidade inferior como, por exemplo, imagens não nítidas, os algoritmos de ML podem ter um desempenho melhor, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da web não filtradas e conter muitos erros.\cite{dataAug}
+Mesmo quando os dados são de qualidade inferior (\textit{e.g.} em imagens com baixa nitidez) os algoritmos de ML podem ter bom desempenho, desde que dados úteis possam ser extraídos pelo modelo do conjunto de dados original. Por exemplo, os modelos de conversão de texto em fala e em texto melhoraram devido ao lançamento de um corpus\footnote{Um corpus pode ser entendido como uma coleção de porções de texto selecionadas de acordo com um conjunto de critérios para representar, tanto quanto possível, uma determinada língua \cite{sinclair2005corpus}} de trilhões de palavras pelo Google \cite{halevy2009unreasonable}. Esse resultado ocorre apesar dos dados serem coletados de páginas da web não filtradas e conter muitos erros.\cite{dataAug}
 
-O Código \ref{cod:dataaug} abaixo mostra o momento em que é definido o tipo de ação que será feita em cada foto, como rotacionar em um ângulo aleatório, inserir ruído na imagem e girar horizontalmente. O método também possibilita escolher a quantidade de imagens que será gerada, neste caso, 1000 imagens.
+O Código \ref{cod:dataaug} abaixo mostra o momento em que é definido o tipo de ação que será feita em cada foto, como rotacionar em um ângulo aleatório, inserir ruído na imagem e girar horizontalmente. O método também possibilita escolher a quantidade de imagens que será gerada. Neste caso, 1000 imagens.
 
 \begin{lstlisting}[caption=Exemplo de código do método \textit{data augmentation}, label=cod:dataaug][H]
  num_files_desired = 1000
@@ -83,7 +90,7 @@ O Código \ref{cod:dataaug} abaixo mostra o momento em que é definido o tipo de
 
 \subsection{Anotações das imagens}
 
-Após ter criado o \textit{dataset}, as anotações das imagens geradas são feitas. Isso quer dizer que é criado um arquivo que contenha as posições dos pixels da \textit{Bounding Box} que engloba o objeto na imagem. Um dos formatos mais conhecidos é o Pascal VOC. O formato VOC do Pascal utiliza arquivos XML para armazenar as informações sobre os objetos anotados nas imagens. Para que seja possível gerar tais arquivos mais facilmente, foi utilizado o software LabelImg.
+Após criar o \textit{dataset}, as anotações das imagens geradas são feitas. É criado um arquivo que contém as posições dos \textit{pixels} da \textit{Bounding Box} que engloba o objeto na imagem. Um dos formatos mais conhecidos é o Pascal VOC. O formato VOC do Pascal utiliza arquivos XML para armazenar as informações sobre os objetos anotados nas imagens. Para que seja possível gerar tais arquivos mais facilmente, foi utilizado o software LabelImg.
 
 %------------------------------------------------
 
@@ -91,7 +98,7 @@ Após ter criado o \textit{dataset}, as anotações das imagens geradas são fei
 
 A \textit{Bounding Box}(bbox) (Figura \ref{fig:boundingBox}) é um dos métodos de anotação de imagem mais populares usados em \textit{Machine Learning} e em \textit{Deep Learning}.
 
-As bbox são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Com exemplo, as bbox do cachorro e do gato da Figura \ref{fig:boundingBox} são definidas com base nas informações de coordenadas da imagem superior. \cite{allDeep}
+As bbox são caixas retangulares que podem ser determinadas pelo recorte da imagem baseado nas coordenadas das extremidades. Comop exemplo, as bbox do cachorro e do gato da Figura \ref{fig:boundingBox} são definidas com base nas informações de coordenadas da imagem superior. \cite{allDeep}
 
 \begin{figure}[H]
 		\centering
@@ -111,13 +118,13 @@ O código \ref{cod:bbox} refere-se à posição das \textit{Bounding Boxes} do c
 
 \subsubsection*{LabelImg}\label{sub:LabelImg}
 
-O LabelImg (Figura \ref{fig:labelimg}) é uma ferramenta \textit{open source} de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Código \ref{cod:XML}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO que é utilizado no presente projeto. \cite{labelimg}
+O LabelImg (Figura \ref{fig:labelimg}) é uma ferramenta \textit{open source} de anotação de imagem gráfica escrita em Python. As anotações são salvas em arquivos XML no formato PASCAL VOC (Código \ref{cod:XML}), o formato usado pelo ImageNet. Além disso, também suporta o formato YOLO, utilizado no projeto. \cite{labelimg}
 
 O software em questão permite que as bbox sejam circuladas englobando o objeto de interesse nas imagens e criando automaticamente um arquivo XML com todas as especificações necessárias.
 
-Utiliza-se o LabelImg para formar o \textit{dataset} que é usado para testar desempenho do algoritmo. Obter dados suficientes para realizar o experimento costuma ser uma dificuldade visto que é necessário um grande volume. Os \textit{datasets open source} ajudam a resolver esta questão ao disponibilizar diversos conjuntos de dados. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes:
+Utiliza-se o LabelImg para formar o \textit{dataset} que é usado para testar o desempenho do algoritmo. Obter dados suficientes para realizar o experimento costuma ser uma dificuldade visto que é necessário um grande volume de informação. Os \textit{datasets open source} ajudam a resolver esta questão ao disponibilizar diversos conjuntos de dados. Alguns \textit{datasets} comumente usados na visão computacional são os seguintes:
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{figuras/MachineLearning/labelimg.png}
 	\caption{Procedimento de anotações das \textit{bounding boxes}}
@@ -153,18 +160,22 @@ Utiliza-se o LabelImg para formar o \textit{dataset} que é usado para testar de
 </annotation>
 \end{lstlisting}
 
-O ImageNet \textit{dataset} \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e de locais de objetos na imagem. O conjunto de dados ImageNet é um dos mais usados no campo da \textit{Deep Learning} por ser detalhado e de uso intuitivo. \cite{zhou2017application}
+O ImageNet \textit{dataset} \cite{deng2009imagenet} possui mais de 14 milhões de imagens, cobrindo mais de 20.000 categorias. Existem mais de um milhão de imagens com anotações explícitas de classe e de locais de objetos na imagem. O conjunto de dados ImageNet é um dos mais usados no campo do \textit{Deep Learning} por ser detalhado e de uso intuitivo. \cite{zhou2017application}
 
 \subsubsection*{Pascal VOC}
-O Pascal VOC é uma coleção de \textit{datasets} também utilizada para o desenvolvimento deste trabalho. Fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos, além de ferramentas para acessar as anotações.O conjunto de dados não é atualizado desde 2012, porém é de boa qualidade e permite a avaliação e comparação de diferentes métodos. \cite{zhou2017application, everingham2010pascal}.
+O Pascal VOC é uma coleção de \textit{datasets} também utilizada para o desenvolvimento deste trabalho. Fornece conjuntos de dados de imagem padronizados para reconhecimento de classe de objetos, além de ferramentas para acessar as anotações. O conjunto de dados não é atualizado desde 2012, porém é de boa qualidade e permite a avaliação e comparação de diferentes métodos. \cite{zhou2017application, everingham2010pascal}.
 
 %-------------
 
 \subsection{Separação do Conjunto de Teste}
 
-Os passos seguintes às anotações das imagens são a separação do conjunto de teste e posteriormente o treinamento do modelo de rede neural. Para a separação, cria-se uma pasta chamada "barcodes" e dentro dela, outras duas pastas de nomes \textbf{train} e \textbf{validation}.
+Os passos seguintes às anotações das imagens são a separação do conjunto de teste e posteriormente o treinamento do modelo de rede neural. Para a separação, cria-se uma pasta chamada \textit{"/barcodes"} e dentro dela, outras duas pastas nomeadas \textbf{train} e \textbf{validation}.
 
-Nenhuma imagem da pasta "train" (conjunto de treinamento) pode estar presente dentro da pasta "validation" (conjunto de validação). O \textit{dataset} de testes tem uma amostra menor que o conjunto de treinamento, cerca de 25\% do total das imagens.
+Nenhuma imagem da pasta \textit{"/train"} (conjunto de treinamento) pode estar presente dentro da pasta \textit{"/validation"} (conjunto de validação). O \textit{dataset} de testes tem uma amostra menor que o conjunto de treinamento, cerca de 25\% do total das imagens.
+
+A divisão em \textit{datasets} de treino e teste é parte da escolha e otimização de modelos, ou seja, escolher o modelo certo e os melhores parâmetros para o mesmo.
+
+A ideia de dividir o \textit{dataset} em duas partes, é que seja uma parte para treinar e outra para testar e ter uma noção da qualidade das nossas previsões (e, portanto, do nosso modelo).
 
 A estrutura da pasta do \textit{dataset} de \textit{barcodes} pode ser visualizada a seguir:
 
@@ -172,7 +183,7 @@ A estrutura da pasta do \textit{dataset} de \textit{barcodes} pode ser visualiza
 	\centering
 	\includegraphics[width=0.5\linewidth]{figuras/MachineLearning/foldersDataset.png}
 	\caption{Estrutura de pastas do \textit{dataset} de barcodes}
-	\label{fig:labelimg}
+	\label{fig:foldersDataset}
 \end{figure}
 
 Ou seja, para cada imagem, há um arquivo XML com as anotações registradas pelo Labelimg. A etapa é o treinamento do modelo. Para tanto é necessário a compreensão da infraestrutura e bibliotecas utilizadas no projeto.
@@ -181,7 +192,7 @@ Ou seja, para cada imagem, há um arquivo XML com as anotações registradas pel
 
 \subsection{Infraestrutura}
 
-Com o intuito de acelerar o processo, foi utilizado um software online chamado Google Colaboratory que tem disponibilidade de configuração com GPU para o treinamento. 
+Com o intuito de acelerar o processo, foi utilizado um software online chamado Google Colaboratory que disponibiliza recursos de GPU para treinamento online. 
 
 %------------------------------------------------
 
@@ -201,26 +212,26 @@ Características e Funcionalidades do Google Colab:
 
 \begin{figure}[H]
 		\centering
-		\includegraphics[scale=0.4]{figuras/MachineLearning/colabGithub.png}
+		\includegraphics[scale=0.25]{figuras/MachineLearning/colabGithub.png}
 		\caption{Utilização do Colab, Drive e Github}
 		\label{fig:colabGithub}
 \end{figure}
 
-O Google Colab se integra facilmente ao Google Drive, fato que o torna uma opção natural para espaço de armazenamento dos dados e modelos. Porém há também outras opções de hospedagem de código, como por exemplo, a plataforma Github, escolhida para este trabalho.
+O Google Colab se integra facilmente ao Google Drive, fato que o torna uma opção direta como espaço de armazenamento dos dados e modelos. Porém há também outras opções de hospedagem de código, como por exemplo, a plataforma Github, escolhida para este trabalho.
 
 \subsection{Blibliotecas utilizadas}
 
-Todo o código foi implementado utilizando a linguagem de programacão Python, e as seguintes bibliotecas foram utilizadas:
+Todo o código foi implementado utilizando a linguagem de programação Python, e as seguintes bibliotecas foram utilizadas:
 
-%------------------------------------------------
+%------------------------------------------------p
 
 \subsubsection{TensorFlow}
 
 O TensorFlow é uma biblioteca Python de código aberto para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o TensorFlow pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis, como telefones e tablets, até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU.
 
-O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de \textit{Machine Learning} na produção de diversas áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de drogas. \cite{abadi2016tensorflow}
+O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de \textit{Machine Learning} na produção de diversas áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de remédios. \cite{abadi2016tensorflow}
 
-Vários serviços do Google uilizam o TensorFlow em sua produção, foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
+Vários serviços do Google utilizaram o TensorFlow em sua produção. O mesmo foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
 
 %------------------------------------------------
 
@@ -250,7 +261,7 @@ O OpenCV (Open Source Computer Vision) é uma biblioteca de \textit{open source}
 
 \subsection{Treinamento dos modelos}
 
-Após gerado o conjunto de dados, é possível trabalhar no treinamento do modelo da rede neural. Para isso foi utilizado o \textit{framework} TensorFlow destinado à \textit{Deep Learning}. Além de uma rede neural pré-treinada chamada YoloV3, escrita em Python que faz uso das funções disponibilizadas pela biblioteca ImageAI . Assim o treinamento foi realizado até atingir um valor considerado aceitável de acerto no conjunto de teste. 
+Após gerado o conjunto de dados, é possível trabalhar no treinamento do modelo da rede neural. Para isso foi utilizado o \textit{framework} TensorFlow destinado à \textit{Deep Learning}. Além de uma rede neural pré-treinada chamada YoloV3, escrita em Python que faz uso das funções disponibilizadas pela biblioteca ImageAI .
 
 Através do modelo da rede Yolov3, treina-se mais dois novos modelos de redes neurais:
 \begin{itemize}
@@ -258,13 +269,13 @@ Através do modelo da rede Yolov3, treina-se mais dois novos modelos de redes ne
     \item Modelo de rede neural para reconhecimento de algarismos numéricos;
 \end{itemize}
 
-O resultado do treinamento são arquivos no formato .h5\footnote{Um arquivo H5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.}. Cada arquivo é um modelo que é avaliado através da melhor acurácia\footnote{Indica uma performance geral do modelo. Dentre todas as classificações, quantas o modelo classificou corretamente;}.
+O resultado do treinamento são arquivos no formato .h5\footnote{Um arquivo h5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.}. Cada arquivo é um modelo que é avaliado através da melhor acurácia, que indica uma performance geral do modelo. Dentre todas as classificações, quantas o modelo classificou corretamente.
 
 %------------------------------------------------
 
 \subsubsection*{YOLOv3}\label{sub:Yolov3}
 
-A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs quando, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de bbox de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
+A rede neural YOLOv3 evoluiu de YOLO e YOLO-V2 \cite{redmon2018yolov3}. Quando comparado com a rede Faster R-CNN, a mais eficiente das CNNs para detecção, a YOLO transforma o problema de detecção em um problema de regressão, em que a informação tem um significado numérico resultante de alguma previsão na imagem. Isto não requer uma região da proposta e gera coordenadas e probabilidades de bbox de cada classe diretamente por meio de regressão. Isso aumenta consideravelmente a velocidade de detecção em comparação com o Faster R-CNN.\cite{yolov3_apple}
 
 O YOLO é a frequência mais rápida (45 FPS) do que outros algoritmos de detecção de objetos \cite{yolov3RealTime}.
 
@@ -291,30 +302,35 @@ Cada célula do  \textit{grid} é usada para predizer B bbox e C probabilidades 
     Confianca = p_r(Object) X IoU_{pred}^{truth} , p_r(Object) \in \left \{ 1\right.,\left.0\right \}
 \end{equation}
 
-Em que, quando o \textit{target} estiver na \textit{grid}, \(p_r(Object)\) = 1 e 0 caso contrário. \(IoU_{pred}^{truth}\) é usado para denotar a interseção sobre união e a previsão da \textit{bbox}. A confiança reflete se a \textit{grid} contém objetos e a precisão da \textit{bbox} prevista. Quando várias \textit{bbox} detectam o mesmo \textit{target}, o YOLO usa o método de não supressão máxima (NMS) para selecionar a melhor \textit{bbox}.
+Quando o \textit{target} estiver no \textit{grid}, \(p_r(Object)\) = 1 e 0 caso contrário. \(IoU_{pred}^{truth}\) é usado para denotar a interseção sobre união e a previsão da bbox. 
+A confiança reflete se o \textit{grid} contém objetos e a precisão da bbox prevista. Quando várias bbox detectam o mesmo \textit{target}, o YOLO usa o método de não supressão máxima (NMS) para selecionar a melhor bbox.
 
 %------------------------------------------------
 
-\section{Aplicação Web} \label{sec:web}
+\section{Sistema Web} \label{sec:web}
 
-Essa seção mostra as etapas necessárias de criação da aplicação web desenvolvida para mostrar ao usuário final os resultados do sistema de detecção de objetos.
+Essa seção mostra as etapas necessárias de criação do sistema web desenvolvida para mostrar ao usuário final os resultados do sistema de detecção de objetos.
 
 O sistema web foi criado para facilitar o gerenciamento, visualização e rastreabilidade das corridas para o operador através de um \textit{layout} amigável.
 
-Nessa etapa foi utilizada a linguagem Node.JS para implementar o \textit{back-end} e as linguagens HTML, CSS, EJS\footnote{O EJS é uma linguagem de visualização, com ele é possível transportar dados do back-end para o front-end de maneira simple, basicamente utiliza-se códigos em javascript no html das páginas.} e JavaScript para implementar o \textit{front-end}. A escolha do Node.JS foi devido aos seguintes fatores:
+Nessa etapa foi utilizada a linguagem Node.JS para implementar o \textit{back-end} e as linguagens HTML, CSS,  e JavaScript para implementar o \textit{front-end}. 
+
+Para a comunicação entre essas duas partes, foi utilizada a linguagem EJS que é uma linguagem de visualização, com ele é possível transportar dados do back-end para o front-end de maneira simples. Basicamente utiliza-se códigos em javascript no html das páginas. 
+
+A escolha do Node.JS foi devido aos seguintes fatores:
 
 \begin{itemize}
-    \item Instalação ser simples, pois não necessita de dependência para configuração.
-    \item Possibilidade de executar aplicações Node em qualquer plataforma.
-    \item I/O não bloqueante. Isso significa que quando é necessário acessar um arquivo no disco, se comunicar com um \textit{Web Service} ou acessar um banco de dados, esse acesso é feito de forma assíncrona por padrão.
-    \item Por ser escrito em JavaScript, poupa grande parte dos esforço caso opte por utilizar tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
+    \item instalação simples, não necessita de dependência para configuração;
+    \item possibilidade de executar aplicações Node em qualquer plataforma;
+    \item I/O não bloqueante. Ou seja, quando é necessário acessar um arquivo no disco, se comunicar com um \textit{Web Service} ou acessar um banco de dados, esse acesso é feito de forma assíncrona por padrão;
+    \item ser escrito em JavaScript, o que simplifica o uso tecnologias \textit{front-end}, que na maioria, também são escritas em JavaScript.
 \end{itemize}
  
 %------------------------------------------------
 
 \subsection{Node.JS}
 
-O Node.JS, também conhecido como Node, é uma estrutura EDA\footnote{Maneira de realizarmos a comunicação entre sistemas que consiste, principalmente em operações assíncronas além de permitir aplicativos escalonáveis e gerar menos acoplamento entre os serviços, permitindo uma arquitetura fortemente flexível.} de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
+O Node.JS, também conhecido como Node, é uma estrutura EDA\footnote{Modo de realizar a comunicação entre sistemas. Consiste, principalmente, em operações assíncronas, além de permitir aplicativos escalonáveis e gerar menor acoplamento entre os serviços, permitindo uma arquitetura flexível.} de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
 
 O Node é um dos \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
 
@@ -322,22 +338,22 @@ O Node é um dos \textit{frameworks} mais famosos que suportam o desenvolvimento
 
 \subsection{HTML}
 
-Para publicar informações para distribuição global, é preciso uma linguagem universalmente compreendida. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permitem o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language).\citeauthor{html}
+Para disponibilizar informações para distribuição global, é preciso uma linguagem universalmente compreendida. A linguagem de publicação usada pela WWW\footnote{WWW é um sistema de documentos dispostos na Internet que permite o acesso às informações apresentadas no formato de hipertexto.} é HTML (da HyperText Markup Language).\citeauthor{html}
 
 O HTML fornece aos autores os meios para: 
 \begin{itemize}
-    \item Publicar documentos on-line com títulos, texto, tabelas, listas, fotos, etc. 
-    \item Recuperar informações on-line por meio de links de hipertexto, com o clique de um botão. 
-    \item Criar formulários para realizar transações com serviços remotos, para uso em busca de informações, reservas, pedidos de produtos, etc. 
+    \item Publicar documentos \textit{online} com títulos, texto, tabelas, listas, fotos etc. 
+    \item Recuperar informações \textit{online} por meio de links de hipertexto de maneira simples. 
+    \item Criar formulários para realizar transações com serviços remotos, para busca de informações, reservas, pedidos de produtos etc. 
     \item Incluir planilhas, videoclipes, clipes de som e outros aplicativos diretamente em seus documentos.
 \end{itemize}
 
 %------------------------------------------------
 
 \subsection{CSS}
-De acordo com \citeauthor{css}, um dos padrões fundamentais do W3C \footnote{Trata-se de uma organização internacional responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online}. CSS é uma linguagem para definir a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal mecanismo por trás da adoção do CSS tem sido a separação da estrutura da apresentação. Embora essa separação de preocupações ajude a evolução de um aplicativo da Web no que diz respeito à estrutura e ao conteúdo, o código CSS em si não é fácil de manter.\cite{badros1999constraint}
+Um dos padrões fundamentais do W3C \footnote{Trata-se de uma organização internacional responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online,css}.
 
-Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação humano-computador, design gráfico, além de habilidades de programação na web \cite{keller2010css}. Além disso, a linguagem possui várias características, como especificidade de herança, cascata e seletor, o que torna o entendimento de como as propriedades CSS são aplicadas aos elementos DOM em tempo de execução, uma tarefa assustadora para desenvolvedores da web.
+CSS é uma linguagem que define a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal vantagem da adoção do CSS é organização da estrutura de apresentação de maneira previsível . \cite{badros1999constraint}
 
 %------------------------------------------------
 
@@ -359,10 +375,14 @@ Escrever código CSS não é trivial \cite{quint2007editing}. Requer interação
 %------------------------------------------------
 \section{Arquitetura do projeto}
 
-Ao fazer a escolha da arquitetura do projeto, optamos utilizar a arquitetura de \textit{microservices} pois como teremos mais de um módulo de software com linguagens e características diferentes, ficaria mais fácil escalar e fazer manutenções de maneiras independentes.
+Ao fazer a escolha da arquitetura do projeto, optou-se por utilizar a arquitetura de \textit{microservices}, pois como haverá mais de um módulo de software com linguagens e características diferentes, torna-se mais fácil escalar e fazer manutenções de maneiras independentes.
 
 \subsection{Microsserviços}
-Seguindo a definição de \citeauthor{ms1} (\citeyear{ms1}), a arquitetura de microsserviços trata do desenvolvimento de uma aplicação que baseia na existência de diversos pequenos serviços independentes. Cada um dos serviços deve rodar em seu próprio processo independente. Estes serviços podem comunicar entre si utilizando mecanismos leves de comunicação (geralmente em torno no HTTP). Os serviços devem ser absolutamente independentes.
+Seguindo a definição de \citeauthor{ms1} (\citeyear{ms1}), a arquitetura de microsserviços trata do desenvolvimento de uma aplicação que se baseia na existência de diversos pequenos serviços independentes. 
+
+Os serviços podem comunicar-se utilizando mecanismos leves de interface, como HTTP. Porém, como cada serviço deve ser independente, uma alteração na implementação de um não deve afetar o funcionamento dos demais. \cite{Pahl}
+
+Em suma os microsserviços são os resultados da decomposição funcional de uma aplicação. 
 
 Um exemplo da arquitetura de microsserviços está na Figura \ref{fig:arquitetura-microsservicos}.
 
@@ -373,7 +393,7 @@ Um exemplo da arquitetura de microsserviços está na Figura \ref{fig:arquitetur
 	\label{fig:arquitetura-microsservicos}
 \end{figure}
 
-Microsserviços são os resultados da decomposição funcional de uma aplicação. São caracterizados pela definição de sua interface e função no sistema. Como cada serviço deve ser independente, uma alteração na sua implementação não deve afetar o funcionamento dos demais. \cite{Pahl}
+ 
 
 %------------------------------------------------
 

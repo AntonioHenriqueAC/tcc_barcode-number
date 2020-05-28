@@ -2,37 +2,13 @@
 
  Este trabalho propõe um sistema capaz detectar código de barras e números através de uma imagem. Os sistemas de reconhecimento de objetos e aplicação web foram implementados. Como mostrado, a implementação é capaz identificar os códigos de barras, identificar os números e mostrá-los em uma aplicação através de telas e imagens.
  
-Ao final do desenvolvimento do projeto e dos resultados apresentados, pode-se concluir que o sistema é eficaz na identificação dos objetos e na gestão do status da corrida. Podendo ser um grande aliado na redução da misturas de aço, automatização do processo e na segurança do trabalhador.
+Ao final do desenvolvimento do projeto e dos resultados apresentados, pode-se concluir que o sistema é eficaz na identificação dos objetos e na gestão do status da corrida, podendo ser um grande aliado na redução da misturas de aço, automatização do processo e na segurança do trabalhador.
 
-Foi concluído que 99.05\% dos códigos de barras foram identificados corretamente e a Tabela \ref{tab:numberRecognize} mostra o resultado da porcentagem de acerto total de cada número detectado.
+Como trabalhos futuros, sugere-se a implementação física do sistema em uma unidade industrial, bem como a utilização da foto em tempo real para rodar o sistema. 
 
-Para trabalhos futuros, pode-se realizar a implementação física do sistema na usina siderurgia, bem como a utilização da foto em tempo real para iniciar o sistema. 
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|l|l|l|}
-		\hline
-		\rowcolor[HTML]{ECF4FF} 
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{\textit{Número}}} &
-		\multicolumn{1}{|c|}{\cellcolor[HTML]{ECF4FF}\textit{Porcentagem}}\\ \hline 
-		0&  98.18\% \\ \hline
-		1&  92.20\% \\ \hline
-		2&  87.01\% \\ \hline
-		3&  94.66\%\\ \hline
-		4&  72.07\% \\ \hline
-		5&  85.96\% \\ \hline
-		6&  96.11\% \\ \hline
-		7&  97.86\% \\ \hline
-		8&  98.39\% \\ \hline
-		9&  96.24\% \\ \hline
-	\end{tabular}
-	\caption{Assertividade dos números}
-	\label{tab:numberRecognize}
-\end{table}
-
-Para melhorar a assertividade ainda mais dos objetos, seria interessante testar mais opções de treinamentos para os modelos da rede neural. Para isso é necessário muito tempo e também muitos testes. os tópicos abaixo provavelmente ajudaria a aumentar a acurácia do modelo:
+Para melhorar a assertividade ainda mais dos objetos, seria interessante testar mais opções de treinamentos para os modelos da rede neural. Para isso, são necessários testes extensivos. Os tópicos abaixo provavelmente ajudariam a aumentar a acurácia do modelo:
 
 \begin{itemize}
-    \item Aumentar o \textit{dataset} de treinamento e validação dos modelos utilizando apenas imagens originais. (Figura \ref{imagemBase})
+    \item Aumentar o \textit{dataset} de treinamento e validação dos modelos utilizando apenas imagens originais. (Figura \ref{fig:imagemBase})
     \item Criar as \textit{bounding boxes} utilizando o LabelImg [0,1,2,3,4,5,6,7,8,9] direto nas imagens originais + imagens com \textit{data augmentation};
 \end{itemize}
