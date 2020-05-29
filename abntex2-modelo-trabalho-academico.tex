@@ -146,7 +146,7 @@
 % ---
 % Informações de dados para CAPA e FOLHA DE ROSTO
 % ---
-\titulo{RECONHECIMENTO AUTOMÁTICO DOS DÍGITOS DE ETIQUETAS ESTAMPADAS EM TARUGOS }
+\titulo{RECONHECIMENTO AUTOMÁTICO DE ETIQUETAS IDENTIFICADORAS EM TARUGOS}
 \autor{Antônio Henrique Alves Cardoso}
 \local{Ouro Preto}
 \data{março de 2020
@@ -303,17 +303,18 @@
 \setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
  \noindent
-A finalidade deste trabalho é o desenvolvimento de um software capaz de extrair e reconhecer com precisão os números localizados nas etiquetas de identificação dos tarugos originados do processo de Lingotamento Contínuo (LC) de uma siderúrgica. 
-%
-Pretende-se incrementar a confiabilidade e automatização desta etapa de fabricação do aço, além de tornar possível a rastreabilidade dos tarugos. 
+A finalidade deste trabalho é o desenvolvimento de um software capaz de extrair e reconhecer com precisão os códigos de barras e os números localizados nas etiquetas de identificação dos tarugos originados do processo de Lingotamento Contínuo (LC) de uma siderúrgica. 
 %
 No processo siderúrgico, o maior problema enfrentado é a mistura de diferentes tipos de aço durante as etapas de fabricação. Portanto, a identificação detalhada de cada umas dessas etapas é essencial. 
 %
-No último passo do processo de LC, os tarugos são estocados e empilhados para depois serem despachados para o processo seguinte, a Laminação. 
+O projeto foi desenvolvido utilizando técnicas de \textit{Machine Learning} para sua implementação. Foram criados e treinados \textit{datasets} e redes neurais e para detecção dos números e códigos de barras das etiquetas. 
+%
+Também foi desenvolvido um sistema web com telas para que o usuário tenha uma melhor visualização e gerenciamento dos resultados obtidos pelo sistema de detecção. 
 %
 Atualmente, a identificação e contagem dos tarugos do estoque são feitas manualmente. 
-Devido ao histórico de erros humanos durante o procedimento, foi pensada em uma alternativa para solucionar o problema criando uma aplicação simples, na qual seria necessária apenas o uso de uma câmera fotográfica digital.
-
+Devido ao histórico de erros humanos durante o procedimento, foi pensada em uma alternativa para solucionar o problema criando uma aplicação, na qual seria necessária apenas o uso de uma câmera fotográfica.
+%
+Por fim, o projeto se comportou como o esperado, identificando em média, 99,05\% dos códigos de barras e 91,86\% dos números. 
 
  \textbf{Palavras-chaves}: aprendizado de máquina, computação da nuvem, IoT, reconhecimento de imagem, código de barras, deep learning, desenvolvimento web.
 \end{resumo}
