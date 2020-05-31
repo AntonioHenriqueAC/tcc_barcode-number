@@ -2,30 +2,38 @@
 % Introdução (exemplo de capítulo sem numeração, mas presente no Sumário)
 % ----------------------------------------------------------
 \chapter[Introdução]{Introdução}
-%\addcontentsline{toc}{chapter}{Introdução}
+%\addcontentsline{toc}{chapter}{Introdução
 % ----------------------------------------------------------
 
- A siderurgia é o processo de transformar ferro, sucata, carbono e fundentes (\textit{e.g.} calcário e dolomita) em aço. Existem dois tipos de usinas siderúrgicas: (i) a usina simples que só utiliza como matéria prima o carvão mineral; (ii) a usina integrada que utiliza tanto o carvão mineral como o carvão vegetal em sua produção.
+ A siderurgia é o ramo da metalurgia que se dedica à fabricação de ferro e aço  através do processamento do minério ferro, sucata, carbono, carvão e fundentes (\textit{e.g.} calcário e dolomita). Existem dois tipos de usinas siderúrgicas: a usina simples, que só utiliza como matéria prima o carvão mineral e a usina integrada, que utiliza tanto o carvão mineral como o carvão vegetal em sua produção (Figura \ref{fig:fluxogramaSiderurgia}).
  
- O processo se inicia na Coqueria com a transformação do minério em pelotas e a destilação do carvão, para obtenção do coque, dele se obtendo ainda subprodutos carboquímicos.
-%
- Nas usinas integradas há um processo adicional que é a Sinterização que tem como produto da aglomeração a quente do minério de ferro, fundentes e finos de coque, o sínter.
-%
- O coque e o sínter são levado aos Alto-Fornos, cuja temperatura média de operação é de 1.500ºC. 
-%
-O ferro se liquefaz e passa a ser chamado de ferro-gusa, que é levado por carros torpedos para a aciaria onde ocorre o refino através da queima de impurezas.
-  
-A transformação do ferro-gusa em aço acontece na Aciaria, através da oxidação dos elementos do gusa que se deseja mitigar, como o carbono, silício, fósforo e enxofre. 
-%
-O produto da Aciaria é o aço líquido.
-
- O aço líquido é encaminhado para o Lingotamento Contínuo e, em processo de solidificação, é trabalhado mecanicamente e transformado em produtos como tarugos, bobinas, arames etc. \cite{aco}
-
- \begin{figure}[htbp]
+  \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.1\linewidth]{figuras/Steel/process.png}
+	\includegraphics[width=0.6\linewidth]{figuras/Steel/fluxogramaSiderurgia.png}
+	\caption{Processo siderúrgico}
+	\legend{Fonte: \cite{silva2016siderurgia} }
+	\label{fig:fluxogramaSiderurgia}
+\end{figure}
+
+ A primeira etapa do processo siderúrgico é a Coqueria. Nela, o minério de ferro é transformado em pelotas através do processo de Pelotização e o carvão mineral é destilado para obtenção do coque.
+%
+As usinas integradas incluem o processo de Sinterização, cujo intuito é produzir sínter por meio da aglomeração do minério de ferro, fundentes e finos de coque.
+
+ O coque e o sínter são levados aos Alto-Fornos, cuja temperatura média de operação é de 1.500ºC. Dentro dos Alto-Fornos, o ferro se liquefaz e passa a ser chamado de ferro-gusa. Ele é levado à Aciaria por carros torpedos para refinamento através da queima das impurezas. Ainda na Aciaria, a oxidação de elementos como o carbono, silício, fósforo e enxofre transformam o ferro-gusa em aço líquido. Ele é então encaminhado para o Lingotamento Contínuo e, em processo de solidificação, é trabalhado mecanicamente e transformado em produtos como tarugos, bobinas, arames, etc \cite{aco}.
+
+Na usina da Gerdau em Ouro Branco, o processo de lingotamento consiste no despejamento de uma panela com aproximadamente 224 toneladas de aço, a uma temperatura de cerca de 1550ºC, no distribuidor que precede o lingotamento em si como mostra a Figura \ref{fig:processLing}.
+%
+Este processo pode levar de horas a dias sem interrupção.
+%
+Cada batelada da panela é chamada de corrida.
+%
+No final de cada corrida, os tarugos são cortados na máquina Oxicorte, de modo que o tamanho é previamente definido de acordo com a necessidade do cliente, como identificado pelo número 5 na Figura \ref{fig:processLing}
+
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{figuras/Steel/process.png}
 	\caption{Processo de lingotamento Contínuo de Tarugos}
-	\legend{Fonte: \citeauthor{freitas2013analise} (\citeyear{freitas2013analise})}
+	\legend{Fonte: \cite{freitas2013analise} }
 	\begin{tabular}{r@{: }l r@{: }l}
         1 & Câmera Fotográfica & 4 & Molde \\
         2& Pilha de corridas & 5 & Máquina de Oxicorte \\
@@ -34,69 +42,57 @@ O produto da Aciaria é o aço líquido.
 	\label{fig:processLing}
 \end{figure}
 
-Especificamente na usina da Gerdau em Ouro Branco (Minas Gerais), o processo de lingotamento consiste no despejamento de uma panela com $\sim~224$ toneladas de aço, a uma temperatura de $\sim~1550~$ºC, no distribuidor que precede o lingotamento em si (Figura \ref{fig:processLing}).
-%
-Este processo pode levar de horas a dias sem interrupção.
-%
-Cada batelada da panela é chamada de \textbf{corrida}.
-
-
 A etapa de solidificação ocorre de fora para dentro do veio
 %
 \footnote{\textit{Veio} é o nome que se dá ao conjunto formado pelo molde, a máquina Oxicorte e os rolos de extração e endireitadores. Quanto maior o número de veios mais produtiva é da máquina, porém mais complexo se torna seu controle.} 
 %
 em função do contato com as paredes refrigeradas do molde, aspersão de água em \textit{sprays} e perda de calor por radiação para o ambiente. Essa troca de calor faz com que o aço se solidifique gradativamente criando zonas onde o material pode ser encontrado ao mesmo tempo em seus estados sólido na parte exterior e líquido no interior (Figura \ref{fig:processLingSolid}).
 
-\begin{figure}[hbt!]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{figuras/Steel/estadoSolidoLiq.png}
+	\includegraphics[width=0.6\linewidth]{figuras/Steel/estadoSolidoLiq.png}
 	\caption{Estados do aço no processo de lingotamento contínuo}
-	\legend{Fonte: \citeauthor{YU201736} (\citeyear{YU201736})}
+	\legend{Fonte: \cite{YU201736}}
 	\label{fig:processLingSolid}
 \end{figure}
 
-No final de cada corrida, os tarugos são cortados na máquina Oxicorte \footnote{O tarugo é cortado em um tamanho previamente definido, possibilitando assim o seu trasporte até a sua destinação final.} de modo que a sessão transversal de casa um seja quadrada, como mostrado na Figura \ref{fig:processLing}.  
+Os tamanhos dos cortes são feitos de acordo com a demanda do cliente. O número de tarugos depende do diâmetro das peças que podem ser de 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Todas as peças de uma mesma corrida têm o mesmo diâmetro e comprimento. Após serem cortados, os tarugos são transportados para o despacho por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e $27$ toneladas de carga (Figura \ref{fig:crane}). 
 
-Os tamanhos dos cortes são feitos de acordo com a demanda do cliente. O número de tarugos depende do diâmetro das peças que podem ser 130mm ou 160mm e do comprimento das mesmas que variam de 07 a 14m. Todas as peças de uma mesma corrida têm o mesmo diâmetro e comprimento. Após serem cortados, os tarugos são transportados para o despacho por uma ponte rolante a base de eletroímãs que suportam altas temperaturas e $27$ toneladas de carga. 
-
-
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\linewidth]{figuras/Steel/ponte_rolante.png}
+	\includegraphics[width=0.5\linewidth]{figuras/Steel/ponte_rolante.png}
 	\caption{Ponte Rolante}
-	\legend{Fonte: \citeauthor{ponte-rolante} (\citeyear{ponte-rolante})}
+	\legend{Fonte: \cite{ponte-rolante})}
 	\label{fig:crane}
 \end{figure}
 
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.5\linewidth]{figuras/Steel/despacho.jpg}
-	\caption{Despacho}
-	\label{fig:despacho}
-\end{figure}
-
-Os tarugos vão para a zona de despacho a uma temperatura de $\sim~700$ºC.
+Os tarugos vão para a zona de despacho a uma temperatura de aproximadamente 700ºC.
 %
 Após cerca de 20 horas a temperatura cai para $150~$ºC, adequada para a fixação das etiquetas de identificação dos tarugos.
 %
-Um jato de água é direcionado aos tarugos para acelerar o resfriamento (Figura \ref{fig:despacho}) com vazão constante apenas na parte frontal.
+Um jato de água é direcionado aos tarugos para acelerar o resfriamento como mostrado na Figura \ref{fig:despacho} com vazão constante apenas na parte frontal.
 %
 A eventual injeção de água no centro do tarugo pode empenar a peça, uma vez que a temperatura central do tarugo está mais quente que as extremidades.
 
-
 Após o tempo necessário, o operador prega as etiquetas utilizando Silicone Acético Transparente, material comprovadamente aderente em altas temperaturas.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figuras/Steel/despacho.jpg}
+	\caption{Exemplo de Despacho: estoque de uma corrida}
+	\label{fig:despacho}
+\end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.25\linewidth]{figuras/Steel/barcode.jpg}
-	\caption{Etiqueta}
+	\caption{Detalhe de uma etiqueta identificadora de um tarugo.} 
 	\label{fig:barcode}
 \end{figure}
 
-A rotulação é importante pois evita a mistura de aço entre uma corrida e outra, viabiliza a rastreabilidade e identificação do aço em processos posteriores como, por exemplo, na laminação até o cliente final. 
+A rotulação é importante pois evita a mistura de aço entre uma corrida e outra, viabiliza a rastreabilidade e identificação do aço em processos posteriores como, por exemplo, na laminação até o cliente final. A tabela \ref{tab:tag} mostra o que cada dígito da etiqueta significa.
 
-\begin{table}[]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|l|l|}
 		\hline
@@ -113,11 +109,10 @@ A rotulação é importante pois evita a mistura de aço entre uma corrida e out
 	\label{tab:tag}
 \end{table}
 
-O número de identificação da etiqueta pode ser reconhecido pelos dígitos ou pelo código de barras através de um leitor de código de barras à \textit{laser}. Em cada etiqueta, o código de barras e os dígitos acima deste correspondem à mesma sequência numérica.
+O número de identificação da etiqueta pode ser reconhecido pelos dígitos ou pelo código de barras através de um leitor de código de barras à \textit{laser}. Em cada etiqueta, o código de barras e os dígitos acima deste correspondem à mesma sequência numérica. Usualmente, a identificação ou leitura das etiquetas é feita por seres humanos e não por máquinas ou sistemas automáticos. Isto leva aos seguintes problemas:
 
-Os atuais problemas na identificação das etiquetas são: 
 \begin{enumerate}
-	\item O processo é manual e demorado.
+	\item O processo é manual e demorado;
 	\item O local em que a pilha de peças se encontra é perigoso devido ao fato de, a todo momento, uma ponte rolante estar trabalhando no mesmo local.
 \end{enumerate}
 
@@ -125,13 +120,11 @@ Os atuais problemas na identificação das etiquetas são:
 
 Nesta seção é realizada a pesquisa na literatura a fim de investigar a relevância da automatização do processo de reconhecimento de imagem em indústrias siderúrgicas. Apresenta-se trabalhos semelhantes ao projeto proposto, bem como as dificuldades encontradas durante seus desenvolvimentos. 
 
-Os reconhecimentos visuais necessários de usinas siderúrgicas são comumente realizados colaboradores dado a capacidade adaptativa do sistema óptico. \cite{refbib1} 
-
-Apesar do alto grau adaptativo e cognitivo, a identificação de imagens por uma pessoa pode gerar deficiências no processo por ser totalmente ligado à capacidade e estado do colaborador. O produto final do reconhecimento feito por uma pessoa depende do nível de preparo, treinamento, capacidade visual e concentração, dentre outros fatores. 
+Apesar do alto grau adaptativo e cognitivo, a identificação de imagens por uma pessoa pode gerar deficiências no processo por ser totalmente ligado à capacidade e estado do colaborador. O produto final do reconhecimento feito por um operador depende do nível de preparo, treinamento, capacidade visual e concentração, dentre outros fatores. \cite{refbib1} 
 %
 Além disto, estes parâmetros não são constantes, sofrendo alteração por motivos externos, como por exemplo, a iluminação ou cansaço. \cite{refbib2, refbib3}
 
-No trabalho \cite{ref1}, o autor trata da extração de números de gerenciamento de placas (SMNs) de imagens estáticas capturadas para automação do processo de fabricação de aço. Para impedir a mistura do produto em cada etapa da fabricação de aço, é essencial um sistema de reconhecimento automático das SMNs (Figura \ref{fig:SMN}). Além disso, o algoritmo de extração de SMNs com desempenho robusto é necessário porque afeta seriamente o desempenho de todo o sistema de reconhecimento. Contudo, resultados experimentais mostram que o algoritmo proposto é confiável. 
+No trabalho \citeauthor{ref1}, o autor trata da extração de números de gerenciamento de placas (SMNs) de imagens estáticas capturadas para automação do processo de fabricação de aço. Para impedir a mistura do produto em cada etapa da fabricação de aço, é essencial um sistema de reconhecimento automático das SMNs (Figura \ref{fig:SMN}). Além disso, o algoritmo de extração de SMNs com desempenho robusto é necessário porque afeta seriamente o desempenho de todo o sistema de reconhecimento. Contudo, resultados experimentais mostram que o algoritmo proposto é confiável. 
 
 \begin{figure}[htbp]
 	\centering
@@ -141,25 +134,22 @@ No trabalho \cite{ref1}, o autor trata da extração de números de gerenciament
 \end{figure}
 
 
-Em \cite{ref2}, os autores desenvolvem um sistema de reconhecimento em tempo real para caracteres gravados no material de placas e tarugos na planta de ferro fundido. 
+Em \citeonline{ref2}, os autores desenvolvem um sistema de reconhecimento em tempo real para caracteres gravados no material de placas e tarugos na planta de ferro fundido. 
 %
 Os tarugos normalmente são misturados no despacho, de modo que suas identificações são dificilmente tratáveis. Os caracteres dessa imagem do material podem ser marcados pelo uso de três tipos de métodos, como máquina de marcação automática, placa de marcação de modelo e escrita à mão. Para a aplicação do algoritmo de reconhecimento, desenvolveu-se um sistema de visão e instalou-se na linha de produção de placas e tarugos da planta de aço-ferro. Por meio do teste, confirmou-se que o sistema apresentou-se bom desempenho e alta taxa de reconhecimento: 97,6\% para placas e 98,6\% para tarugos.
 
 \section{Objetivos} 
 
-Tendo em vista o apresentado, o objetivo deste trabalho é desenvolver um sistema automático para a identificação robusta de etiquetas identificadoras em tarugos e geração de relatório para as corridas.
+O objetivo deste trabalho é desenvolver um sistema automático para o reconhecimento de etiquetas identificadoras em tarugos e uma interface para que o operador realize as conferências. 
 
-Usando uma foto, o sistema será capaz de identificar as etiquetas fixadas no Tarugo, contar o número de etiquetas, identificar o código de barras e, além disso, identificar os números que se encontram acima do mesmo.
-
-Será criado uma aplicação Web com um servidor para que seja gerado um relatório detalhado de forma automática facilitando a conferência por parte do operador.
-
+Por meio de uma foto, o sistema será capaz de contar o número de etiquetas, identificar o código de barras e os números acima dele. Será criada uma aplicação Web com um servidor para que seja gerado, de forma automática, um relatório detalhado e facilitar a conferência por parte do operador.
 
 \section{Organização do trabalho}
 
 O presente trabalho está organizado em 4 capítulos. O atual apresenta o problema, possíveis soluções, e os objetivos propostos.
 %
-O Capítulo 2 apresenta estrutura geral dos sistemas, das linguagens de programação, das bibliotecas, dos métodos e dos \textit{softwares} utilizados no projeto.
+O Capítulo 2 apresenta a estrutura geral dos sistemas, das linguagens de programação, das bibliotecas, dos métodos e dos \textit{softwares} utilizados no projeto.
 %
-No Capítulo 3 é apresentado o desenvolvimento e os resultados. Explica-se também os experimentos realizados e códigos implementados.
+No Capítulo 3 são apresentados o desenvolvimento e os resultados deste trabalho. Explica-se também os experimentos realizados e códigos implementados.
 %
 No Capítulo 4 são abordadas as considerações finais do trabalho.
