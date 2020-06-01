@@ -22,7 +22,7 @@ O fluxo geral do sistema proposto é apresentado na Figura \ref{fig:arqgeral}.
 	\label{fig:arqgeral}
 \end{figure}
 
-O projeto será realizado em etapas sequenciais. Primeiro, com uma câmera comum, são fotografadas as peças de uma corrida no setor de despacho. A fotografia iniciará automaticamente o fluxo do sistema e, a partir dela, terá início o reconhecimento da imagem. Os códigos de barras localizados nas etiquetas de cada tarugo são detectados, recortados automaticamente e salvos separadamente em imagens contendo apenas uma etiqueta. Em seguida, os números são identificados. A corrida é então salva em um banco de dados e exibida através de telas para que o usuário possa validá-las.
+O projeto será realizado em etapas sequenciais. Primeiro, com uma câmera comum, são fotografadas as peças de uma corrida no setor de despacho. A fotografia iniciará automaticamente o fluxo do sistema e, a partir dela, terá início o reconhecimento da imagem. Os códigos de barras localizados nas etiquetas de cada tarugo são detectados, recortados automaticamente e salvos separadamente em imagens contendo apenas uma etiqueta. Em seguida, os números são identificados. A corrida é então salva em um banco de dados e exibida através telas e relatórios detalhados para que o usuário possa validá-las.
 
 A comunicação entre os dois sistemas, de detecção e web, acontece através do resultado da saída do sistema de detecção, que são os números localizados acima do código de barras de cada etiqueta. Posteriormente estes números são  gravados em um arquivo JSON para que o sistema web possa mostrá-los através das telas. 
 
@@ -30,7 +30,7 @@ A comunicação entre os dois sistemas, de detecção e web, acontece através d
 
 \section{Sistema de Detecção} \label{sec:backend}
 
-Para realizar o experimento, é necessário treinar um modelo de rede neural que seja capaz de reconhecer códigos de barras e algarismos numéricos. Primeiro é coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens juntamente com a classe a qual pertence. Então, por último, é possível realizar a configuração e o treinamento da rede neural. Por fim é calculada a acurácia, mediante imagens de teste, do modelo que obteve a melhor performance no treinamento.
+Para realizar o experimento, é necessário treinar um modelo de rede neural que seja capaz de reconhecer códigos de barras e algarismos numéricos. Primeiro é coletado o maior número possível de imagens dos códigos de barras. Em seguida, é gerado um \textit{dataset} com as características dessas imagens juntamente com a classe a qual pertence. Então, é possível realizar a configuração e o treinamento da rede neural. Por fim é calculada a acurácia, mediante imagens de teste, do modelo que obteve a melhor performance no treinamento.
 
 A linguagem de programação Python para implementação do sistema de detecção foi prioritariamente escolhida devido à grande comunidade existente, ao grande número de bibliotecas de análise de dados disponíveis e ao fato da ferramenta Google Colab utilizá-lo, permitindo o alto processamento dos dados, o que não seria possível em um computador de baixa performance.
 
@@ -115,30 +115,25 @@ O \textit{software} em questão permite que a bbox seja circulada englobando o o
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{figuras/MachineLearning/labelimg.png}
+	\includegraphics[width=0.7\linewidth]{figuras/MachineLearning/labelimg.png}
 	\caption{Procedimento de anotações das \textit{bounding boxes}}
 	\label{fig:labelimg}
 \end{figure}
-
+\lstset{
+   basicstyle=\fontsize{9}{9}\selectfont\ttfamily
+}
 \begin{lstlisting}[caption=Arquivo XML gerado pelo LabelImg, label=cod:XML]
 <annotation>
 	<folder>images</folder>
 	<filename>05102009081.jpgbarcodeOrig.png</filename>
-	<path>C:\Users\antonio.cardoso\Desktop\tcc\barcode\train\images\05102009081.jpgbarcodeOrig.png</path>
-	<source>
-		<database>Unknown</database>
-	</source>
+	<path>C:\Users\antonio.cardoso\barcode\train\images\05102009081.png</path>
 	<size>
 		<width>640</width>
 		<height>480</height>
 		<depth>3</depth>
 	</size>
-	<segmented>0</segmented>
 	<object>
 		<name>barcode</name>
-		<pose>Unspecified</pose>
-		<truncated>0</truncated>
-		<difficult>0</difficult>
 		<bndbox>
 			<xmin>105</xmin>
 			<ymin>63</ymin>
@@ -159,9 +154,7 @@ O Pascal VOC é outra coleção de \textit{datasets} também utilizada para o de
 
 \subsection{Separação do Conjunto de Teste}
 
-Os passos seguintes às anotações das imagens são a separação do conjunto de teste e posteriormente o de treinamento do modelo de rede neural. Para a separação, cria-se uma pasta chamada \textit{\enquote{/barcodes}} e dentro dela, outras duas pastas nomeadas \textit{\enquote{train}} (conjunto de treinamento) e \textit{\enquote{validation}} (conjunto de validação). Nenhuma imagem da pasta \textit{\enquote{train}} pode estar presente dentro da pasta \textit{\enquote{/validation}}. O conjunto de testes tem uma amostra menor que o de treinamento, cerca de 25\% do total das imagens.
-
-A divisão em \textit{datasets} de treino e teste é parte da escolha de otimização de modelos, para que se tenha noção da qualidade das previsões. Para cada imagem, há um arquivo XML com as anotações registradas pelo LabelImg. A etapa é o treinamento do modelo. Para tanto é necessário a compreensão da infraestrutura e bibliotecas utilizadas no projeto.
+Os passos seguintes às anotações das imagens são a separação do conjunto de teste e posteriormente o de treinamento do modelo de rede neural. Para a separação, cria-se uma pasta chamada \textit{\enquote{/barcodes}} e dentro dela, outras duas pastas nomeadas \textit{\enquote{train}} (conjunto de treinamento) e \textit{\enquote{validation}} (conjunto de validação). O conjunto de dados de treino  costumam representar cerca de 75\% da totalidade dos dados.
 
 A estrutura da pasta do \textit{dataset} de \textit{barcodes} pode ser visualizada na \ref{fig:foldersDataset}:
 
@@ -171,6 +164,10 @@ A estrutura da pasta do \textit{dataset} de \textit{barcodes} pode ser visualiza
 	\caption{Estrutura de pastas do \textit{dataset} de barcodes}
 	\label{fig:foldersDataset}
 \end{figure}
+
+A divisão em \textit{datasets} de treino e teste é parte da escolha de otimização de modelos, para que se tenha noção da qualidade das previsões. Para cada imagem, há um arquivo XML com as anotações registradas pelo LabelImg.
+
+
 
 %------------------------------------------------
 
@@ -211,11 +208,11 @@ Todo o código foi implementado utilizando a linguagem de programação Python, 
 
 \subsubsection{TensorFlow}
 
-O \textit{TensorFlow} é uma biblioteca Python de \textit{open source} para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o \textit{TensorFlow} pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis, como telefones e tablets, até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU.
+O \textit{TensorFlow} é uma biblioteca Python de \textit{open source} para implementar algoritmos de \textit{Machine Learning}. Um código utilizando o \textit{TensorFlow} pode ser executado com pouca ou nenhuma alteração em uma ampla variedade de sistemas heterogêneos, desde dispositivos móveis, como telefones e tablets, até sistemas distribuídos em larga escala de centenas de máquinas e milhares de dispositivos computacionais, como placas de GPU. Vários serviços do Google utilizaram o \textit{TensorFlow} em sua produção. Ele foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
 
 O sistema é flexível e tem sido usado para conduzir pesquisas e implantar sistemas de \textit{Machine Learning} na produção de diversas áreas da ciência da computação e outros campos, incluindo reconhecimento de fala, visão computacional, robótica, recuperação de informações, processamento de idiomas, extração de informações geográficas e descoberta computacional de remédios \cite{abadi2016tensorflow}.
 
-Vários serviços do Google utilizaram o \textit{TensorFlow} em sua produção. Ele foi lançado como um projeto de código aberto e tornou-se amplamente utilizado para pesquisa de ML.\cite{199317}
+
 
 %------------------------------------------------
 
@@ -230,7 +227,7 @@ O objetivo do \textit{scikit-image} é fornecer uma biblioteca de alta qualidade
 \subsubsection{ImageAI}
 
 ImageAI é uma biblioteca Python de código aberto desenvolvida para capacitar os desenvolvedores a criarem aplicativos e sistemas com recursos independentes de \textit{Deep Learning} e \textit{Computer Vision} usando poucas linhas de código.
-
+%
 A biblioteca ImageAI suporta previsão e treinamento de imagens usando 4 algoritmos diferentes de \textit{Machine Learning} treinados no conjunto de dados ImageNet-1000. O ImageAI também suporta detecção de objetos, detecção de vídeo e rastreamento de objetos usando RetinaNet, YOLOv3 e TinyYOLOv3 treinados no conjunto de dados COCO e PASCAL VOC \cite{ImageAI}.
 
 Este trabalho utiliza a classe da biblioteca ImageAI chamada \textit{Custom Detection Model Training}, que possibilita o treinamento modelo próprio de detecção de objetos utilizando a arquitetura da YOLOv3.
@@ -253,7 +250,9 @@ Através do modelo da rede Yolov3, treina-se mais dois novos modelos de redes ne
     \item Modelo de rede neural para reconhecimento de algarismos numéricos.
 \end{itemize}
 
-O resultado do treinamento é dado em arquivos no formato .h5\footnote{Um arquivo h5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.}. Cada arquivo é um modelo que será avaliado através de sua acurácia, são escolhidos os modelos de melhor performance.  A acurácia indica o percentual de previsão de acerto na identificação dos dígitos ou do objeto.
+O treinamento resulta em arquivos no formato .h5\footnote{Um arquivo h5 é um arquivo de dados salvo no formato \textit{Hierarchical Data Format}(HDF). Contém conjuntos multidimensionais de dados científicos.}. Cada arquivo é um modelo que será avaliado e escolhido o de melhor acurácia, responsável por indicar a previsão de acerto na detecção do objeto. 
+
+A acurácia ou \textit{Accuracy} é uma métrica para avaliar modelos de classificação. Informalmente, acurácia é a fração das previsões que o modelo acertou. 
 
 %------------------------------------------------
 
@@ -313,7 +312,7 @@ A escolha do Node.JS foi devido aos seguintes fatores:
 \subsection{Node.JS}
 
 O Node.JS, também conhecido como Node, é uma estrutura EDA\footnote{Modo de realizar a comunicação entre sistemas. Consiste, principalmente, em operações assíncronas, além de permitir aplicativos escalonáveis e gerar menor acoplamento entre os serviços, permitindo uma arquitetura flexível.} de código aberto para o desenvolvimento de aplicativos JavaScript em servidores. É baseado no \textit{runtime} do Google, chamado de motor V8. O V8 e o Node são implementados em C e C++, focados no desempenho e baixo consumo de memória. Embora o V8 suporte principalmente o uso de JavaScript no navegador, o Node foca no suporte de processos de servidores \cite{Tilkov2010}.
-
+%
 O Node é um dos \textit{frameworks} mais famosos que suportam o desenvolvimento de servidores utilizando o JavaScript \cite{Tilkov2010}.
 
 %------------------------------------------------
@@ -334,7 +333,7 @@ O HTML fornece aos autores os meios para:
 
 \subsection{CSS}
 Um dos padrões fundamentais do W3C \footnote{Trata-se de uma organização internacional responsável pelos protocolos e padronização da WWW, a rede mundial de computadores.} para o desenvolvimento de aplicativos da web é o \textit{Cascading Style Sheets}(CSS) \cite{Casca8378199:online,css}.
-
+%
 CSS é uma linguagem que define a semântica de apresentação dos elementos HTML, incluindo seu posicionamento, layout, cor e fontes. A principal vantagem da adoção do CSS é organização da estrutura de apresentação de maneira previsível \cite{badros1999constraint}.
 
 
@@ -350,7 +349,7 @@ Seguindo a definição de \citeauthor{ms1} (\citeyear{ms1}), a arquitetura de mi
 Os serviços podem comunicar-se utilizando mecanismos leves de interface, como HTTP. Porém, como cada serviço deve ser independente, uma alteração na implementação de um não deve afetar o funcionamento dos demais \cite{Pahl}.
 
 Em suma os microsserviços são os resultados da decomposição funcional de uma aplicação. 
-
+%
 Um exemplo da arquitetura de microsserviços está na Figura \ref{fig:arquitetura-microsservicos}.
 
 \begin{figure}[H]
